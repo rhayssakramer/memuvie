@@ -1,0 +1,45 @@
+<div class="page-bg">
+  <div class="glass-card" style="margin:0 auto; max-width:560px; padding:clamp(1.25rem,3vw,2rem)">
+    <div class="decor-dots">
+      <p class="subtitle-accent">Entre para descobrir!</p>
+      <h2 class="section-title" style="font-family:'Great Vibes',cursive; font-size:clamp(1.8rem,4.5vw,2.6rem)">Crie seu perfil</h2>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" style="margin-top:1rem; display:grid; gap:1rem">
+      <div>
+        <label for="name" style="display:block; font-weight:600; margin-bottom:.4rem">Seu Nome</label>
+        <input id="name" class="input-field" [(ngModel)]="userName" name="userName" placeholder="Digite seu nome" required>
+      </div>
+
+      <div>
+        <label for="email" style="display:block; font-weight:600; margin-bottom:.4rem">E-mail</label>
+        <input id="email" type="email" class="input-field" [(ngModel)]="email" name="email" placeholder="voce@exemplo.com" required>
+      </div>
+
+      <div>
+        <label for="password" style="display:block; font-weight:600; margin-bottom:.4rem">Senha</label>
+        <input id="password" type="password" class="input-field" [(ngModel)]="password" name="password" placeholder="Crie uma senha" required>
+      </div>
+
+      <div>
+        <label style="display:block; font-weight:600; margin-bottom:.4rem">Adicione sua foto</label>
+        <div class="upload-box" (click)="fileInput.click()">
+          <ng-container *ngIf="!previewUrl; else preview">
+            <div style="font-size:2rem">📷</div>
+            <p style="color:#6b7a90">Carregar um arquivo ou arraste e solte</p>
+            <small style="color:#9aa3b2">PNG, JPG, GIF até 10MB</small>
+          </ng-container>
+          <ng-template #preview>
+            <img [src]="previewUrl" alt="Preview" style="max-width:220px; max-height:220px; border-radius:12px;">
+          </ng-template>
+        </div>
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/gif" style="display:none">
+      </div>
+
+      <div style="display:flex; gap:.8rem; margin-top:.5rem">
+        <button type="button" class="btn-gradient" style="background:linear-gradient(90deg,#e9edf7,#dfe7ff); color:#0f2238" (click)="onBack()">Sair</button>
+        <button type="submit" class="btn-gradient" [disabled]="!userName.trim()">Entrar na Festa</button>
+      </div>
+    </form>
+  </div>
+</div>
