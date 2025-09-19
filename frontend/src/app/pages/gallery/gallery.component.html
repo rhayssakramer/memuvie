@@ -1,0 +1,76 @@
+<div class="page-bg">
+  <!-- Top bar with brand, links and share -->
+  <div class="gallery-topbar">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">🎂</span>
+      <span class="brand-name">Chá Revelação</span>
+    </div>
+    <nav class="top-links">
+      <button class="btn-gradient" style="padding:.45rem .9rem" (click)="goBack()">Voltar</button>
+      <a href="#" class="logout-link" (click)="$event.preventDefault(); logout()">Sair</a>
+    </nav>
+  </div>
+
+  <!-- Section header with title and create button -->
+  <div class="gallery-header-row">
+    <h1 class="gallery-title">Galeria de Memórias</h1>
+    <button class="btn-gradient" (click)="goToInteraction()" style="display:inline-flex; align-items:center; gap:.5rem">
+      <span aria-hidden="true">🖼️</span>
+      <span>Criar</span>
+    </button>
+  </div>
+
+  <div class="gallery-grid">
+    <div
+      class="gallery-card"
+      *ngFor="let item of galleryItems"
+    >
+      <ng-container *ngIf="item.video; else photoTpl">
+        <video [src]="item.video" controls class="card-image" style="background:#000"></video>
+      </ng-container>
+      <ng-template #photoTpl>
+        <img *ngIf="item.photo" [src]="item.photo" [alt]="'Post by ' + item.userName" class="card-image">
+      </ng-template>
+      <div class="card-content">
+        <div class="user-info">
+          <img [src]="item.userPhoto" [alt]="item.userName" class="user-avatar">
+          <div class="user-details">
+            <div class="user-name">{{ item.userName }}</div>
+            <div class="post-date">{{ formatDate(item.date) }}</div>
+          </div>
+        </div>
+        <p class="card-message">{{ item.message }}</p>
+        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="openModal(item)">Ver</button>
+          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="share(item)">Compartilhar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" *ngIf="selectedItem" (click)="closeModal()">
+    <button class="modal-close">✕</button>
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <ng-container *ngIf="selectedItem.video; else modalPhoto">
+        <video [src]="selectedItem.video" controls class="modal-image" style="background:#000"></video>
+      </ng-container>
+      <ng-template #modalPhoto>
+        <img *ngIf="selectedItem.photo" [src]="selectedItem.photo" [alt]="'Post by ' + selectedItem.userName" class="modal-image">
+      </ng-template>
+      <div class="modal-details">
+        <div class="modal-user-info">
+          <img [src]="selectedItem.userPhoto" [alt]="selectedItem.userName" class="modal-avatar">
+          <div class="user-details">
+            <div class="user-name">{{ selectedItem.userName }}</div>
+            <div class="post-date">{{ formatDate(selectedItem.date) }}</div>
+          </div>
+        </div>
+        <p class="modal-message">{{ selectedItem.message }}</p>
+        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+          <button class="btn-gradient" style="padding:.5rem 1rem" (click)="share(selectedItem)">Compartilhar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
