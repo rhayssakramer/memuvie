@@ -1,0 +1,34 @@
+<section class="hero">
+  <!-- Decorative background circles -->
+  <span class="dot dot-top-left"></span>
+  <span class="dot dot-left"></span>
+  <span class="dot dot-right"></span>
+
+  <div class="hero-inner">
+    <p class="subtitle">É menino ou menina?</p>
+    <h1 class="title">Chá Revelação</h1>
+
+    <div class="countdown" aria-live="polite">
+      <div class="time">
+  <div class="value pink">{{ days | number:'2.0-0' }}</div>
+        <div class="label">DIAS</div>
+      </div>
+      <div class="time">
+  <div class="value">{{ hours | number:'2.0-0' }}</div>
+        <div class="label">HORAS</div>
+      </div>
+      <div class="time">
+  <div class="value blue">{{ minutes | number:'2.0-0' }}</div>
+        <div class="label">MINUTOS</div>
+      </div>
+      <div class="time">
+  <div class="value">{{ seconds | number:'2.0-0' }}</div>
+        <div class="label">SEGUNDOS</div>
+      </div>
+    </div>
+
+    <button class="cta" (click)="onEnter()">
+      ✨ Entrar na Festa
+    </button>
+  </div>
+</section>

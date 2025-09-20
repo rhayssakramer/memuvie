@@ -1,0 +1,27 @@
+<div class="login-page">
+  <header class="login-header">
+    <div class="brand">Chá Revelação</div>
+  </header>
+
+  <main class="login-main">
+    <div class="card">
+      <h1>Entrar</h1>
+      <p class="hint">Use o e-mail cadastrado ao criar seu perfil.</p>
+
+      <form (ngSubmit)="onSubmit()" class="form">
+        <label>E-mail
+          <input type="email" [(ngModel)]="email" name="email" required class="input" placeholder="voce@exemplo.com" />
+        </label>
+        <label>Senha
+          <input type="password" [(ngModel)]="password" name="password" required class="input" placeholder="••••••••" />
+        </label>
+        <div class="error" *ngIf="error">{{ error }}</div>
+        <button class="btn-gradient submit" type="submit">Entrar</button>
+      </form>
+
+      <div class="help">
+        Ainda não tem perfil? <a (click)="goToCreate()" href="#">Crie seu perfil</a>
+      </div>
+    </div>
+  </main>
+</div>

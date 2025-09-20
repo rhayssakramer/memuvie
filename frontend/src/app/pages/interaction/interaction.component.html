@@ -1,0 +1,65 @@
+<div class="interaction-page">
+  <!-- Header -->
+  <header class="interaction-header">
+    <div class="brand">Chá Revelação</div>
+    <nav class="header-links">
+      <a routerLink="/" routerLinkActive="active">Início</a>
+      <a routerLink="/gallery" routerLinkActive="active">Galeria</a>
+      <a href="#" (click)="$event.preventDefault(); logout()">Sair</a>
+    </nav>
+  </header>
+
+  <!-- Main container -->
+  <main class="interaction-main">
+    <section class="title-block">
+      <h1>Compartilhe o Amor</h1>
+      <p>Sua presença é nosso maior presente! Ajude a eternizar este momento enviando suas fotos, vídeos e mensagens de carinho.</p>
+    </section>
+
+    <div class="cta-stack">
+      <button class="cta cta-primary" (click)="openPhotoCapture()">
+        <span class="cta-icon" aria-hidden="true">📁</span>
+        <span>Envie Fotos/Vídeos da Festa</span>
+      </button>
+      <button class="cta cta-secondary" (click)="openVideoCapture()">
+        <span class="cta-icon" aria-hidden="true">🎥</span>
+        <span>Deixe seu depoimento em vídeo</span>
+      </button>
+    </div>
+
+    <hr class="section-separator" />
+
+    <section class="message-area">
+      <h2>Ou deixe uma mensagem especial</h2>
+
+      <!-- Upload dashed area or preview -->
+      <div class="upload-dashed" (click)="openPhotoCapture()" *ngIf="!photoPreviewUrl; else photoPreview">
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">
+          <strong>Adicionar foto</strong>
+          <small>Clique para escolher uma imagem</small>
+        </div>
+      </div>
+      <ng-template #photoPreview>
+        <div class="upload-preview" (click)="openPhotoCapture()">
+          <img [src]="photoPreviewUrl!" alt="Pré-visualização da imagem" />
+        </div>
+      </ng-template>
+
+      <div class="textarea-wrap">
+        <textarea [(ngModel)]="message" [maxlength]="maxLength" placeholder="Escreva sua mensagem aqui... (até 5000 caracteres)"></textarea>
+        <div class="char-count">{{ remainingCharacters }} caracteres restantes</div>
+      </div>
+
+      <button class="send-button" (click)="submitMessage()" [disabled]="!message.trim() && !selectedPhoto && !selectedVideo">Enviar Mensagem</button>
+
+      <div class="gallery-full-link">
+        <a routerLink="/gallery">Ver Galeria Completa →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Hidden inputs for camera/file capture -->
+  <input type="file" id="videoInput" accept="video/*" capture style="display:none" (change)="onVideoSelected($event)">
+  <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
+</div>
