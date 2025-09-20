@@ -1,1 +1,112 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  --primary-color: #ff69b4;
+  --secondary-color: #ff1493;
+  --text-color: #2c3e50;
+  --background-color: #f8f9fa;
+  --white: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --blue: #5a8dff;
+  --rose: #ff5fa3;
+  --soft-rose: #fff4f9;
+  --soft-blue: #f0f5ff;
+  --surface: rgba(255,255,255,.72);
+  --glass-blur: 8px;
+}
+
+/* Layout helpers */
+.page-bg {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+  padding: 2rem 1rem;
+}
+
+.glass-card {
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.08);
+}
+
+.section-title {
+  color: #0f2238;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.subtitle-accent { color: var(--rose); font-weight: 700; text-align: center; }
+
+.btn-gradient {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border: 0;
+  border-radius: 999px;
+  padding: .9rem 1.4rem;
+  background: linear-gradient(90deg, var(--rose) 0%, var(--blue) 100%);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(255,95,163,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn-gradient:hover { transform: translateY(-2px); }
+
+.input-field, .textarea-field {
+  width: 100%;
+  padding: .9rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #e7e9ef;
+  background: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.input-field:focus, .textarea-field:focus {
+  border-color: #c6d2ff;
+  box-shadow: 0 0 0 4px rgba(90,141,255,.14);
+}
+.textarea-field { min-height: 160px; resize: vertical; }
+
+.upload-box {
+  border: 2px dashed #e1e4ef;
+  border-radius: 16px;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: #fff;
+  transition: border-color .2s ease, background .2s ease;
+}
+.upload-box:hover { border-color: #d6b7ff; background: #fcf7ff; }
+
+.nav-area {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; margin-bottom: 1.25rem;
+}
+
+.decor-dots { position: relative; }
+.decor-dots::before, .decor-dots::after {
+  content: ""; position: absolute; border-radius: 50%; opacity: .6; pointer-events: none;
+}
+.decor-dots::before { width: 70px; height: 70px; background: #ffc1dc; left: -20px; top: -20px; }
+.decor-dots::after  { width: 90px; height: 90px; background: #b5d1ff; right: -20px; bottom: -20px; }
