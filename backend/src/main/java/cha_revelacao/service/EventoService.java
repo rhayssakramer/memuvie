@@ -48,6 +48,17 @@ public class EventoService {
         evento.setNomeMae(request.getNomeMae());
         evento.setNomePai(request.getNomePai());
         evento.setDataEncerramentoVotacao(request.getDataEncerramentoVotacao());
+        evento.setFotoCapa(request.getFotoCapa());
+        evento.setVideoDestaque(request.getVideoDestaque());
+        evento.setCorTema(request.getCorTema());
+        
+        // Definir o tipo de evento, padrão para CHÁ_REVELAÇÃO se não for informado
+        if (request.getTipoEvento() != null) {
+            evento.setTipoEvento(request.getTipoEvento());
+        } else {
+            evento.setTipoEvento(Evento.TipoEvento.CHA_REVELACAO);
+        }
+        
         evento.setUsuario(usuario);
         evento.setStatus(Evento.StatusEvento.ATIVO);
         evento.setRevelado(false);
