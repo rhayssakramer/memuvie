@@ -4,24 +4,31 @@
   </header>
 
   <main class="login-main">
-    <div class="card">
-      <h1>Entrar</h1>
-      <p class="hint">Use o e-mail cadastrado ao criar seu perfil.</p>
+    <div class="layout">
+      <aside class="left-rail"></aside>
 
-      <form (ngSubmit)="onSubmit()" class="form">
-        <label>E-mail
-          <input type="email" [(ngModel)]="email" name="email" required class="input" placeholder="voce@exemplo.com" />
-        </label>
-        <label>Senha
-          <input type="password" [(ngModel)]="password" name="password" required class="input" placeholder="••••••••" />
-        </label>
-        <div class="error" *ngIf="error">{{ error }}</div>
-        <button class="btn-gradient submit" type="submit">Entrar</button>
-      </form>
+      <section class="center-area">
+        <div class="card login-card">
+          <h1 class="card-title">Entrar</h1>
+          <p class="hint">Use o e-mail cadastrado ao criar seu perfil.</p>
 
-      <div class="help">
-        Ainda não tem perfil? <button class="link-button" (click)="goToCreate($event)">Crie seu perfil</button>
-      </div>
+          <form (ngSubmit)="onSubmit()" class="form">
+            <label class="field-label">E-mail</label>
+            <input type="email" [(ngModel)]="email" name="email" required class="input soft" placeholder="admin@admin.com" />
+
+            <label class="field-label">Senha</label>
+            <input type="password" [(ngModel)]="password" name="password" required class="input soft" placeholder="••••" />
+
+            <div class="error" *ngIf="error">{{ error }}</div>
+
+            <button class="btn-pill" type="submit">Entrar</button>
+          </form>
+
+          <div class="help">
+            Ainda não tem perfil? <button class="link-button" (click)="goToCreate($event)">Crie seu perfil</button>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
