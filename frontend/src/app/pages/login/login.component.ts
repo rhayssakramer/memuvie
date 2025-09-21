@@ -55,6 +55,12 @@ export class LoginComponent {
     }
     logoutAll(); // Limpa qualquer sessão anterior
     this.showCreateProfile = true;
+    // Disable body scroll while modal is open
+    try {
+      document.body.style.overflow = 'hidden';
+    } catch (e) {
+      // server-side rendering or environment without document - ignore
+    }
   }
 
   // Fecha o modal e limpa os campos
@@ -66,6 +72,12 @@ export class LoginComponent {
     this.newConfirmPassword = '';
     this.selectedFile = null;
     this.previewUrl = null;
+    // Re-enable body scroll
+    try {
+      document.body.style.overflow = '';
+    } catch (e) {
+      // ignore
+    }
   }
 
   onFileSelected(event: Event) {

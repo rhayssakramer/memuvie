@@ -201,15 +201,17 @@
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
+  /* Make the wrapper transparent so only the inner card (`.modal-card`) is visible.
+     Keep positioning and sizing but remove the white background. */
+  background: transparent;
+  padding: 0; /* delegate padding to .modal-card */
+  border-radius: 0; /* card handles rounding */
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
+  /* Avoid the wrapper creating a scrollbar; internal card handles scrolling */
+  overflow: visible;
   position: relative;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
@@ -245,11 +247,24 @@
 /* New modal card styles to match design */
 .modal-card {
   width: 100%;
+  /* Keep the visible card background and shadow. */
   background: linear-gradient(180deg, rgba(255,244,248,1) 0%, rgba(255,255,255,1) 45%);
   border-radius: 18px;
   padding: 2rem 2rem 1.6rem 2rem;
   box-shadow: 0 12px 30px rgba(15,34,56,0.08);
   position: relative;
+  /* Responsividade: limitar altura e permitir scroll interno sem criar scroll na página */
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  /* Hide scrollbar visually while keeping the ability to scroll */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* WebKit browsers (Chrome, Safari, Opera) hide scrollbar */
+.modal-card::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 
 .modal-top {
@@ -260,9 +275,10 @@
 
 .modal-sub {
   display: block;
-  color: #ff6f9b;
+  color: #e91e63; 
+  font-size: 16px;
   font-weight: 700;
-  margin-bottom: 0.2rem;
+  margin-top: 10px;
 }
 
 .modal-title {
@@ -286,6 +302,24 @@
 .modal-form { 
   margin-top: 1rem; 
 }
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .modal { align-items: flex-start; padding-top: 24px; }
+  .modal-content { width: 95%; max-width: 420px; }
+  .modal-card { border-radius: 14px; padding: 1.25rem; }
+  .modal-title { font-size: 1.6rem; }
+  .modal-sub { font-size: .85rem; }
+}
+
+/* Larger screens */
+@media (min-width: 1200px) {
+  .modal-content { max-width: 700px; }
+  .modal-card { padding: 2.4rem; }
+}
+
+/* Utility: fallback class to remove body scroll if needed elsewhere */
+.no-scroll { overflow: hidden !important; }
 
 .modal-error { 
   color: #e91e63; 
@@ -338,6 +372,20 @@
   cursor:pointer 
 }
 
+/* Modal-specific secondary button: same sizing/shape/interaction as modal primary but different color */
+.modal .btn-secondary {
+  border: 0;
+  border-radius: 999px;
+  padding: .95rem 1.6rem;
+  background: #f3f4f6;
+  color: #0f2238;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(90,141,255,0.06);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.modal .btn-secondary:hover { transform: translateY(-2px); }
+
 .btn-gradient { 
   background: linear-gradient(90deg,#e9edf7,#dfe7ff); 
   color:#0f2238; 
@@ -358,20 +406,23 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
+  margin-top: -10px;
   font-weight: 500;
 }
 
-/* Estilos do botão */
+/* Estilos do botão (modal) - atualizado conforme solicitado */
 .modal .btn-gradient {
-  background: linear-gradient(45deg, #e91e63, #f06292);
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
+  border: 0;
+  border-radius: 999px;
+  padding: .95rem 1.6rem;
+  background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(255,95,163,.25);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
+.modal .btn-gradient:hover { transform: translateY(-2px); }
 
 .btn-gradient { 
   background: linear-gradient(90deg,#e9edf7,#dfe7ff);
@@ -397,9 +448,10 @@
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
+  /* Ensure the duplicated block also matches the transparent wrapper approach */
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   width: 90%;
   max-width: 500px;
   position: relative;
