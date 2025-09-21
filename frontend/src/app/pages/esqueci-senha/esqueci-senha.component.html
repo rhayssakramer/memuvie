@@ -1,0 +1,43 @@
+<div class="esqueci-senha-container">
+  <div class="card">
+    <h1 class="card-title">Recuperação de Senha</h1>
+
+    <div *ngIf="!enviado">
+      <p class="form-description">
+        Informe seu email cadastrado para receber um link de redefinição de senha.
+      </p>
+      
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            id="email" 
+            type="email" 
+            [(ngModel)]="email" 
+            name="email" 
+            required 
+            class="input" 
+            placeholder="seu.email@exemplo.com">
+        </div>
+        
+        <div *ngIf="erro" class="error-message">{{ erro }}</div>
+        
+        <div *ngIf="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Processando sua solicitação...</p>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="voltar()">Voltar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">Enviar</button>
+        </div>
+      </form>
+    </div>
+    
+    <div *ngIf="enviado" class="success-container">
+      <div class="success-icon">✓</div>
+      <p class="success-message">{{ mensagem }}</p>
+      <button class="btn btn-primary" style="width: 100%;" (click)="voltar()">Voltar ao Login</button>
+    </div>
+  </div>
+</div>
