@@ -60,7 +60,7 @@ export class GalleryComponent implements OnInit {
 
   logout() {
     logoutAll(); // Clear session and profile
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']); // Navega para a página inicial (home)
   }
 
   formatDate(date: Date | string): string {
@@ -75,41 +75,104 @@ export class GalleryComponent implements OnInit {
   }
 
   async share(item: GalleryItem) {
+    if (!item) return; // Prevenir erro se o item for null
+
     const text = `${item.userName} compartilhou uma homenagem no Chá Revelação\n\n${item.message || ''}`.trim();
-    const url = location.href; // current page, or could be a deep link
+    const url = location.href;
+    
     try {
-      if (navigator.share) {
-        await navigator.share({ title: 'Chá Revelação', text, url });
+      // Verificar se a API está realmente disponível
+      if (typeof navigator.share === 'function') {
+        await navigator.share({
+          title: 'Chá Revelação',
+          text,
+          url
+        });
         return;
       }
-    } catch {}
+    } catch (error) {
+      console.log('Share failed:', error);
+    }
 
-    // Fallback share links
+    // Fallback: abrir em nova janela com delay para evitar bloqueio de popup
+    const openWindow = (url: string) => {
+      const win = window.open(url, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        // Popup foi bloqueado, mostra em nova aba
+        window.location.href = url;
+      }
+    };
+
+    // Links de compartilhamento
     const encodedText = encodeURIComponent(text + '\n' + url);
     const whatsapp = `https://wa.me/?text=${encodedText}`;
     const facebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
-    // Instagram doesn't support direct web share with pre-filled content; open profile
-    const instagram = `https://www.instagram.com/`;
 
-    window.open(whatsapp, '_blank');
-    setTimeout(() => window.open(facebook, '_blank'), 400);
-    setTimeout(() => window.open(instagram, '_blank'), 800);
+    // Tentar abrir WhatsApp primeiro
+    try {
+      openWindow(whatsapp);
+    } catch (error) {
+      console.log('WhatsApp share failed:', error);
+    }
+
+    // Facebook com pequeno delay
+    setTimeout(() => {
+      try {
+        openWindow(facebook);
+      } catch (error) {
+        console.log('Facebook share failed:', error);
+      }
+    }, 500);
+  }
+
+  removeItem(item: GalleryItem) {
+    const index = this.galleryItems.findIndex(i => i.id === item.id);
+    if (index > -1) {
+      this.galleryItems.splice(index, 1);
+      localStorage.setItem('posts', JSON.stringify(this.galleryItems));
+    }
   }
 
   async sharePage() {
     const title = 'Galeria - Chá Revelação';
     const text = 'Veja a nossa Galeria de Memórias do Chá Revelação';
     const url = location.href;
+    
     try {
-      if (navigator.share) {
+      if (typeof navigator.share === 'function') {
         await navigator.share({ title, text, url });
         return;
       }
-    } catch {}
-    const whatsapp = `https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`;
+    } catch (error) {
+      console.log('Share page failed:', error);
+    }
+
+    // Função auxiliar para abrir janelas com fallback
+    const openWindow = (url: string) => {
+      const win = window.open(url, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = url;
+      }
+    };
+
+    // Preparar URLs de compartilhamento
+    const encodedText = encodeURIComponent(text + '\n' + url);
+    const whatsapp = `https://wa.me/?text=${encodedText}`;
     const facebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
-    window.open(whatsapp, '_blank');
-    setTimeout(() => window.open(facebook, '_blank'), 400);
+
+    // Tentar compartilhar com tratamento de erros
+    try {
+      openWindow(whatsapp);
+      setTimeout(() => {
+        try {
+          openWindow(facebook);
+        } catch (error) {
+          console.log('Facebook share failed:', error);
+        }
+      }, 500);
+    } catch (error) {
+      console.log('WhatsApp share failed:', error);
+    }
   }
 
 }

@@ -3,25 +3,22 @@
   <div class="gallery-topbar">
   <div class="brand-name">Pedro ou <span>Eduarda?</span></div>
     <nav class="gallery-header">
-      <button class="gallery-button" (click)="goBack()">Voltar</button>
+      <a (click)="$event.preventDefault(); logout()"><img src="../../../../public/sair-do-usuario.png"></a>
       <button class="gallery-button" (click)="$event.preventDefault(); logout()">Sair</button>
     </nav>
   </div>
 
-  <!-- Section header with title and create button -->
-  <div class="gallery-header-row">
-    <h1 class="gallery-title">Galeria de Memórias</h1>
-    <button class="btn-gradient" (click)="goToInteraction()" style="display:inline-flex; align-items:center; gap:.5rem">
-      <span aria-hidden="true">🖼️</span>
-      <span>Criar</span>
-    </button>
-  </div>
+  <button class="btn-floating" (click)="goToInteraction()">
+  </button>
 
   <div class="gallery-grid">
     <div
       class="gallery-card"
-      *ngFor="let item of galleryItems"
+      *ngFor="let item of galleryItems;"
+      (click)="openModal(item)"
     >
+      <button class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
+
       <ng-container *ngIf="item.video; else photoTpl">
         <video [src]="item.video" controls class="card-image" style="background:#000"></video>
       </ng-container>
@@ -38,8 +35,7 @@
         </div>
         <p class="card-message">{{ item.message }}</p>
         <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
-          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="openModal(item)">Ver</button>
-          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="share(item)">Compartilhar</button>
+          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="$event.stopPropagation(); share(item)">Compartilhar</button>
         </div>
       </div>
     </div>
