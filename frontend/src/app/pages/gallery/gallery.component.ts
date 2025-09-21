@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { logoutAll } from '../../utils/auth';
+import { logoutAll, getProfile, syncUserData } from '../../utils/auth';
 
 interface GalleryItem {
   id: number;
@@ -28,11 +28,20 @@ export class GalleryComponent implements OnInit {
   constructor(private router: Router, private location: Location) {}
 
   ngOnInit() {
+    // Sincronizar dados de usuário para garantir compatibilidade
+    syncUserData();
+
     const raw = localStorage.getItem('posts');
     if (raw) {
       try {
         const items = JSON.parse(raw) as GalleryItem[];
-        this.galleryItems = items;
+        this.galleryItems = items.map(item => {
+          // Verificar se o userPhoto é válido, caso contrário usar a imagem padrão
+          if (!item.userPhoto || item.userPhoto === 'undefined' || item.userPhoto === 'null') {
+            item.userPhoto = 'assets/avatar-1.jpg';
+          }
+          return item;
+        });
       } catch {}
     }
   }

@@ -1,31 +1,31 @@
 services:
-  app:
-    build: .
-    container_name: revelacao-cha-backend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/revelacao_cha_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_PROFILES_ACTIVE=docker
-      - SERVER_SERVLET_CONTEXT_PATH=/api
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-      - SPRING_JPA_SHOW_SQL=true
-      - SPRING_FLYWAY_ENABLED=true
-      - JWT_SECRET=mySecretKey123456789mySecretKey123456789
-      - JWT_EXPIRATION=86400000
-    networks:
-      - revelacao-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+#  app:
+#    build: .
+#    container_name: revelacao-cha-backend
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/revelacao_cha_db
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SERVER_SERVLET_CONTEXT_PATH=/api
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+#      - SPRING_JPA_SHOW_SQL=true
+#      - SPRING_FLYWAY_ENABLED=true
+#      - JWT_SECRET=mySecretKey123456789mySecretKey123456789
+#      - JWT_EXPIRATION=86400000
+#    networks:
+#      - revelacao-network
+#    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 60s
 
   # Serviço Flyway opcional para rodar Migrate manualmente (NÃO inicia automaticamente)
   # Execute quando precisar aplicar novas migrações sem reiniciar o app:
