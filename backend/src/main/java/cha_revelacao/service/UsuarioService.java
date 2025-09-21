@@ -38,6 +38,7 @@ public class UsuarioService {
         usuario.setNome(request.getNome());
         usuario.setEmail(request.getEmail());
         usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+        usuario.setFotoPerfil(request.getFotoPerfil()); // Adiciona a foto de perfil
         usuario.setTipo(Usuario.TipoUsuario.CONVIDADO);
         usuario.setAtivo(true);
 
@@ -91,6 +92,11 @@ public class UsuarioService {
 
         usuario.setNome(request.getNome());
         usuario.setEmail(request.getEmail());
+        
+        // Atualiza a foto de perfil se fornecida
+        if (request.getFotoPerfil() != null && !request.getFotoPerfil().isEmpty()) {
+            usuario.setFotoPerfil(request.getFotoPerfil());
+        }
 
         if (request.getSenha() != null && !request.getSenha().isEmpty()) {
             usuario.setSenha(passwordEncoder.encode(request.getSenha()));
