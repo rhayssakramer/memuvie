@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { logoutAll } from '../../utils/auth';
 
 interface GalleryItem {
   id: number;
@@ -58,8 +59,8 @@ export class GalleryComponent implements OnInit {
   }
 
   logout() {
-    // logout is handled elsewhere in app via auth utils; keep simple redirect
-    this.router.navigate(['/identification']);
+    logoutAll(); // Clear session and profile
+    this.router.navigate(['/login']);
   }
 
   formatDate(date: Date | string): string {

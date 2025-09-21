@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { saveProfile, startSession } from '../../utils/auth';
+import { saveProfile, startSession, logoutAll } from '../../utils/auth';
 
 @Component({
   selector: 'app-identification',
@@ -11,14 +11,25 @@ import { saveProfile, startSession } from '../../utils/auth';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class IdentificationComponent {
+export class IdentificationComponent implements OnInit {
   userName: string = '';
   email: string = '';
   password: string = '';
   selectedFile: File | null = null;
   previewUrl: string | null = null;
 
-  constructor(private router: Router) {}
+  ngOnInit() {
+    // Clear everything on initialization
+    logoutAll();
+    // Clear all storage to be extra safe
+    localStorage.clear();
+    sessionStorage.clear();
+  }
+
+  constructor(private router: Router) {
+    // Force clear any existing session on component creation
+    logoutAll();
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
