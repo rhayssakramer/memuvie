@@ -20,8 +20,62 @@
       </form>
 
       <div class="help">
-        Ainda não tem perfil? <a (click)="goToCreate()" href="#">Crie seu perfil</a>
+        Ainda não tem perfil? <button class="link-button" (click)="goToCreate($event)">Crie seu perfil</button>
       </div>
     </div>
   </main>
+
+  <!-- Modal de criação de perfil -->
+  <div class="modal" *ngIf="showCreateProfile">
+    <div class="modal-content">
+      <div class="modal-card">
+        <div class="modal-top">
+          <small class="modal-sub">Entre para descobrir!</small>
+          <h1 class="modal-title">Crie seu perfil</h1>
+          <button class="close-button" (click)="closeCreateProfile()">&times;</button>
+        </div>
+
+        <form (ngSubmit)="createProfile()" class="modal-form">
+          <div class="modal-error" *ngIf="error">{{ error }}</div>
+
+          <div class="form-group">
+            <label for="newName">Seu Nome</label>
+            <input id="newName" [(ngModel)]="newUserName" name="newUserName" required class="input" placeholder="Digite seu nome">
+          </div>
+
+          <div class="form-group">
+            <label for="newEmail">E-mail</label>
+            <input id="newEmail" type="email" [(ngModel)]="newEmail" name="newEmail" required class="input" placeholder="voce@exemplo.com">
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Senha</label>
+            <input id="newPassword" type="password" [(ngModel)]="newPassword" name="newPassword" required minlength="6" class="input" placeholder="Crie uma senha (mín. 6 caracteres)">
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar Senha</label>
+            <input id="confirmPassword" type="password" [(ngModel)]="newConfirmPassword" name="newConfirmPassword" required minlength="6" class="input" placeholder="Digite a senha novamente">
+          </div>
+
+          <div class="form-group">
+            <label>Adicione sua foto</label>
+            <div class="upload-box" (click)="fileInput.click()">
+              <ng-container *ngIf="!previewUrl">
+                <div class="upload-placeholder">📷</div>
+                <small class="upload-hint">Clique para escolher uma imagem</small>
+              </ng-container>
+              <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="upload-preview">
+            </div>
+            <input #fileInput id="fileInput" type="file" (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/gif" style="display: none">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="closeCreateProfile()">Cancelar</button>
+            <button type="submit" class="btn-gradient">Criar Perfil</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

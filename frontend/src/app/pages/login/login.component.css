@@ -7,9 +7,192 @@
 .hint { margin:0 0 1rem; color:#666; }
 .form { display:grid; gap:.8rem; }
 label { color:#111; font-weight:600; display:block; }
-.input { width:100%; border:1.5px solid #eee; border-radius:12px; padding:.75rem .9rem; font-size:1rem; }
-.input:focus { outline:none; border-color:#f7b9cf; }
-.error { color:#e91e63; font-weight:600; margin-top:.25rem; }
-.submit { width:100%; margin-top:.4rem; }
-.help { text-align:center; margin-top: .9rem; }
-.help a { color:#e91e63; text-decoration:none; font-weight:600; }
+
+/* Estilos do Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+/* New modal card styles to match design */
+.modal-card {
+  width: 100%;
+  background: linear-gradient(180deg, rgba(255,244,248,1) 0%, rgba(255,255,255,1) 45%);
+  border-radius: 18px;
+  padding: 2rem 2rem 1.6rem 2rem;
+  box-shadow: 0 12px 30px rgba(15,34,56,0.08);
+  position: relative;
+}
+
+.modal-top {
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+
+.modal-sub {
+  display: block;
+  color: #ff6f9b;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.modal-title {
+  margin: 0;
+  font-family: 'Great Vibes', cursive, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 2.2rem;
+  color: #0f2238;
+  line-height: 1;
+}
+
+.modal-card .close-button {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: #666;
+}
+
+.modal-form { margin-top: 1rem; }
+
+.modal-error { color: #e91e63; font-weight: 700; margin-bottom: .6rem; text-align:center }
+
+.upload-box {
+  border: 2px dashed #dcdcdc;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  min-height: 120px;
+  cursor: pointer;
+}
+
+.upload-placeholder { font-size: 2rem; }
+.upload-hint { color:#9aa3b2; font-size:.9rem }
+.upload-preview { max-width: 220px; max-height: 220px; border-radius: 12px; object-fit: cover }
+
+.form-actions { display:flex; justify-content:space-between; gap:.8rem; margin-top: .8rem }
+.btn-secondary { background:#f3f4f6; border:none; padding:.6rem 1rem; border-radius:10px; cursor:pointer }
+.btn-gradient { background: linear-gradient(90deg,#e9edf7,#dfe7ff); color:#0f2238; border:none; padding:.6rem 1rem; border-radius:10px; cursor:pointer }
+
+/* Inputs style adjustments inside modal */
+.modal .input { width:100%; border:1.5px solid #eee; border-radius:12px; padding:.85rem 1rem; }
+
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Estilos do botão */
+.modal .btn-gradient {
+  background: linear-gradient(45deg, #e91e63, #f06292);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-gradient { background: linear-gradient(90deg,#e9edf7,#dfe7ff); color:#0f2238; border:none; padding:.6rem 1rem; border-radius:10px; cursor:pointer }
+
+/* Estilos do Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  padding: 0;
+  cursor: pointer;
+  color: #666;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
