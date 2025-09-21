@@ -10,6 +10,7 @@ public class UsuarioResponse {
     private Long id;
     private String nome;
     private String email;
+    private String fotoPerfil;
     private Usuario.TipoUsuario tipo;
     private Boolean ativo;
     private LocalDateTime criadoEm;
