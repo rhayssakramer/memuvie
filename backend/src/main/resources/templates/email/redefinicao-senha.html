@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Redefinição de Senha</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #FF55AA;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #FF55AA;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Memuvie</h1>
+    </div>
+    
+    <div class="content">
+        <h2>Redefinição de Senha</h2>
+        
+        <p>Olá <span th:text="${nome}">Usuário</span>,</p>
+        
+        <p>Recebemos uma solicitação para redefinir sua senha de acesso ao Memuvie. Para criar uma nova senha, clique no botão abaixo:</p>
+        
+        <p style="text-align: center;">
+            <a class="button" th:href="${resetUrl}" target="_blank">Redefinir minha senha</a>
+        </p>
+        
+        <p>Se o botão não funcionar, você também pode copiar e colar o link abaixo em seu navegador:</p>
+        
+        <p style="word-break: break-all;">
+            <a th:href="${resetUrl}" th:text="${resetUrl}" target="_blank">Link de redefinição</a>
+        </p>
+        
+        <p>Este link expirará em <span th:text="${validade}">30 minutos</span>.</p>
+        
+        <h3>Como redefinir sua senha:</h3>
+        <ol>
+            <li><strong>Clique no botão</strong> "Redefinir minha senha" acima ou use o link fornecido</li>
+            <li>Você será redirecionado para uma página segura do Memuvie</li>
+            <li><strong>Crie uma nova senha</strong> que seja forte e segura</li>
+            <li>Sua senha deve ter pelo menos 8 caracteres e incluir letras, números e caracteres especiais</li>
+            <li>Após confirmar sua nova senha, você poderá fazer login imediatamente com suas novas credenciais</li>
+        </ol>
+        
+        <p><strong>Dica de segurança:</strong> Evite usar senhas que você já usa em outros sites. Crie uma senha única para o Memuvie.</p>
+        
+        <p>Se você não solicitou a redefinição da sua senha, ignore este e-mail ou entre em contato conosco imediatamente, pois alguém pode estar tentando acessar sua conta.</p>
+        
+        <p>Atenciosamente,<br/>Equipe Memuvie</p>
+    </div>
+    
+    <div class="footer">
+        <p>Esta é uma mensagem automática, por favor não responda este e-mail.</p>
+        <p>&copy; 2025 Memuvie. Todos os direitos reservados.</p>
+    </div>
+</body>
+</html>
