@@ -13,7 +13,7 @@ const requireAuthGuard = () => {
   if (isSessionValid() && getProfile()) {
     return true;
   }
-  router.navigate(['/login']);
+  router.navigate(['/']); // Redirecionando para home ao invés de login
   return false;
 };
 

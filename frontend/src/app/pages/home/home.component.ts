@@ -50,6 +50,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onEnter() {
+    // Se o usuário estiver autenticado, vai para interação
+    // Se não, vai para a página de login
     if (isSessionValid() && !!getProfile()) {
       this.router.navigate(['/interaction']);
     } else {
