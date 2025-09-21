@@ -84,12 +84,13 @@ export class InteractionComponent implements OnInit {
     (document.getElementById('photoInput') as HTMLInputElement)?.click();
   }
 
-  submitMessage() {
-    if (!(this.message.trim() || this.selectedPhoto || this.selectedVideo)) return;
+  async submitMessage() {
+    // Allow submit if there's a typed message, a selected photo, a selected video, or an existing preview URL
+    if (!(this.message.trim() || this.selectedPhoto || this.selectedVideo || this.photoPreviewUrl)) return;
 
     const userName = localStorage.getItem('userName') || 'Convidado';
 
-    const savePost = (photoDataUrl?: string, videoObjectUrl?: string) => {
+    const savePost = (photoDataUrl?: string, videoDataUrl?: string) => {
       const raw = localStorage.getItem('posts');
       const posts = raw ? JSON.parse(raw) : [];
       posts.unshift({
@@ -97,38 +98,65 @@ export class InteractionComponent implements OnInit {
         userName,
         userPhoto: localStorage.getItem('userPhoto') || 'assets/avatar-1.jpg',
         photo: photoDataUrl || null,
-        video: videoObjectUrl || null,
+        // store video as data URL as well so it persists across sessions
+        video: videoDataUrl || null,
         message: this.message || '',
         date: new Date().toISOString()
       });
       localStorage.setItem('posts', JSON.stringify(posts));
+      // Clear local state before navigating so the component doesn't hold stale data
+      this.message = '';
+      this.selectedPhoto = null;
+      this.photoPreviewUrl = null;
+      if (this.videoPreviewUrl) {
+        try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
+      }
+      this.selectedVideo = null;
+      this.videoPreviewUrl = null;
+      const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
+      if (photoInput) photoInput.value = '';
+      const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
+      if (videoInput) videoInput.value = '';
+
       this.router.navigate(['/gallery']);
     };
 
-    if (this.selectedPhoto) {
-      // If we already have a preview DataURL (fast path), reuse it and avoid re-reading the file.
+    // Helper to read a File as DataURL
+    const readFileAsDataURL = (file: File) => {
+      return new Promise<string>((resolve, reject) => {
+        const r = new FileReader();
+        this.currentFileReader = r;
+        r.onload = () => { this.currentFileReader = null; resolve(r.result as string); };
+        r.onerror = () => { this.currentFileReader = null; reject(new Error('read error')); };
+        r.onabort = () => { this.currentFileReader = null; reject(new Error('aborted')); };
+        r.readAsDataURL(file);
+      });
+    };
+
+    try {
+      let photoDataUrl: string | undefined = undefined;
+      let videoDataUrl: string | undefined = undefined;
+
       if (this.photoPreviewUrl) {
-        savePost(this.photoPreviewUrl, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
-      } else {
-        // Fallback: read the file now and keep a reference to allow aborting if needed
-        const reader = new FileReader();
-        this.currentFileReader = reader;
-        reader.onload = () => {
-          savePost(reader.result as string, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
-          this.currentFileReader = null;
-        };
-        reader.onerror = () => {
-          // reading failed - clear and do not navigate
-          this.currentFileReader = null;
-        };
-        reader.onabort = () => {
-          this.currentFileReader = null;
-        };
-        reader.readAsDataURL(this.selectedPhoto);
+        // already have a DataURL preview
+        photoDataUrl = this.photoPreviewUrl;
+      } else if (this.selectedPhoto) {
+        photoDataUrl = await readFileAsDataURL(this.selectedPhoto);
       }
-    } else {
-      // No photo, just message and/or video
-      savePost(undefined, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
+
+      if (this.selectedVideo) {
+        // Convert video file to DataURL so it persists
+        videoDataUrl = await readFileAsDataURL(this.selectedVideo);
+      } else if (this.videoPreviewUrl && !this.selectedVideo) {
+        // In case videoPreviewUrl was created with createObjectURL but file not set, avoid storing object URL
+        videoDataUrl = undefined;
+      }
+
+      savePost(photoDataUrl, videoDataUrl);
+    } catch (e) {
+      // read failed - do not navigate away
+      // leave state so user can retry
+      return;
     }
   }
 

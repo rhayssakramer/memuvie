@@ -1,22 +1,27 @@
-
+.page-bg{
+  margin: 0;
+  padding: 0;
+}
 
 .header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 0 1rem;
 }
 
 /* New Topbar matching screenshot */
 .gallery-topbar {
-  max-width: 1200px;
+  max-width: 100%;
+  box-shadow: 0 14px 30px rgba(255,95,163,.25); 
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .75rem 1rem;
-  border-bottom: 1px solid rgba(0,0,0,0.08); /* separator line */
+  padding: .9rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: #ffffff;
+  border-radius: 0 0 5px 5px;
 }
 
 .brand {
@@ -24,39 +29,48 @@
   align-items: center;
   gap: .5rem;
 }
-.brand-icon { font-size: 1.1rem; }
-.brand-name { color: #0f2238; font-weight: 600; }
 
-.top-links {
+.brand-icon { 
+  font-size: 1.1rem; 
+}
+
+.brand-name { 
+  color: #3a7bff;
+  font-weight: 700; 
+  font-size: 20px;
+  margin-left: 100px;
+}
+
+.brand-name span{
+  color: #ff5fa3;
+}
+
+.gallery-header {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
 }
-.top-links a {
-  color: #111;
-  text-decoration: none;
-  font-weight: 500;
-  opacity: .7;
+.gallery-button{
+  display:flex; 
+  gap:1rem;  
 }
-.top-links .logout-link { margin-left:.5rem; }
-.top-links .text-link {
-  background: transparent;
-  border: none;
-  color: #111;
-  font-weight: 500;
-  opacity: .7;
-  cursor: pointer;
-}
-.top-links a.active-link { color: #e91e63; opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
 
-.icon-button {
-  background: transparent;
-  border: none;
-  padding: .4rem;
-  border-radius: 8px;
-  cursor: pointer;
+.gallery-button{
+  width: 70px;
+  height: 35px;
+  border: 0; 
+  border-radius: 999px; 
+  padding: .95rem 1.6rem; 
+  display:flex; 
+  align-items:center; 
+  justify-content: center; 
+  gap:.5rem; 
+  background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%); 
+  color: #fff; 
+  font-weight: 700; 
+  cursor: pointer; 
+  transition: transform .2s ease, box-shadow .2s ease; 
 }
-.icon-button:hover { background: rgba(0,0,0,0.05); }
 
 .gallery-header-row {
   max-width: 1200px;

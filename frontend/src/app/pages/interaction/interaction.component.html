@@ -2,10 +2,10 @@
   <!-- Header -->
   <header class="interaction-header">
     <div class="brand">Pedro ou <span>Eduarda?</span></div>
-    <nav class="header-links">
-      <a routerLink="/" routerLinkActive="active">Início</a>
-      <a routerLink="/gallery" routerLinkActive="active">Galeria</a>
-      <a href="#" (click)="$event.preventDefault(); logout()">Sair</a>
+    <nav class="header-interaction">
+      <button class="header-button" routerLink="/" >Home</button>
+      <button class="header-button" routerLink="/gallery">Galeria</button>
+      <button class="header-button" href="#" (click)="$event.preventDefault(); logout()">Sair</button>
     </nav>
   </header>
 
@@ -66,7 +66,7 @@
         <div class="char-count">{{ remainingCharacters }} caracteres restantes</div>
       </div>
 
-      <button class="send-button" (click)="submitMessage()" [disabled]="!message.trim() && !selectedPhoto && !selectedVideo">Enviar Mensagem</button>
+  <button class="send-button" (click)="submitMessage()" [disabled]="!message.trim() && !selectedPhoto && !selectedVideo && !photoPreviewUrl">Enviar Mensagem</button>
     </section>
   </main>
 

@@ -250,8 +250,8 @@
 /* New modal card styles to match design */
 .modal-card {
   width: 100%;
-  /* Keep the visible card background and shadow. */
-  background: linear-gradient(180deg, rgba(255,244,248,1) 0%, rgba(255,255,255,1) 45%);
+   /* Keep the visible card background and shadow. */
+  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
   border-radius: 18px;
   padding: 2rem 2rem 1.6rem 2rem;
   box-shadow: 0 12px 30px rgba(15,34,56,0.08);
@@ -344,6 +344,10 @@
   cursor: pointer;
 }
 
+.upload-box:hover{
+  background-color: #f8f8ff;
+}
+
 /* Quando houver foto selecionada: borda em rosa/vermelho conforme solicitado */
 .upload-box.has-photo {
   border-color: #e11d48; /* cor solicitada */
@@ -367,7 +371,10 @@
 }
 
 /* Botão de remover (X) posicionado no canto superior direito do box */
-.upload-box { position: relative; }
+.upload-box {
+  position: relative; 
+}
+
 .remove-btn {
   position: absolute;
   top: 8px;
@@ -375,8 +382,8 @@
   background: #e11d48; /* destaque vermelho */
   color: #fff;
   border: none;
-  width: 42px;
-  height: 42px;
+  width: 25px;
+  height:25px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -387,9 +394,19 @@
   box-shadow: 0 8px 22px rgba(225,29,72,0.18);
   transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
 }
-.remove-btn:hover { transform: translateY(-2px); background: #d01845; }
-.remove-btn:active { transform: translateY(1px); }
-.remove-btn:focus { outline: 3px solid rgba(225,29,72,0.18); }
+
+.remove-btn:hover { 
+  transform: translateY(-2px); 
+  background: #d01845; 
+}
+
+.remove-btn:active { 
+  transform: translateY(1px); 
+}
+
+.remove-btn:focus { 
+  outline: 3px solid rgba(225,29,72,0.18); 
+}
 
 /* Quando houver foto, exibir thumbnail menor e leve escala */
 .upload-box.has-photo .upload-preview {
@@ -427,7 +444,10 @@
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.modal .btn-secondary:hover { transform: translateY(-2px); }
+
+.modal .btn-secondary:hover { 
+  transform: translateY(-2px); 
+}
 
 .btn-gradient { 
   background: linear-gradient(90deg,#e9edf7,#dfe7ff); 
@@ -465,7 +485,10 @@
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.modal .btn-gradient:hover { transform: translateY(-2px); }
+
+.modal .btn-gradient:hover { 
+  transform: translateY(-2px); 
+}
 
 .btn-gradient { 
   background: linear-gradient(90deg,#e9edf7,#dfe7ff);

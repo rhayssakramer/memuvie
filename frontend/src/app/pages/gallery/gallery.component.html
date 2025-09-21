@@ -1,13 +1,10 @@
 <div class="page-bg">
   <!-- Top bar with brand, links and share -->
   <div class="gallery-topbar">
-    <div class="brand">
-      <span class="brand-icon" aria-hidden="true">🎂</span>
-      <span class="brand-name">Chá Revelação</span>
-    </div>
-    <nav class="top-links">
-      <button class="btn-gradient" style="padding:.45rem .9rem" (click)="goBack()">Voltar</button>
-      <a href="#" class="logout-link" (click)="$event.preventDefault(); logout()">Sair</a>
+  <div class="brand-name">Pedro ou <span>Eduarda?</span></div>
+    <nav class="gallery-header">
+      <button class="gallery-button" (click)="goBack()">Voltar</button>
+      <button class="gallery-button" (click)="$event.preventDefault(); logout()">Sair</button>
     </nav>
   </div>
 
