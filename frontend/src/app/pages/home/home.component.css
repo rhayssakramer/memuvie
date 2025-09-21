@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 /* Background hero section */
 .hero {
   min-height: 100vh;
@@ -5,7 +7,7 @@
   display: grid;
   place-items: center;
   padding: 2rem 1rem;
-  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+  background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
   position: relative;
   overflow: hidden;
 }
@@ -24,7 +26,11 @@
 .subtitle {
   color: #ff5fa3;
   font-weight: 700;
-  margin-bottom: .75rem;
+  font-size: 20px;
+}
+
+.subtitle span{
+  color: #3a7bff;
 }
 
 .title {
@@ -32,7 +38,6 @@
   font-size: clamp(2.2rem, 6vw, 4rem);
   color: #0f2238;
   text-shadow: 0 6px 18px rgba(15,34,56,.15);
-  margin-bottom: 1.5rem;
 }
 
 /* Countdown */
@@ -89,8 +94,8 @@
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  opacity: .6;
+  opacity: .3;
 }
-.dot-top-left { width: 80px; height: 80px; background: #ffc1dc; top: 26px; left: 26px; }
-.dot-left { width: 56px; height: 56px; background: #ffb1d4; left: 22px; bottom: 140px; }
-.dot-right { width: 110px; height: 110px; background: #b5d1ff; right: 28px; bottom: 120px; }
+.dot-top-left { width: 80px; height: 80px; background: #ffffff; top: 26px; left: 26px; }
+.dot-left { width: 56px; height: 56px; background: #ffffff; left: 22px; bottom: 140px; }
+.dot-right { width: 110px; height: 110px; background: #ffffff; right: 28px; bottom: 120px; }
