@@ -21,15 +21,105 @@ export class InteractionComponent implements OnInit {
   videoPreviewUrl: string | null = null;
   maxLength: number = 5000;
 
+  private resizeImage(base64Str: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const maxWidth = 600;  // Reduzido de 800 para 600
+        const maxHeight = 600; // Reduzido de 800 para 600
+        let width = img.width;
+        let height = img.height;
+
+        // Calcular novas dimensões mantendo a proporção
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Não foi possível criar contexto 2d'));
+          return;
+        }
+
+        // Aplica um leve desfoque para melhor compressão
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'low';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Converter para JPEG com qualidade mais baixa para economizar espaço
+        resolve(canvas.toDataURL('image/jpeg', 0.5));
+      };
+      img.onerror = () => {
+        reject(new Error('Erro ao carregar imagem'));
+      };
+    });
+  }
+
+  private async cleanupOldPosts() {
+    try {
+      const raw = localStorage.getItem('posts');
+      if (raw) {
+        const posts = JSON.parse(raw);
+        // Primeiro tenta manter 10 posts
+        let recentPosts = posts.slice(0, 10);
+        
+        try {
+          localStorage.setItem('posts', JSON.stringify(recentPosts));
+        } catch (e) {
+          // Se ainda estiver cheio, tenta manter apenas 5 posts
+          recentPosts = posts.slice(0, 5);
+          try {
+            localStorage.setItem('posts', JSON.stringify(recentPosts));
+          } catch (e) {
+            // Se ainda estiver cheio, limpa tudo
+            localStorage.removeItem('posts');
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao limpar posts antigos:', e);
+      // Em caso de erro, tenta limpar tudo
+      localStorage.removeItem('posts');
+    }
+  }
+
   constructor(private router: Router) {}
 
   ngOnInit() {
-    // No-op; route guards handle auth/session.
+    // Limpar todo o estado quando o componente é inicializado
+    this.message = '';
+    this.selectedPhoto = null;
+    this.photoPreviewUrl = null;
+    this.isReadingPhoto = false;
+    this.currentFileReader = null;
+    this.selectedVideo = null;
+    this.videoPreviewUrl = null;
+
+    // Limpar os inputs de arquivo
+    setTimeout(() => {
+      const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
+      const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
+      if (photoInput) photoInput.value = '';
+      if (videoInput) videoInput.value = '';
+    }, 0);
   }
 
   logout() {
     logoutAll(); // Clear session and profile
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']); // Navega para a página inicial (home)
   }
 
   openFileUpload() {
@@ -37,32 +127,38 @@ export class InteractionComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event) {
+    console.log('Foto selecionada');
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.selectedPhoto = input.files[0];
-      // Create preview URL
       const reader = new FileReader();
-      this.currentFileReader = reader;
       this.isReadingPhoto = true;
+      
       reader.onload = () => {
-        this.photoPreviewUrl = reader.result as string;
-        this.isReadingPhoto = false;
-        this.currentFileReader = null;
+        console.log('Foto carregada, iniciando redimensionamento');
+        const base64Str = reader.result as string;
+        
+        this.resizeImage(base64Str)
+          .then(resizedBase64 => {
+            console.log('Foto redimensionada com sucesso');
+            this.photoPreviewUrl = resizedBase64;
+            this.isReadingPhoto = false;
+          })
+          .catch(error => {
+            console.error('Erro ao redimensionar:', error);
+            this.isReadingPhoto = false;
+            this.selectedPhoto = null;
+            this.photoPreviewUrl = null;
+          });
       };
+      
       reader.onerror = () => {
-        // If reading fails, clear state so user can retry
+        console.error('Erro ao ler foto');
         this.isReadingPhoto = false;
-        this.currentFileReader = null;
         this.selectedPhoto = null;
         this.photoPreviewUrl = null;
       };
-      reader.onabort = () => {
-        // User cancelled the read
-        this.isReadingPhoto = false;
-        this.currentFileReader = null;
-        this.selectedPhoto = null;
-        this.photoPreviewUrl = null;
-      };
+      
       reader.readAsDataURL(this.selectedPhoto);
     }
   }
@@ -85,40 +181,69 @@ export class InteractionComponent implements OnInit {
   }
 
   async submitMessage() {
-    // Allow submit if there's a typed message, a selected photo, a selected video, or an existing preview URL
-    if (!(this.message.trim() || this.selectedPhoto || this.selectedVideo || this.photoPreviewUrl)) return;
+    console.log('Iniciando submitMessage');
+    
+    // Verificar se há conteúdo para enviar
+    const hasContent = this.message.trim() || this.selectedPhoto || this.selectedVideo || this.photoPreviewUrl;
+    console.log('Tem conteúdo para enviar?', hasContent, {
+      message: this.message.trim(),
+      photo: !!this.selectedPhoto,
+      video: !!this.selectedVideo,
+      preview: !!this.photoPreviewUrl
+    });
+
+    if (!hasContent) {
+      console.log('Nenhum conteúdo para enviar');
+      return;
+    }
 
     const userName = localStorage.getItem('userName') || 'Convidado';
 
     const savePost = (photoDataUrl?: string, videoDataUrl?: string) => {
-      const raw = localStorage.getItem('posts');
-      const posts = raw ? JSON.parse(raw) : [];
-      posts.unshift({
-        id: Date.now(),
-        userName,
-        userPhoto: localStorage.getItem('userPhoto') || 'assets/avatar-1.jpg',
-        photo: photoDataUrl || null,
-        // store video as data URL as well so it persists across sessions
-        video: videoDataUrl || null,
-        message: this.message || '',
-        date: new Date().toISOString()
-      });
-      localStorage.setItem('posts', JSON.stringify(posts));
-      // Clear local state before navigating so the component doesn't hold stale data
-      this.message = '';
-      this.selectedPhoto = null;
-      this.photoPreviewUrl = null;
-      if (this.videoPreviewUrl) {
-        try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
-      }
-      this.selectedVideo = null;
-      this.videoPreviewUrl = null;
-      const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
-      if (photoInput) photoInput.value = '';
-      const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
-      if (videoInput) videoInput.value = '';
+      try {
+        // Salvar o post
+        const raw = localStorage.getItem('posts');
+        const posts = raw ? JSON.parse(raw) : [];
+        posts.unshift({
+          id: Date.now(),
+          userName,
+          userPhoto: localStorage.getItem('userPhoto') || 'assets/avatar-1.jpg',
+          photo: photoDataUrl || null,
+          video: videoDataUrl || null,
+          message: this.message || '',
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('posts', JSON.stringify(posts));
 
-      this.router.navigate(['/gallery']);
+        // Limpar o estado
+        this.message = '';
+        this.selectedPhoto = null;
+        this.photoPreviewUrl = null;
+        this.isReadingPhoto = false;
+        this.currentFileReader = null;
+
+        if (this.videoPreviewUrl) {
+          try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
+        }
+        this.selectedVideo = null;
+        this.videoPreviewUrl = null;
+
+        // Limpar inputs de arquivo
+        ['photoInput', 'videoInput'].forEach(inputId => {
+          const input = document.getElementById(inputId) as HTMLInputElement | null;
+          if (input) {
+            input.value = '';
+            input.files = null;
+          }
+        });
+
+        // Navegar após um pequeno delay para garantir que tudo foi limpo
+        setTimeout(() => {
+          this.router.navigate(['/gallery']);
+        }, 100);
+      } catch (error) {
+        console.error('Erro ao salvar o post:', error);
+      }
     };
 
     // Helper to read a File as DataURL
