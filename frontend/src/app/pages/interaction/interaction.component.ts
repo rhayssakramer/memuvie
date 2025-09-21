@@ -15,6 +15,8 @@ export class InteractionComponent implements OnInit {
   message: string = '';
   selectedPhoto: File | null = null;
   photoPreviewUrl: string | null = null;
+  isReadingPhoto: boolean = false;
+  currentFileReader: FileReader | null = null;
   selectedVideo: File | null = null;
   videoPreviewUrl: string | null = null;
   maxLength: number = 5000;
@@ -40,8 +42,26 @@ export class InteractionComponent implements OnInit {
       this.selectedPhoto = input.files[0];
       // Create preview URL
       const reader = new FileReader();
+      this.currentFileReader = reader;
+      this.isReadingPhoto = true;
       reader.onload = () => {
         this.photoPreviewUrl = reader.result as string;
+        this.isReadingPhoto = false;
+        this.currentFileReader = null;
+      };
+      reader.onerror = () => {
+        // If reading fails, clear state so user can retry
+        this.isReadingPhoto = false;
+        this.currentFileReader = null;
+        this.selectedPhoto = null;
+        this.photoPreviewUrl = null;
+      };
+      reader.onabort = () => {
+        // User cancelled the read
+        this.isReadingPhoto = false;
+        this.currentFileReader = null;
+        this.selectedPhoto = null;
+        this.photoPreviewUrl = null;
       };
       reader.readAsDataURL(this.selectedPhoto);
     }
@@ -86,13 +106,57 @@ export class InteractionComponent implements OnInit {
     };
 
     if (this.selectedPhoto) {
-      const reader = new FileReader();
-      reader.onload = () => savePost(reader.result as string, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
-      reader.readAsDataURL(this.selectedPhoto);
+      // If we already have a preview DataURL (fast path), reuse it and avoid re-reading the file.
+      if (this.photoPreviewUrl) {
+        savePost(this.photoPreviewUrl, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
+      } else {
+        // Fallback: read the file now and keep a reference to allow aborting if needed
+        const reader = new FileReader();
+        this.currentFileReader = reader;
+        reader.onload = () => {
+          savePost(reader.result as string, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
+          this.currentFileReader = null;
+        };
+        reader.onerror = () => {
+          // reading failed - clear and do not navigate
+          this.currentFileReader = null;
+        };
+        reader.onabort = () => {
+          this.currentFileReader = null;
+        };
+        reader.readAsDataURL(this.selectedPhoto);
+      }
     } else {
       // No photo, just message and/or video
       savePost(undefined, this.selectedVideo ? this.videoPreviewUrl || undefined : undefined);
     }
+  }
+
+  cancelUpload() {
+    // Abort any in-progress FileReader
+    try {
+      if (this.currentFileReader && (this.currentFileReader.readyState !== 2)) {
+        // readyState 2 === DONE
+        this.currentFileReader.abort();
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Clear selected files and previews
+    this.selectedPhoto = null;
+    this.photoPreviewUrl = null;
+    this.selectedVideo = null;
+    if (this.videoPreviewUrl) {
+      try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
+    }
+    this.videoPreviewUrl = null;
+
+    // Clear file input elements so the same file can be selected again if desired
+    const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
+    if (photoInput) photoInput.value = '';
+    const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
+    if (videoInput) videoInput.value = '';
   }
 
   get remainingCharacters() {

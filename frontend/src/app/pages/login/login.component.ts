@@ -92,6 +92,14 @@ export class LoginComponent {
     }
   }
 
+  // Remove a imagem selecionada sem abrir o seletor
+  removeSelected(event: Event) {
+    // Evita que o clique no botão abra o input file (propagação para o container)
+    event.stopPropagation();
+    this.selectedFile = null;
+    this.previewUrl = null;
+  }
+
   createProfile() {
     // Validação dos campos
     if (!this.newUserName.trim() || !this.newEmail.trim() || !this.newPassword.trim() || !this.newConfirmPassword.trim()) {

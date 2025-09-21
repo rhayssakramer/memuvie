@@ -64,8 +64,15 @@
   color: #1b2c44;
 }
 
-.value.pink { color: #ff4f9a; background: #fff4f9; }
-.value.blue { color: #3a7bff; background: #f0f5ff; }
+.value.pink {
+  color: #ff4f9a; 
+  background: #fff4f9;
+}
+
+.value.blue { 
+  color: #3a7bff; 
+  background: #f0f5ff; 
+}
 
 .label {
   font-size: .75rem;
@@ -87,7 +94,9 @@
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.cta:hover { transform: translateY(-2px); }
+.cta:hover {
+  transform: translateY(-2px);
+}
 
 /* Decorative dots */
 .dot {
@@ -96,6 +105,27 @@
   pointer-events: none;
   opacity: .3;
 }
-.dot-top-left { width: 80px; height: 80px; background: #ffffff; top: 26px; left: 26px; }
-.dot-left { width: 56px; height: 56px; background: #ffffff; left: 22px; bottom: 140px; }
-.dot-right { width: 110px; height: 110px; background: #ffffff; right: 28px; bottom: 120px; }
+
+.dot-top-left { 
+  width: 80px; 
+  height: 80px; 
+  background: #ffffff; 
+  top: 26px; 
+  left: 26px; 
+}
+
+.dot-left { 
+  width: 56px; 
+  height: 56px; 
+  background: #ffffff; 
+  left: 22px; 
+  bottom: 140px; 
+}
+
+.dot-right { 
+  width: 110px; 
+  height: 110px; 
+  background: #ffffff; 
+  right: 28px; 
+  bottom: 120px; 
+}

@@ -21,7 +21,7 @@
           </form>
 
           <div class="help">
-            <span>Ainda não tem perfil?</span> <button class="link-button" (click)="goToCreate($event)"><span>Crie seu perfil</span></button>
+            Ainda não tem perfil?<button class="link-button" (click)="goToCreate($event)"><span>Crie seu perfil</span></button>
           </div>
         </div>
       </section>
@@ -63,12 +63,18 @@
 
           <div class="form-group">
             <label>Adicione sua foto</label>
-            <div class="upload-box" (click)="fileInput.click()">
+            <!-- bind a classe has-photo quando houver previewUrl; botão X permite remover sem abrir o seletor -->
+            <div class="upload-box" (click)="fileInput.click()" [class.has-photo]="previewUrl">
               <ng-container *ngIf="!previewUrl">
                 <div class="upload-placeholder">📷</div>
                 <small class="upload-hint">Clique para escolher uma imagem</small>
               </ng-container>
+
+              <!-- Mostrar preview quando houver imagem selecionada -->
               <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="upload-preview">
+
+              <!-- Botão para remover a imagem; stopPropagation evita abrir o seletor ao clicar no X -->
+              <button *ngIf="previewUrl" type="button" class="remove-btn" (click)="removeSelected($event)" aria-label="Remover foto">&times;</button>
             </div>
             <input #fileInput id="fileInput" type="file" (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/gif" style="display: none">
           </div>
