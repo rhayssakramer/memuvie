@@ -102,7 +102,7 @@ export class LoginComponent {
       // Ignore errors
     }
   }
-  
+
   // Navegação para a página de recuperação de senha
   esqueceuSenha() {
     this.router.navigate(['/esqueci-senha']);
