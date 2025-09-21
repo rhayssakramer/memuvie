@@ -39,6 +39,9 @@ public class Usuario {
     @Size(min = 6, max = 100)
     @Column(nullable = false)
     private String senha;
+    
+    @Column(name = "foto_perfil", length = 1000)
+    private String fotoPerfil;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -71,5 +74,13 @@ public class Usuario {
 
     public String getEmail() {
         return email;
+    }
+    
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+    
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }
