@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -80,6 +81,22 @@ public class Evento {
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Voto> votos;
+    
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GaleriaPost> galeriaPosts;
+    
+    @Column(name = "foto_capa", length = 1000)
+    private String fotoCapa;
+    
+    @Column(name = "video_destaque", length = 1000)
+    private String videoDestaque;
+    
+    @Column(name = "cor_tema")
+    private String corTema;
+    
+    @Column(name = "tipo_evento")
+    @Enumerated(EnumType.STRING)
+    private TipoEvento tipoEvento = TipoEvento.CHA_REVELACAO;
 
     public enum SexoBebe {
         MENINO, MENINA
@@ -87,6 +104,10 @@ public class Evento {
 
     public enum StatusEvento {
         ATIVO, CANCELADO, FINALIZADO
+    }
+    
+    public enum TipoEvento {
+        CHA_REVELACAO, ANIVERSARIO, CASAMENTO, FORMATURA, OUTRO
     }
 
     public Long getId() { return id; }
@@ -115,4 +136,14 @@ public class Evento {
     public void setDataEncerramentoVotacao(LocalDateTime dataEncerramentoVotacao) { this.dataEncerramentoVotacao = dataEncerramentoVotacao; }
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public List<GaleriaPost> getGaleriaPosts() { return galeriaPosts; }
+    public void setGaleriaPosts(List<GaleriaPost> galeriaPosts) { this.galeriaPosts = galeriaPosts; }
+    public String getFotoCapa() { return fotoCapa; }
+    public void setFotoCapa(String fotoCapa) { this.fotoCapa = fotoCapa; }
+    public String getVideoDestaque() { return videoDestaque; }
+    public void setVideoDestaque(String videoDestaque) { this.videoDestaque = videoDestaque; }
+    public String getCorTema() { return corTema; }
+    public void setCorTema(String corTema) { this.corTema = corTema; }
+    public TipoEvento getTipoEvento() { return tipoEvento; }
+    public void setTipoEvento(TipoEvento tipoEvento) { this.tipoEvento = tipoEvento; }
 }
