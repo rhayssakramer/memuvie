@@ -20,4 +20,7 @@ public class UsuarioRequest {
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 6, max = 100, message = "Senha deve ter entre 6 e 100 caracteres")
     private String senha;
+    
+    @Size(max = 1000, message = "URL da foto de perfil deve ter no máximo 1000 caracteres")
+    private String fotoPerfil;
 }

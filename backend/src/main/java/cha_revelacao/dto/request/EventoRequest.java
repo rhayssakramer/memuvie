@@ -1,5 +1,6 @@
 package cha_revelacao.dto.request;
 
+import cha_revelacao.model.Evento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,16 @@ public class EventoRequest {
     private String nomePai;
 
     private LocalDateTime dataEncerramentoVotacao;
+    
+    @Size(max = 1000, message = "URL da foto de capa deve ter no máximo 1000 caracteres")
+    private String fotoCapa;
+    
+    @Size(max = 1000, message = "URL do vídeo de destaque deve ter no máximo 1000 caracteres")
+    private String videoDestaque;
+    
+    private String corTema;
+    
+    private Evento.TipoEvento tipoEvento;
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -47,4 +58,12 @@ public class EventoRequest {
     public void setNomePai(String nomePai) { this.nomePai = nomePai; }
     public LocalDateTime getDataEncerramentoVotacao() { return dataEncerramentoVotacao; }
     public void setDataEncerramentoVotacao(LocalDateTime dataEncerramentoVotacao) { this.dataEncerramentoVotacao = dataEncerramentoVotacao; }
+    public String getFotoCapa() { return fotoCapa; }
+    public void setFotoCapa(String fotoCapa) { this.fotoCapa = fotoCapa; }
+    public String getVideoDestaque() { return videoDestaque; }
+    public void setVideoDestaque(String videoDestaque) { this.videoDestaque = videoDestaque; }
+    public String getCorTema() { return corTema; }
+    public void setCorTema(String corTema) { this.corTema = corTema; }
+    public Evento.TipoEvento getTipoEvento() { return tipoEvento; }
+    public void setTipoEvento(Evento.TipoEvento tipoEvento) { this.tipoEvento = tipoEvento; }
 }
