@@ -1,16 +1,5 @@
 <div class="page-bg">
-  <!-- Top bar with brand, links and share -->
-  <div class="gallery-topbar">
-  <div class="brand-name">Pedro ou <span>Eduarda?</span></div>
-    <nav class="gallery-header">
-      <a (click)="$event.preventDefault(); logout()"><img src="../../../../public/sair-do-usuario.png"></a>
-      <button class="gallery-button" (click)="$event.preventDefault(); logout()">Sair</button>
-    </nav>
-  </div>
-
-  <button class="btn-floating" (click)="goToInteraction()">
-  </button>
-
+  <app-header></app-header>
   <div class="gallery-grid">
     <div
       class="gallery-card"

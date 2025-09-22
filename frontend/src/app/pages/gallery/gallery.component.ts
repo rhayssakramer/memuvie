@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
+import { HeaderComponent } from '../../shared/header/header.component';
 import { logoutAll } from '../../utils/auth';
 
 interface GalleryItem {
@@ -19,7 +21,7 @@ interface GalleryItem {
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, ProfileMenuComponent, HeaderComponent]
 })
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;
