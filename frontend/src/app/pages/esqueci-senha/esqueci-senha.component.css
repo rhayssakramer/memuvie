@@ -1,52 +1,52 @@
 .esqueci-senha-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .card {
-  width: 100%;
-  max-width: 450px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
 }
 
 /* Modal styles when embedded */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.683);
-  z-index: 9999;
-  padding: 20px;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.683);
+    z-index: 9999;
+    padding: 20px;
 }
 
 .modal-card.recovery-modal {
-  margin-left: 30px;
-  max-width: 420px;
-  width: 100%;
-  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
-  border-radius: 12px;
-  padding: 28px;
-  position: relative;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    margin-left: 30px;
+    max-width: 420px;
+    width: 100%;
+    background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
 }
 
 .modal-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #666;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #666;
 }
 
 .card-title {
@@ -77,12 +77,12 @@
 }
 
 .input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: border-color 0.2s;
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.2s;
 }
 
 .input:focus {
@@ -91,52 +91,52 @@
 }
 
 .error-message {
-  color: #e91e63;
-  margin: 15px 0;
-  padding: 10px;
-  background-color: rgba(217, 83, 79, 0.1);
-  border-radius: 5px;
-  text-align: center;
+    color: #e91e63;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: rgba(217, 83, 79, 0.1);
+    border-radius: 5px;
+    text-align: center;
 }
 
 .success-container {
-  text-align: center;
-  padding: 20px 0;
+    text-align: center;
+    padding: 20px 0;
 }
 
 .success-icon {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  background-color: #5cb85c;
-  color: white;
-  border-radius: 50%;
-  font-size: 30px;
-  font-weight: 200;
-  margin-bottom: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: #5cb85c;
+    color: white;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: 200;
+    margin-bottom: 20px;
 }
 
 .success-message {
-  color: #333;
-  font-size: 18px;
-  margin-bottom: 25px;
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 25px;
 }
 
 .form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
 }
 
 .btn {
-  padding: 12px 25px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-primary {
@@ -155,7 +155,7 @@
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px); 
+    transform: translateY(-2px); 
 }
 
 .btn-secondary {
@@ -174,22 +174,22 @@
 }
 
 .btn-secondary:hover {
-  transform: translateY(-2px); 
+    transform: translateY(-2px); 
 }
 
 .loading {
-  text-align: center;
-  padding: 15px;
+    text-align: center;
+    padding: 15px;
 }
 
 .spinner {
-  border: 4px solid rgba(255, 85, 170, 0.3);
-  border-radius: 50%;
-  border-top: 4px solid #e91e63;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 15px;
+    border: 4px solid rgba(255, 85, 170, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #e91e63;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
 }
 
 @keyframes spin {
