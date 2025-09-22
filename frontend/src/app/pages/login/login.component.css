@@ -86,8 +86,7 @@
     display:flex; 
     justify-content:center; 
     align-items:center; /* center card verticalmente dentro do layout */
-    margin-right: 10em;
-    margin-top: -5em;
+    margin: 0;
 }
 
 /* Responsivo: stack layout e centralize o conteúdo em narrow viewports */
@@ -114,7 +113,8 @@
 }
 
 .login-card { 
-    width: 420px; 
+    width: 100%; 
+    max-width: 460px; 
     background: #fff; 
     border-radius: 12px; 
     box-shadow: 0 12px 30px rgba(15,34,56,0.06); 
@@ -134,17 +134,16 @@
     text-align: center;
 }
 
-.form { 
-    display:flex; 
-    flex-direction:column; 
-    gap:12px; 
+.card { 
+    background: var(--white); 
+    border-radius:16px; 
+    box-shadow: var(--shadow); 
+    padding: 1.25rem 1.25rem; 
+    margin: 2.5rem 0 1rem 0;
+    position: relative; /* ensure cards appear above background */
+    z-index: 2; /* above .login-page and the dots */
 }
 
-.field-label { 
-    font-weight:600; 
-    color:#111; 
-    margin-bottom:6px; 
-}
 
 /* soft input style correspondente à screenshot: pale-blue rounded */
 .input.soft { 
@@ -295,6 +294,7 @@
     line-height: 1;
     font-size: 20px;
     color: #252525;
+    margin-top: 15px;
 }
 
 .modal-card .close-button {
@@ -305,6 +305,7 @@
     border: none;
     font-size: 26px;
     color: #666;
+    margin-bottom: 15px;
 }
 
 .modal-form { 
@@ -394,10 +395,16 @@
 }
 
 .upload-preview { 
-    max-width: 220px; 
-    max-height: 220px; 
-    border-radius: 12px; 
-    object-fit: cover
+        max-width: 220px; 
+        max-height: 220px; 
+        border-radius: 12px; 
+        object-fit: cover;
+}
+
+@media (max-width: 480px) {
+    .login-header .brand { font-size: 1.8rem; margin-top: .8rem; }
+    .login-card { max-width: 360px; }
+    .modal-card { padding: 1rem; }
 }
 
 /* Button de remover (X) posicionado no canto superior direito do box */
@@ -447,11 +454,12 @@
     display:flex; 
     justify-content:space-between; 
     gap:.8rem; 
-    margin-top: .8rem 
+    margin-top: .8rem; 
+    margin-bottom: 15px;
 }
 
 .btn-secondary { 
-    width: 125px;
+    width: 130px;
     height: 40px;
     background:#f3f4f6; 
     border:none; 
@@ -483,7 +491,7 @@
     border:none; 
     padding:.6rem 1rem;
     border-radius:10px; 
-    cursor:pointer 
+    cursor: pointer;
 }
 
 /* Ajustes inputs style dentro do modal */
@@ -504,17 +512,19 @@
 
 /* Estilos do button (modal) - atualizado conforme solicitado */
 .modal .btn-gradient {
-    width: 125px;
+    min-width: 140px; /* allow enough space for two words without wrapping */
+    width: auto;
     height: 40px;
     border: 0;
     border-radius: 999px;
-    padding: .5rem 1.6rem;
+    padding: .45rem 1.2rem;
     background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
     color: #fff;
     font-weight: 700;
     box-shadow: 0 14px 30px rgba(255,95,163,.25);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
+    white-space: nowrap; /* prevent line breaks inside the button label */
 }
 
 .modal .btn-gradient:hover { 

@@ -79,6 +79,31 @@ button {
 }
 .btn-gradient:hover { transform: translateY(-2px); }
 
+/* Ensure button transitions also work on touch and keyboard focus
+   - Provide transitions on the base element so they animate when :active or :focus-visible
+   - Use touch-action to improve responsiveness on mobile and remove tap highlight */
+.btn-gradient, .nav-button, .nav-gallery, .btn-pill, .cta, .btn-secondary {
+  transition: transform .18s ease, box-shadow .18s ease, background-color .12s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Mirror hover effect for active (touch) and focus-visible (keyboard) so mobile shows the interaction */
+.btn-gradient:active, .nav-button:active, .nav-gallery:active, .btn-pill:active, .cta:active, .btn-secondary:active,
+.btn-gradient:focus-visible, .nav-button:focus-visible, .nav-gallery:focus-visible, .btn-pill:focus-visible, .cta:focus-visible {
+  transform: translateY(-2px);
+  /* gentle shadow change for pressed state */
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+}
+
+/* For coarse pointers (touch devices) ensure the same active effect is visible immediately */
+@media (hover: none) and (pointer: coarse) {
+  .btn-gradient:active, .nav-button:active, .nav-gallery:active, .btn-pill:active, .cta:active, .btn-secondary:active {
+    transform: translateY(-1.5px);
+    transition: transform .12s ease;
+  }
+}
+
 .input-field, .textarea-field {
   width: 100%;
   padding: .9rem 1rem;
@@ -116,3 +141,45 @@ button {
 }
 .decor-dots::before { width: 70px; height: 70px; background: #ffc1dc; left: -20px; top: -20px; }
 .decor-dots::after  { width: 90px; height: 90px; background: #b5d1ff; right: -20px; bottom: -20px; }
+
+/* Responsive helpers and breakpoints */
+:root {
+  --container-max-width: 1100px;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+img, svg, picture {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Typography scaling for smaller screens */
+@media (max-width: 900px) {
+  body { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+}
+
+/* Utility helpers */
+.row { display:flex; gap:1rem; flex-wrap:wrap; }
+.col { flex: 1 1 0; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+/* Make glass cards and sections responsive */
+.glass-card { padding: 1rem; border-radius: 16px; }
+.page-bg { padding: 1rem 0.6rem; }
+
+/* Global breakpoint tweaks */
+@media (max-width: 768px) {
+  .nav-area { padding: 0 .5rem; }
+  .btn-gradient { padding: .75rem 1rem; font-size: .95rem; }
+  .section-title { font-size: 1.1rem; }
+  .subtitle-accent { font-size: .9rem; }
+}

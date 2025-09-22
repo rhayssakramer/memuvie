@@ -117,6 +117,18 @@ export class InteractionComponent implements OnInit {
       if (photoInput) photoInput.value = '';
       if (videoInput) videoInput.value = '';
     }, 0);
+
+    // Garantir que a rolagem do body esteja habilitada ao entrar na página.
+    // Alguns modais em outras páginas mudam `document.body.style.overflow` para 'hidden'
+    // e, em casos específicos, pode permanecer assim após navegação. Aqui nos certificamos
+    // de resetar para permitir rolagem sem precisar de refresh (F5).
+    try {
+      if (document && document.body && document.body.style) {
+        document.body.style.overflow = '';
+      }
+    } catch (e) {
+      // Ignorar em ambientes sem DOM (SSR) ou em caso de erro
+    }
   }
 
   logout() {

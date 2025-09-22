@@ -81,7 +81,7 @@
           </div>
 
           <div class="form-group">
-            <label>Adicione sua foto</label>
+            <label id="label">Adicione sua foto</label>
             <!-- Vincular uma classe has-photo quando houver previewUrl; button X permite remover sem abrir o seletor -->
             <div class="upload-box" (click)="fileInput.click()" [class.has-photo]="previewUrl">
               <ng-container *ngIf="!previewUrl">

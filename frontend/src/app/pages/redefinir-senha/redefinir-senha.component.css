@@ -22,6 +22,16 @@
   z-index: 2;
 }
 
+@media (max-width: 480px) {
+  .card { padding: 18px; max-width: 360px; }
+  .redefinir-senha-container { padding: 1rem; }
+  /* Keep action buttons side-by-side on small screens
+     Use flex sizing so one button remains left and the other right */
+  .form-actions { gap: 0.5rem; flex-wrap: nowrap; align-items: center; }
+  .form-actions .btn { flex: 1 1 48%; max-width: 48%; }
+  .btn-primary, .btn-secondary { width: auto; }
+}
+
 .card-title {
   color: #252525;
   font-size: 20px;

@@ -1,6 +1,6 @@
 .header {
     max-width: 100%;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25); 
+    box-shadow: 0 14px 30px rgba(255,95,163,.25);
     margin: 0 auto;
     display: grid;
     grid-template-columns: 200px 1fr 200px;
@@ -12,11 +12,11 @@
 }
 
 .brand {
-    width: 20em;
+    width: auto;
     color: #3a7bff;
-    font-weight: 700; 
+    font-weight: 700;
     font-size: 20px;
-    margin-left: 120px;
+    margin-left: 0;
 }
 
 .brand span {
@@ -74,13 +74,39 @@
 }
 
 .nav-list {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.8rem;
-    margin: 0;
-    padding: 0;
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.8rem;
+        margin: 0;
+        padding: 0;
+}
+
+/* Responsive header - arrange as two-row grid on small screens
+     Top row: brand (left) and profile menu (right)
+     Second row: nav centered */
+@media (max-width: 768px) {
+    .header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-areas: "brand menu" "nav nav";
+        gap: .4rem;
+        padding: .6rem .8rem;
+        align-items: center;
+    }
+    .brand { grid-area: brand; text-align: left; margin: 0; font-size: 18px; }
+    app-profile-menu { grid-area: menu; justify-self: end; align-self: center; }
+    .nav-container { grid-area: nav; justify-self: center; width: 100%; }
+    .nav-list { justify-content: center; gap: .5rem; flex-wrap: wrap; }
+    .nav-button, .nav-gallery { padding: .6rem 1rem; font-size: .95rem; width: auto; }
+}
+
+@media (max-width: 420px) {
+    .brand { font-size: 16px; }
+    .nav-list { gap: .4rem; }
+    .nav-button, .nav-gallery { padding: .5rem .8rem; font-size: .9rem; }
 }
 
 .nav-gallery{

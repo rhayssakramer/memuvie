@@ -54,7 +54,7 @@
     margin: 0;
     font-size: 20px;
     color: #252525;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -86,8 +86,8 @@
 }
 
 .input:focus {
-  border-color: #000000;
-  outline: none;
+    border-color: #000000;
+    outline: none;
 }
 
 .error-message {
@@ -202,11 +202,15 @@
         padding: 20px;
   }
   
+  /* Keep action buttons side-by-side on small screens */
   .form-actions {
-        flex-direction: column;
+      flex-direction: row;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+      align-items: center;
   }
-  
-  .btn-primary {
-        margin: 10px 0 0 0;
-  }
+
+  .form-actions .btn { flex: 1 1 48%; max-width: 48%; }
+
+  .btn-primary, .btn-secondary { margin: 0; }
 }

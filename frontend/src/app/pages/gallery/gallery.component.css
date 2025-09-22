@@ -8,8 +8,8 @@
 /* os botões agora usam .btn-gradient globalmente */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -26,8 +26,7 @@
     box-shadow: var(--shadow);
     transition: transform 0.3s ease;
     cursor: pointer;
-    width: 300px; /* Largura fixa baseada no layout atual */
-    margin: 0 auto; /* Centraliza o card */
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -57,7 +56,8 @@
 
 .card-image {
     width: 100%;
-    height: 300px; /* Mantém a altura padrão atual */
+    height: 220px;
+    max-height: 40vh;
     object-fit: cover; /* Garante que a image cubra todo o espaço */
     object-position: center; /* Centraliza a image */
     display: block;
@@ -132,6 +132,12 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
+}
+
+@media (max-width: 480px) {
+    .card-image { height: 160px; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; }
+    .modal-content { max-width: 95%; padding: .5rem; }
 }
 
 .modal-close {
