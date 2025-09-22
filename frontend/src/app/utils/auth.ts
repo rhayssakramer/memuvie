@@ -46,6 +46,10 @@ export function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
+export function updateProfile(profile: UserProfile) {
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
 export function logoutAll() {
   clearSession();
   clearProfile();
