@@ -1,0 +1,13 @@
+.recovery-link {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.recovery-link .link-button {
+  color: #4a90e2;
+  font-size: 0.9em;
+}
+
+.recovery-link .link-button:hover {
+  text-decoration: underline;
+}

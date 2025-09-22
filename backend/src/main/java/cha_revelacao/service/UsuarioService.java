@@ -7,7 +7,6 @@ import cha_revelacao.dto.response.UsuarioResponse;
 import cha_revelacao.exception.BusinessException;
 import cha_revelacao.model.Usuario;
 import cha_revelacao.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,14 +19,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UsuarioService {
+    private static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
+
+    // Constructor explícito para injeção de dependências
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                         PasswordEncoder passwordEncoder,
+                         JwtService jwtService,
+                         AuthenticationManager authenticationManager,
+                         ModelMapper modelMapper) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.modelMapper = modelMapper;
+    }
 
     public UsuarioResponse criarUsuario(UsuarioRequest request) {
         if (usuarioRepository.existsByEmail(request.getEmail())) {

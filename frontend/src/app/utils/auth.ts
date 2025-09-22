@@ -25,8 +25,16 @@ export function clearProfile() {
   localStorage.removeItem(PROFILE_KEY);
 }
 
+export function saveSession(token: string, expiresAt: number): Session {
+  const session: Session = { token, expiresAt };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  return session;
+}
+
 export function startSession(hours = 4): Session {
   const expiresAt = Date.now() + hours * 60 * 60 * 1000;
+  // Esta função será mantida para compatibilidade com o código existente
+  // Mas deve ser substituída por saveSession em novas implementações
   const session: Session = { token: cryptoRandom(), expiresAt };
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   return session;
@@ -56,6 +64,36 @@ export function logoutAll() {
   // Backward-compat cleanup
   localStorage.removeItem('userName');
   localStorage.removeItem('userPhoto');
+}
+
+// Função para manter compatibilidade entre formato antigo e novo de usuário
+export function syncUserData() {
+  // Primeiro, tentar obter do perfil
+  const profile = getProfile();
+
+  if (profile) {
+    // Se temos perfil, garantir que os dados legados estão sincronizados
+    localStorage.setItem('userName', profile.name);
+    if (profile.photo) {
+      localStorage.setItem('userPhoto', profile.photo);
+    }
+    return true;
+  } else {
+    // Se não temos perfil mas temos dados legados, criar perfil
+    const oldUserName = localStorage.getItem('userName');
+    const oldUserPhoto = localStorage.getItem('userPhoto');
+
+    if (oldUserName) {
+      const newProfile = {
+        name: oldUserName,
+        email: 'usuario@local.com', // Email padrão para usuários legados
+        photo: oldUserPhoto || 'assets/avatar-1.jpg'
+      };
+      saveProfile(newProfile);
+      return true;
+    }
+  }
+  return false;
 }
 
 function cryptoRandom() {
