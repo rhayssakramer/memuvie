@@ -1,0 +1,35 @@
+<div class="profile-menu" (document:click)="onClickOutside($event)">
+  <!-- Trigger do menu (avatar) -->
+  <button class="profile-trigger" (click)="toggleMenu()">
+    <img [src]="profile?.photo || defaultAvatar" 
+         [alt]="profile?.name" 
+         class="profile-avatar">
+  </button>
+
+  <!-- Conteúdo do menu (aparece quando isMenuOpen = true) -->
+  <div class="menu-content" [class.open]="isMenuOpen">
+    <!-- Header com informações do perfil -->
+    <div class="profile-header">
+      <img [src]="profile?.photo || defaultAvatar" 
+           [alt]="profile?.name" 
+           class="profile-avatar">
+      <div class="profile-info">
+        <div class="profile-name">{{ profile?.name || 'Usuário' }}</div>
+        <div class="profile-email">{{ profile?.email || 'email@exemplo.com' }}</div>
+      </div>
+    </div>
+
+    <!-- Opções do menu -->
+    <div class="menu-item" (click)="editProfile()">
+      <span>Editar Perfil</span>
+    </div>
+
+    <!-- Opção de logout -->
+    <div class="menu-item danger" (click)="logout()">
+      <span>Sair</span>
+    </div>
+  </div>
+
+  <!-- Modal de edição de perfil -->
+  <app-edit-profile></app-edit-profile>
+</div>
