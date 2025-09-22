@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { isSessionValid, getProfile } from '../../utils/auth';
 
+import { HeaderComponent } from '../../shared/header/header.component';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, HeaderComponent]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   // Countdown target: 04/10/2025 17:00 local time (dd/MM/yyyy HH:mm)

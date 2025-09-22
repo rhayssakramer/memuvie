@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
+import { HeaderComponent } from '../../shared/header/header.component';
 import { logoutAll } from '../../utils/auth';
 
 @Component({
@@ -9,7 +11,7 @@ import { logoutAll } from '../../utils/auth';
   templateUrl: './interaction.component.html',
   styleUrls: ['./interaction.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule, ProfileMenuComponent, HeaderComponent]
 })
 export class InteractionComponent implements OnInit {
   message: string = '';

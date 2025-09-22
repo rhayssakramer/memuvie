@@ -20,14 +20,14 @@
 }
 
 .interaction-header .brand { 
-  color: #ff5fa3;
+  color: #3a7bff;
   font-weight: 700; 
-  font-size: 25px;
+  font-size: 20px;
   margin-left: 100px;
 }
 
 .interaction-header .brand span{
-  color: #3a7bff;
+  color: #ff5fa3;
 }
 
 .interaction-header .header-interaction { 
