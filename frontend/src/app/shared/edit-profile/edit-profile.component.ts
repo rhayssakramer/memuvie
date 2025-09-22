@@ -62,13 +62,13 @@ export class EditProfileComponent implements OnInit {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       
-      // Verifica o tamanho do arquivo (max 5MB)
+      // Verifica o size do file (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.errorMessage = 'A foto deve ter no máximo 5MB';
         return;
       }
 
-      // Verifica o tipo do arquivo
+      // Verifica o tipo do file
       if (!file.type.startsWith('image/')) {
         this.errorMessage = 'Por favor, selecione uma imagem válida';
         return;
@@ -96,13 +96,13 @@ export class EditProfileComponent implements OnInit {
     }
 
     try {
-      // Se tiver foto, converte para base64
+      // Se tiver photo, converte para base64
       let photoBase64 = null;
       if (this.form.photo) {
         photoBase64 = await this.fileToBase64(this.form.photo);
       }
 
-      // Atualiza o perfil
+      // Atualiza o profile
       const updatedProfile = {
         ...this.profile,
         name: this.form.name,
@@ -110,7 +110,7 @@ export class EditProfileComponent implements OnInit {
         photo: photoBase64 || this.profile.photo
       };
 
-      // TODO: Implementar atualização de senha no backend
+      // TODO: Implementar atualização de password no backend
       if (this.form.newPassword) {
         // updatePassword(this.form.currentPassword, this.form.newPassword);
       }
@@ -118,7 +118,7 @@ export class EditProfileComponent implements OnInit {
       updateProfile(updatedProfile);
       this.successMessage = 'Perfil atualizado com sucesso!';
       
-      // Atualiza o perfil local
+      // Atualiza o profile local
       this.profile = updatedProfile;
       
       // Fecha o modal após 2 segundos

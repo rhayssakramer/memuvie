@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { logoutAll } from '../../utils/auth';
 
@@ -11,7 +10,7 @@ import { logoutAll } from '../../utils/auth';
   templateUrl: './interaction.component.html',
   styleUrls: ['./interaction.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ProfileMenuComponent, HeaderComponent]
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent]
 })
 export class InteractionComponent implements OnInit {
   message: string = '';
@@ -81,7 +80,7 @@ export class InteractionComponent implements OnInit {
         try {
           localStorage.setItem('posts', JSON.stringify(recentPosts));
         } catch (e) {
-          // Se ainda estiver cheio, tenta manter apenas 5 posts
+          // Se ainda estiver cheio, tenta manter only 5 posts
           recentPosts = posts.slice(0, 5);
           try {
             localStorage.setItem('posts', JSON.stringify(recentPosts));
@@ -93,7 +92,7 @@ export class InteractionComponent implements OnInit {
       }
     } catch (e) {
       console.error('Erro ao limpar posts antigos:', e);
-      // Em caso de erro, tenta limpar tudo
+      // Em caso de error, tenta limpar tudo
       localStorage.removeItem('posts');
     }
   }
@@ -110,7 +109,7 @@ export class InteractionComponent implements OnInit {
     this.selectedVideo = null;
     this.videoPreviewUrl = null;
 
-    // Limpar os inputs de arquivo
+    // Limpar os inputs de file
     setTimeout(() => {
       const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
       const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
@@ -120,7 +119,7 @@ export class InteractionComponent implements OnInit {
   }
 
   logout() {
-    logoutAll(); // Clear session and profile
+    logoutAll(); // Limpar sessão e perfil
     this.router.navigate(['/']); // Navega para a página inicial (home)
   }
 
@@ -203,7 +202,7 @@ export class InteractionComponent implements OnInit {
 
     const savePost = (photoDataUrl?: string, videoDataUrl?: string) => {
       try {
-        // Salvar o post
+        // Salva o post
         const raw = localStorage.getItem('posts');
         const posts = raw ? JSON.parse(raw) : [];
         posts.unshift({
@@ -230,7 +229,7 @@ export class InteractionComponent implements OnInit {
         this.selectedVideo = null;
         this.videoPreviewUrl = null;
 
-        // Limpar inputs de arquivo
+        // Limpar inputs de file
         ['photoInput', 'videoInput'].forEach(inputId => {
           const input = document.getElementById(inputId) as HTMLInputElement | null;
           if (input) {
@@ -248,7 +247,7 @@ export class InteractionComponent implements OnInit {
       }
     };
 
-    // Helper to read a File as DataURL
+    // Auxiliar para ler um arquivo como DataURL
     const readFileAsDataURL = (file: File) => {
       return new Promise<string>((resolve, reject) => {
         const r = new FileReader();
@@ -265,30 +264,30 @@ export class InteractionComponent implements OnInit {
       let videoDataUrl: string | undefined = undefined;
 
       if (this.photoPreviewUrl) {
-        // already have a DataURL preview
+        // Já tem uma prévia do DataURL
         photoDataUrl = this.photoPreviewUrl;
       } else if (this.selectedPhoto) {
         photoDataUrl = await readFileAsDataURL(this.selectedPhoto);
       }
 
       if (this.selectedVideo) {
-        // Convert video file to DataURL so it persists
+        // Converte o arquivo de vídeo para DataURL para que ele persista
         videoDataUrl = await readFileAsDataURL(this.selectedVideo);
       } else if (this.videoPreviewUrl && !this.selectedVideo) {
-        // In case videoPreviewUrl was created with createObjectURL but file not set, avoid storing object URL
+        // Caso videoPreviewUrl tenha sido criado com createObjectURL, mas o arquivo não esteja definido, evite armazenar a URL do objeto
         videoDataUrl = undefined;
       }
 
       savePost(photoDataUrl, videoDataUrl);
     } catch (e) {
-      // read failed - do not navigate away
-      // leave state so user can retry
+      // Leitura falhou - não navegue para longe
+      // Saia do estado para que o usuário possa tentar novamente
       return;
     }
   }
 
   cancelUpload() {
-    // Abort any in-progress FileReader
+    // Abortar qualquer FileReader em andamento
     try {
       if (this.currentFileReader && (this.currentFileReader.readyState !== 2)) {
         // readyState 2 === DONE
@@ -298,7 +297,7 @@ export class InteractionComponent implements OnInit {
       // ignore
     }
 
-    // Clear selected files and previews
+    // Limpar arquivos selecionados e visualizações
     this.selectedPhoto = null;
     this.photoPreviewUrl = null;
     this.selectedVideo = null;
@@ -307,7 +306,7 @@ export class InteractionComponent implements OnInit {
     }
     this.videoPreviewUrl = null;
 
-    // Clear file input elements so the same file can be selected again if desired
+    // Limpa os elementos de entrada do arquivo para que o mesmo arquivo possa ser selecionado novamente, se desejado
     const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
     if (photoInput) photoInput.value = '';
     const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;

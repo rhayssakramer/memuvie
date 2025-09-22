@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Pegar o token do localStorage
     const session = getSession();
 
-    // Se o token existe e não expirou
+    // Se o token existe e do not expirou
     if (session && session.token && session.expiresAt > Date.now()) {
       // Clone a requisição e adicione o header de autorização
       request = request.clone({

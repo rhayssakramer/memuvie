@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { logoutAll } from '../../utils/auth';
+import { HeaderComponent } from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-interaction',
   templateUrl: './interaction.component.html',
   styleUrls: ['./interaction.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent]
 })
 export class InteractionComponent implements OnInit {
   message: string = '';
@@ -20,6 +21,7 @@ export class InteractionComponent implements OnInit {
   selectedVideo: File | null = null;
   videoPreviewUrl: string | null = null;
   maxLength: number = 5000;
+
 
   constructor(private router: Router) {}
 
@@ -57,6 +59,13 @@ export class InteractionComponent implements OnInit {
 
   openPhotoCapture() {
     const input = document.getElementById('photoInput') as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  }
+
+  openVideoCapture() {
+    const input = document.getElementById('videoInput') as HTMLInputElement | null;
     if (input) {
       input.click();
     }
@@ -104,7 +113,7 @@ export class InteractionComponent implements OnInit {
         userName,
         userPhoto: localStorage.getItem('userPhoto') || 'assets/avatar-1.jpg',
         photo: this.photoPreviewUrl,
-        video: null,
+        video: this.videoPreviewUrl || null,
         message: this.message,
         date: new Date().toISOString()
       };
@@ -125,9 +134,27 @@ export class InteractionComponent implements OnInit {
   cancelUpload() {
     this.selectedPhoto = null;
     this.photoPreviewUrl = null;
+    if (this.videoPreviewUrl) {
+      try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
+    }
+    this.selectedVideo = null;
     const input = document.getElementById('photoInput') as HTMLInputElement | null;
     if (input) {
       input.value = '';
+    }
+  }
+
+  onVideoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedVideo = input.files[0];
+      try {
+        const url = URL.createObjectURL(this.selectedVideo);
+        this.videoPreviewUrl = url;
+      } catch (e) {
+        console.error('Erro ao criar preview de vídeo', e);
+        this.videoPreviewUrl = null;
+      }
     }
   }
 

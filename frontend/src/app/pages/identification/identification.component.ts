@@ -19,15 +19,15 @@ export class IdentificationComponent implements OnInit {
   previewUrl: string | null = null;
 
   ngOnInit() {
-    // Clear everything on initialization
+    // Limpar tudo na inicialização
     logoutAll();
-    // Clear all storage to be extra safe
+    // Limpe todo o armazenamento para ficar mais seguro
     localStorage.clear();
     sessionStorage.clear();
   }
 
   constructor(private router: Router) {
-    // Force clear any existing session on component creation
+    // Forçar a limpeza de qualquer sessão existente na criação do componente
     logoutAll();
   }
 
@@ -35,7 +35,7 @@ export class IdentificationComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.selectedFile = input.files[0];
-      // Create preview URL
+      // Criar URL de visualização
       const reader = new FileReader();
       reader.onload = () => {
         this.previewUrl = reader.result as string;
@@ -46,7 +46,7 @@ export class IdentificationComponent implements OnInit {
 
   onSubmit() {
     if (!this.userName.trim() || !this.email.trim() || !this.password.trim()) return;
-    // Save new profile and start 4h session
+    // Salve o novo perfil e inicie a sessão de 4h
     saveProfile({ name: this.userName.trim(), email: this.email.trim(), photo: this.previewUrl || null });
     startSession(4);
     // Backward-compat keys

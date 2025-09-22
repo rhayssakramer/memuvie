@@ -36,7 +36,7 @@ export class EsqueciSenhaComponent {
     // Exibe indicador de carregamento
     this.loading = true;
 
-    // Chama o serviço de autenticação para solicitar redefinição
+    // Chama o serviço de authentication para solicitar reset
     this.authService.solicitarRedefinicaoSenha(this.email).subscribe({
       next: (response) => {
         this.loading = false;
@@ -47,13 +47,13 @@ export class EsqueciSenhaComponent {
         console.error('Erro ao solicitar redefinição de senha:', err);
         this.loading = false;
         
-        // Mesmo em caso de erro, mostramos uma mensagem genérica para não revelar
+        // Mesmo em caso de error, mostramos uma message genérica para do not revelar
         // quais emails estão cadastrados no sistema
         this.enviado = true;
         this.mensagem = 'Se o email estiver cadastrado em nosso sistema, você receberá um link para redefinir sua senha em instantes.';
         
-        // Para debug apenas
-        // this.erro = err.message || 'Ocorreu um erro ao processar sua solicitação.';
+        // Para debug only
+        // this.error = err.message || 'Ocorreu um error ao processar sua solicitação.';
       }
     });
   }

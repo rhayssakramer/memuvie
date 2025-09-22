@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { HeaderComponent } from '../../shared/header/header.component'; // Manter importação do componente de cabeçalho
 import { logoutAll } from '../../utils/auth';
 
 interface GalleryItem {
@@ -21,7 +21,7 @@ interface GalleryItem {
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule, ProfileMenuComponent, HeaderComponent]
+  imports: [CommonModule, RouterModule, HeaderComponent] // Remove ProfileMenuComponent das importações
 })
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;
@@ -52,7 +52,7 @@ export class GalleryComponent implements OnInit {
   }
 
   goBack() {
-    // Try browser history back, fallback to home if no history
+    // Tentar retornar ao histórico do navegador, retornar à página inicial se não houver histórico
     if (window.history.length > 1) {
       this.location.back();
     } else {
@@ -61,7 +61,7 @@ export class GalleryComponent implements OnInit {
   }
 
   logout() {
-    logoutAll(); // Clear session and profile
+    logoutAll(); // Limpar sessão e perfil
     this.router.navigate(['/']); // Navega para a página inicial (home)
   }
 
@@ -77,7 +77,7 @@ export class GalleryComponent implements OnInit {
   }
 
   async share(item: GalleryItem) {
-    if (!item) return; // Prevenir erro se o item for null
+    if (!item) return; // Prevenir error se o item for null
 
     const text = `${item.userName} compartilhou uma homenagem no Chá Revelação\n\n${item.message || ''}`.trim();
     const url = location.href;

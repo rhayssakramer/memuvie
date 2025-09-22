@@ -5,8 +5,8 @@ export interface UserProfile {
 }
 
 export interface Session {
-  token: string; // simple opaque token
-  expiresAt: number; // epoch ms
+  token: string; // Simple opaque token
+  expiresAt: number; // Epoch ms
 }
 
 const PROFILE_KEY = 'userProfile';
@@ -68,18 +68,18 @@ export function logoutAll() {
 
 // Função para manter compatibilidade entre formato antigo e novo de usuário
 export function syncUserData() {
-  // Primeiro, tentar obter do perfil
+  // Primeiro, tentar obter do profile
   const profile = getProfile();
 
   if (profile) {
-    // Se temos perfil, garantir que os dados legados estão sincronizados
+    // Se temos profile, garantir que os dados legados estão sincronizados
     localStorage.setItem('userName', profile.name);
     if (profile.photo) {
       localStorage.setItem('userPhoto', profile.photo);
     }
     return true;
   } else {
-    // Se não temos perfil mas temos dados legados, criar perfil
+    // Se do not temos profile mas temos dados legados, criar profile
     const oldUserName = localStorage.getItem('userName');
     const oldUserPhoto = localStorage.getItem('userPhoto');
 

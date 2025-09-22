@@ -15,7 +15,7 @@
     padding: 30px;
 }
 
-/* Modal styles when embedded */
+/* Estilos modais quando incorporados */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -59,9 +59,9 @@
 }
 
 .form-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 20px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -199,14 +199,14 @@
 
 @media (max-width: 480px) {
   .card {
-    padding: 20px;
+        padding: 20px;
   }
   
   .form-actions {
-    flex-direction: column;
+        flex-direction: column;
   }
   
   .btn-primary {
-    margin: 10px 0 0 0;
+        margin: 10px 0 0 0;
   }
 }

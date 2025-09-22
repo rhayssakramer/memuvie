@@ -9,7 +9,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getProfile, isSessionValid } from './utils/auth';
 
-// Guard: requires authenticated user
+// Guarda: requer authenticated user
 const requireAuthGuard = () => {
   const router = inject(Router);
   if (isSessionValid() && getProfile()) {

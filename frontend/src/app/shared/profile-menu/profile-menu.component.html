@@ -8,7 +8,7 @@
 
   <!-- Conteúdo do menu (aparece quando isMenuOpen = true) -->
   <div class="menu-content" [class.open]="isMenuOpen">
-    <!-- Header com informações do perfil -->
+    <!-- Header com informações do profile -->
     <div class="profile-header">
       <img [src]="profile?.photo || defaultAvatar" 
            [alt]="profile?.name" 
@@ -30,6 +30,6 @@
     </div>
   </div>
 
-  <!-- Modal de edição de perfil -->
+  <!-- Modal de edição de profile -->
   <app-edit-profile></app-edit-profile>
 </div>

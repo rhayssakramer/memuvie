@@ -48,13 +48,13 @@ export class EventoService {
       .pipe(catchError(this.handleError<Evento>('updateEvento')));
   }
 
-  // Excluir um evento
+  // Remove um evento
   deleteEvento(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`, this.getHttpOptions())
       .pipe(catchError(this.handleError<any>('deleteEvento')));
   }
 
-  // Obter os cabeçalhos HTTP com o token de autenticação
+  // Obter os cabeçalhos HTTP com o token de authentication
   private getHttpOptions() {
     const token = this.getToken();
     return {

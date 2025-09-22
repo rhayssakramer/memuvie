@@ -22,7 +22,7 @@
     <section class="message-area">
       <h2>Ou deixe uma mensagem especial</h2>
 
-      <!-- Upload dashed area or preview -->
+      <!-- Upload dashed área ou preview -->
         <div class="upload-dashed" (click)="openPhotoCapture()" *ngIf="!photoPreviewUrl && !isReadingPhoto; else photoPreview">
           <div class="upload-icon">📷</div>
           <div class="upload-text">
@@ -68,7 +68,7 @@
     </section>
   </main>
 
-  <!-- Hidden inputs for camera/file capture -->
+  <!-- Entradas ocultas para captura de câmera/arquivo -->
   <input type="file" id="videoInput" accept="video/*" capture style="display:none" (change)="onVideoSelected($event)">
   <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
 </div>

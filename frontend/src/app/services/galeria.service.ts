@@ -52,13 +52,13 @@ export class GaleriaService {
       .pipe(catchError(this.handleError<GaleriaPost>('updatePost')));
   }
 
-  // Excluir um post
+  // Remove um post
   deletePost(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`, this.getHttpOptions())
       .pipe(catchError(this.handleError<any>('deletePost')));
   }
 
-  // Obter os cabeçalhos HTTP com o token de autenticação
+  // Obter os cabeçalhos HTTP com o token de authentication
   private getHttpOptions() {
     const token = this.getToken();
     return {

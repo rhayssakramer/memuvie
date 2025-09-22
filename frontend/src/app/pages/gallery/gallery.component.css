@@ -1,173 +1,173 @@
 .page-bg{
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-/* buttons now use .btn-gradient globally */
+/* os botões agora usam .btn-gradient globalmente */
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;
 }
 
 .gallery-card {
-  position: relative;
-  background: var(--white);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  width: 300px; /* Largura fixa baseada no layout atual */
-  margin: 0 auto; /* Centraliza o card */
-  display: flex;
-  flex-direction: column;
+    position: relative;
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    width: 300px; /* Largura fixa baseada no layout atual */
+    margin: 0 auto; /* Centraliza o card */
+    display: flex;
+    flex-direction: column;
 }
 
 .gallery-card:hover {
-  transform: translateY(-5px);
+    transform: translateY(-5px);
 }
 
 .cancel-upload { 
-  position: absolute; 
-  top: .6rem; 
-  right: .6rem; 
-  background: rgba(255,255,255,0.95); 
-  color: #e91e63;
-  border: 0; 
-  padding: .4rem .55rem; 
-  border-radius: 999px; 
-  cursor: pointer; 
-  font-weight: 800; 
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    position: absolute; 
+    top: .6rem; 
+    right: .6rem; 
+    background: rgba(255,255,255,0.95); 
+    color: #e91e63;
+    border: 0; 
+    padding: .4rem .55rem; 
+    border-radius: 999px; 
+    cursor: pointer; 
+    font-weight: 800; 
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
 .cancel-upload:hover {
-  background: rgba(255,255,255,1);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    background: rgba(255,255,255,1);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
 .card-image {
-  width: 100%;
-  height: 300px; /* Mantém a altura padrão atual */
-  object-fit: cover; /* Garante que a imagem cubra todo o espaço */
-  object-position: center; /* Centraliza a imagem */
-  display: block;
-  background-color: #f8f8f8; /* Cor de fundo enquanto a imagem carrega */
+    width: 100%;
+    height: 300px; /* Mantém a altura padrão atual */
+    object-fit: cover; /* Garante que a image cubra todo o espaço */
+    object-position: center; /* Centraliza a image */
+    display: block;
+    background-color: #f8f8f8; /* Cor de fundo enquanto a image carrega */
 }
 
 .card-content {
-  padding: 1.5rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .user-details {
-  flex: 1;
+    flex: 1;
 }
 
 .user-name {
-  font-weight: 600;
-  color: var(--text-color);
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 .post-date {
-  font-size: 0.8rem;
-  color: #666;
+    font-size: 0.8rem;
+    color: #666;
 }
 
 .card-message {
-  color: var(--text-color);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-clamp: 3;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 3;
 }
 
 /* Modal styles */
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
-  background: var(--white);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
+    background: var(--white);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
 }
 
 .modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--white);
-  cursor: pointer;
-  z-index: 1001;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--white);
+    cursor: pointer;
+    z-index: 1001;
 }
 
 .modal-image {
-  width: 100%;
-  max-height: 500px;
-  object-fit: contain;
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
 }
 
 .modal-details {
-  padding: 2rem;
+    padding: 2rem;
 }
 
 .modal-user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .modal-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .modal-message {
-  color: var(--text-color);
-  line-height: 1.6;
-  margin-top: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-top: 1rem;
 }

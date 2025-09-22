@@ -1,11 +1,7 @@
 <div class="page-bg">
   <app-header></app-header>
   <div class="gallery-grid">
-    <div
-      class="gallery-card"
-      *ngFor="let item of galleryItems;"
-      (click)="openModal(item)"
-    >
+    <div class="gallery-card" *ngFor="let item of galleryItems;" (click)="openModal(item)">
       <button class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
 
       <ng-container *ngIf="item.video; else photoTpl">

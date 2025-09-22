@@ -5,7 +5,7 @@
     </div>
 
     <form (ngSubmit)="onSubmit()">
-      <!-- Seção de Foto -->
+      <!-- Seção de photo -->
         <div class="photo-section">
             <div class="photo-container">
                 <img [src]="photoPreview || 'assets/images/default-avatar.png'" [alt]="form.name" class="photo-preview">
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <!-- Seção de Alteração de Senha -->
+        <!-- Seção de Alteração de password -->
             <div class="form-group">
                 <label class="form-label">Senha Atual</label>
                 <input placeholder="Digite sua senha atual" type="password" class="form-input" [(ngModel)]="form.currentPassword" name="currentPassword" required>
@@ -47,7 +47,7 @@
         <input placeholder="Confirme sua nova senha" type="password" class="form-input" [(ngModel)]="form.confirmPassword" name="confirmPassword">
         </div>
 
-        <!-- Mensagens de erro/sucesso -->
+        <!-- Mensagens de error/sucesso -->
         <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
         <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
 

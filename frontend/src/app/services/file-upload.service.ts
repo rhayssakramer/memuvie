@@ -12,7 +12,7 @@ export class FileUploadService {
 
   constructor(private http: HttpClient) { }
 
-  // Upload de arquivo comum
+  // Upload de file comum
   uploadFile(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
@@ -29,7 +29,7 @@ export class FileUploadService {
       .pipe(catchError(this.handleError<HttpEvent<any>>('uploadFile')));
   }
 
-  // Upload de imagem como Base64
+  // Upload de image como Base64
   uploadBase64(base64Image: string, filename: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/upload-base64`, {
       content: base64Image,
@@ -38,12 +38,12 @@ export class FileUploadService {
       .pipe(catchError(this.handleError<any>('uploadBase64')));
   }
 
-  // Obter URL do arquivo
+  // Obter URL do file
   getFileUrl(filename: string): string {
     return `${environment.apiUrl}/files/${filename}`;
   }
 
-  // Obter os cabeçalhos HTTP com o token de autenticação
+  // Obter os cabeçalhos HTTP com o token de authentication
   private getHttpOptions() {
     const token = this.getToken();
     return {

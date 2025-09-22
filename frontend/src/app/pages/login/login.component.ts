@@ -30,7 +30,7 @@ export class LoginComponent {
   selectedFile: File | null = null;
   previewUrl: string | null = null;
 
-  // Controle da visibilidade da senha
+  // Controle da visibilidade da password
   showPassword: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
@@ -46,13 +46,13 @@ export class LoginComponent {
       return;
     }
 
-    // Tentar autenticar no backend primeiro
+    // Tentar authenticate no backend primeiro
     this.authService.login({
       email: this.email.trim(),
-      senha: this.password.trim()  // Alterado de password para senha para corresponder ao backend
+      senha: this.password.trim()  // Alterado de password para password para corresponder ao backend
     }).subscribe({
       next: (response) => {
-        // Salvar a sessão e o perfil
+        // Save a sessão e o profile
         saveSession(response.token, response.expiresAt);
         saveProfile(response.user);
         this.router.navigate(['/interaction']);
@@ -61,7 +61,7 @@ export class LoginComponent {
         // Fallback para o modo local (temporário até backend completo)
         console.warn('Backend auth failed, trying local mode:', err);
 
-        // Verifica o perfil salvo localmente
+        // Verifica o profile salvo localmente
         const profile = getProfile();
         if (profile && profile.email.toLowerCase() === this.email.trim().toLowerCase()) {
           // Usar startSession importado do auth.ts
@@ -78,7 +78,7 @@ export class LoginComponent {
     });
   }
 
-  // Abre o modal de criação de perfil
+  // Abre o modal de criação de profile
   // Recebe o evento do click para prevenir o comportamento padrão do <a href="#"> (evita navegação)
   goToCreate(event?: Event) {
     if (event) {
@@ -86,11 +86,11 @@ export class LoginComponent {
     }
     logoutAll(); // Limpa qualquer sessão anterior
     this.showCreateProfile = true;
-    // Disable body scroll while modal is open
+    // Desabilita a body scroll enquanto o modal estiver aberto
     try {
       document.body.style.overflow = 'hidden';
     } catch (e) {
-      // server-side rendering or environment without document - ignore
+      // server-side rendering ou environment ou ambiente sem documento - ignorar
     }
   }
 
@@ -107,13 +107,13 @@ export class LoginComponent {
     try {
       document.body.style.overflow = '';
     } catch (e) {
-      // Ignore errors
+      // Ignorar erros
     }
   }
 
-  // Navegação para a página de recuperação de senha
+  // Navegação para a página de recovery de password
   esqueceuSenha() {
-    // Open embedded recovery modal instead of navigating
+    // Abrir o embedded recovery modal incorporado em vez de navegar
     this.showRecoveryModal = true;
     try {
       document.body.style.overflow = 'hidden';
@@ -134,7 +134,7 @@ export class LoginComponent {
     if (input.files && input.files[0]) {
       const file = input.files[0];
 
-      // Verificar o tamanho do arquivo (limitar a 1MB)
+      // Verificar o size do file (limitar a 1MB)
       if (file.size > 1024 * 1024) {
         this.error = 'A imagem é muito grande. Por favor, selecione uma imagem com menos de 1MB.';
         return;
@@ -145,16 +145,16 @@ export class LoginComponent {
     }
   }
 
-  // Método para redimensionar e comprimir a imagem
+  // Método para redimensionar e comprimir a image
   resizeAndCompressImage(file: File) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const img = new Image();
       img.onload = () => {
-        // Redimensionar para um tamanho máximo razoável
+        // Redimensionar para um size máximo razoável
         let width = img.width;
         let height = img.height;
-        const MAX_SIZE = 500; // pixels - tamanho máximo em qualquer dimensão
+        const MAX_SIZE = 500; // pixels - size máximo em qualquer dimensão
 
         if (width > height && width > MAX_SIZE) {
           height = Math.round((height * MAX_SIZE) / width);
@@ -172,18 +172,18 @@ export class LoginComponent {
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Comprimir a imagem - qualidade reduzida para JPEG
+          // Comprimir a image - qualidade reduzida para JPEG
           // Qualidade entre 0 e 1, onde 1 é a melhor qualidade
           const compressedImageData = canvas.toDataURL('image/jpeg', 0.7);
           this.previewUrl = compressedImageData;
 
-          // Verificar o tamanho final da string
-          if (this.previewUrl.length > 900000) { // Limite um pouco abaixo do tamanho do campo no banco
+          // Verificar o size final da string
+          if (this.previewUrl.length > 900000) { // Limite um pouco abaixo do size do campo no banco
             this.error = 'A imagem ainda está muito grande após compressão. Por favor, selecione uma imagem menor.';
             this.selectedFile = null;
             this.previewUrl = null;
           } else {
-            this.error = ''; // Limpa qualquer erro anterior
+            this.error = ''; // Limpa qualquer error anterior
           }
         }
       };
@@ -192,16 +192,16 @@ export class LoginComponent {
     reader.readAsDataURL(file);
   }
 
-  // Remove a imagem selecionada sem abrir o seletor
+  // Remove a image selecionada sem abrir o seletor
   removeSelected(event: Event) {
-    // Evita que o clique no botão abra o input file (propagação para o container)
+    // Evita que o clique no button abra o input file (propagação para o container)
     event.stopPropagation();
     this.selectedFile = null;
     this.previewUrl = null;
   }
 
   createProfile() {
-    // Validação dos campos
+    // Validation dos campos
     if (!this.newUserName.trim() || !this.newEmail.trim() || !this.newPassword.trim() || !this.newConfirmPassword.trim()) {
       this.error = 'Preencha todos os campos obrigatórios';
       return;
@@ -228,7 +228,7 @@ export class LoginComponent {
     // Registrar no backend
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
-        // Salvar a sessão e o perfil
+        // save a sessão e o profile
         saveSession(response.token, response.expiresAt);
         saveProfile(response.user);
 
@@ -247,7 +247,7 @@ export class LoginComponent {
         // Fechar o modal
         this.showCreateProfile = false;
 
-        // Mostrar mensagem de sucesso
+        // Mostrar message de sucesso
         this.error = 'Perfil criado com sucesso! Faça login para continuar.';
       },
       error: (err) => {
@@ -255,14 +255,14 @@ export class LoginComponent {
 
         // Fallback para o modo local (temporário até backend completo)
         try {
-          // Salva o novo perfil localmente
+          // Save o novo profile localmente
           saveProfile({
             name: this.newUserName.trim(),
             email: this.newEmail.trim(),
             photo: this.previewUrl || null
           });
 
-          // Salva os dados de compatibilidade
+          // Save os dados de compatibilidade
           localStorage.setItem('userName', this.newUserName.trim());
           if (this.previewUrl) {
             localStorage.setItem('userPhoto', this.previewUrl);
@@ -283,7 +283,7 @@ export class LoginComponent {
           // Fecha o modal
           this.showCreateProfile = false;
 
-          // Mostra mensagem de sucesso (com aviso)
+          // Mostra message de sucesso (com aviso)
           this.error = 'Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.';
         } catch (e) {
           this.error = 'Erro ao criar perfil. Tente novamente.';
