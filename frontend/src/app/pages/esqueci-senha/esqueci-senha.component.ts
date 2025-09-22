@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -12,6 +12,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./esqueci-senha.component.css']
 })
 export class EsqueciSenhaComponent {
+  @Input() embedded: boolean = false;
+  @Output() close = new EventEmitter<void>();
   email: string = '';
   mensagem: string = '';
   erro: string = '';
@@ -58,6 +60,10 @@ export class EsqueciSenhaComponent {
 
   // Retorna para a tela de login
   voltar() {
-    this.router.navigate(['/login']);
+    if (this.embedded) {
+      this.close.emit();
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

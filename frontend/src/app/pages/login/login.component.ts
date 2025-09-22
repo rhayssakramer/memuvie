@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EsqueciSenhaComponent } from '../esqueci-senha/esqueci-senha.component';
 import { getProfile, logoutAll, saveProfile, UserProfile, saveSession } from '../../utils/auth';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, EsqueciSenhaComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -112,7 +113,20 @@ export class LoginComponent {
 
   // Navegação para a página de recuperação de senha
   esqueceuSenha() {
-    this.router.navigate(['/esqueci-senha']);
+    // Open embedded recovery modal instead of navigating
+    this.showRecoveryModal = true;
+    try {
+      document.body.style.overflow = 'hidden';
+    } catch (e) {}
+  }
+
+  showRecoveryModal: boolean = false;
+
+  closeRecovery() {
+    this.showRecoveryModal = false;
+    try {
+      document.body.style.overflow = '';
+    } catch (e) {}
   }
 
   onFileSelected(event: Event) {

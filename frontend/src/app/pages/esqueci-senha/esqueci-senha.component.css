@@ -4,8 +4,6 @@
   justify-content: center;
   min-height: 100vh;
   padding: 20px;
-  background-color: #f8f9fa;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
 }
 
 .card {
@@ -17,28 +15,65 @@
   padding: 30px;
 }
 
+/* Modal styles when embedded */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.683);
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-card.recovery-modal {
+  margin-left: 30px;
+  max-width: 420px;
+  width: 100%;
+  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+  border-radius: 12px;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
+}
+
 .card-title {
-  text-align: center;
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 20px;
+    text-align: center;
+    margin: 0;
+    font-size: 20px;
+    color: #252525;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .form-description {
   text-align: center;
   color: #666;
-  margin-bottom: 30px;
-}
-
-.form-group {
   margin-bottom: 20px;
 }
 
+.form-group {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #252525;
 }
 
 .input {
@@ -51,12 +86,12 @@
 }
 
 .input:focus {
-  border-color: #FF55AA;
+  border-color: #000000;
   outline: none;
 }
 
 .error-message {
-  color: #d9534f;
+  color: #e91e63;
   margin: 15px 0;
   padding: 10px;
   background-color: rgba(217, 83, 79, 0.1);
@@ -79,6 +114,7 @@
   color: white;
   border-radius: 50%;
   font-size: 30px;
+  font-weight: 200;
   margin-bottom: 20px;
 }
 
@@ -91,7 +127,7 @@
 .form-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .btn {
@@ -104,24 +140,41 @@
 }
 
 .btn-primary {
-  background-color: #FF55AA;
-  color: white;
-  flex: 1;
-  margin-left: 10px;
+    width: 125px;
+    height: 40px;
+    border: 0;
+    border-radius: 999px;
+    padding: .5rem 1.6rem;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
-  background-color: #e94c98;
+  transform: translateY(-2px); 
 }
 
 .btn-secondary {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #333;
+    width: 125px;
+    height: 40px;
+    border: 0;
+    border-radius: 999px;
+    padding: .5rem 1.6rem;
+    background: #f3f4f6;
+    color: #0f2238;
+    font-weight: 700;
+    box-shadow: 0 14px 30px rgba(90,141,255,0.06);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    margin-top: 10px;
 }
 
 .btn-secondary:hover {
-  background-color: #e9ecef;
+  transform: translateY(-2px); 
 }
 
 .loading {
@@ -132,7 +185,7 @@
 .spinner {
   border: 4px solid rgba(255, 85, 170, 0.3);
   border-radius: 50%;
-  border-top: 4px solid #FF55AA;
+  border-top: 4px solid #e91e63;
   width: 30px;
   height: 30px;
   animation: spin 1s linear infinite;

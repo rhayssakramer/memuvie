@@ -166,12 +166,12 @@
 
 .help { 
   text-align:center; 
-  margin-top: 12px; 
+  margin-top: 14px; 
   color:#6b7280; 
 }
 
 .help span{
-  font-size: 16px;
+  font-size: 14px;
   color:#e11d48;
 }
 
@@ -275,7 +275,7 @@
 .modal-title {
   margin: 0;
   line-height: 1;
-  font-size: 14px;
+  font-size: 20px;
   color: #252525;
 }
 
