@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 
 @Component({
   selector: 'app-redefinir-senha',
   templateUrl: './redefinir-senha.component.html',
   styleUrls: ['./redefinir-senha.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, DotsBackgroundComponent]
 })
 export class RedefinirSenhaComponent implements OnInit {
   token: string = '';

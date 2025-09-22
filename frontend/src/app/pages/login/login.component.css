@@ -1,6 +1,8 @@
 .login-page { 
     background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
     min-height:100vh; 
+    position: relative; /* establish stacking context so background dots behind it */
+    z-index: 1; /* sit above the dots-bg-root which uses z-index:-1 */
 }
 
 .login-header { 
@@ -37,6 +39,8 @@
     box-shadow: var(--shadow); 
     padding: 1.25rem 1.25rem; 
     margin-top: 5em;
+    position: relative; /* ensure cards appear above background */
+    z-index: 2; /* above .login-page and the dots */
 }
 
 .card h1 { 

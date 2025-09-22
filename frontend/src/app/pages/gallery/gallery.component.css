@@ -1,6 +1,8 @@
 .page-bg{
     margin: 0;
     padding: 0;
+    position: relative; /* stacking context so dots stay behind */
+    z-index: 1;
 }
 
 /* os botões agora usam .btn-gradient globalmente */
@@ -12,6 +14,8 @@
     max-width: 1200px;
     margin: 0 auto;
     margin-top: 20px;
+    position: relative; /* ensure grid content appears above the background */
+    z-index: 2;
 }
 
 .gallery-card {

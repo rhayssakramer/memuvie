@@ -7,6 +7,8 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
+  position: relative; /* stacking context so dots are behind */
+  z-index: 1;
 }
 
 .card {
@@ -16,6 +18,8 @@
   padding: 30px;
   width: 100%;
   max-width: 450px;
+  position: relative;
+  z-index: 2;
 }
 
 .card-title {

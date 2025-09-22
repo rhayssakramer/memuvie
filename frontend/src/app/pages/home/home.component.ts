@@ -21,11 +21,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   minutes = 0;
   seconds = 0;
 
+  // Decorative dots for background
+  dots: Array<{
+    id: number;
+    top?: string; // css value like '10px' or '20%'
+    left?: string;
+    size: number;
+    color: string;
+    opacity: number;
+    delay: number;
+    floatDuration: number;
+    pulseDuration: number;
+  }> = [];
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.tick();
     this.timerId = setInterval(() => this.tick(), 1000);
+
+    // Gerar dots decorativos aleatórios
+    this.generateDots(18);
   }
 
   ngOnDestroy(): void {
@@ -58,5 +74,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/login']);
     }
+  }
+
+  private generateDots(count: number) {
+    const palette = ['#ffffff', 'rgba(255,95,163,0.95)', 'rgba(58,123,255,0.95)', '#fff7f9', '#f0f5ff'];
+    this.dots = Array.from({ length: count }).map((_, i) => {
+      const size = Math.round(18 + Math.random() * 110); // px
+      const top = Math.round(Math.random() * 90) + '%';
+      const left = Math.round(Math.random() * 95) + '%';
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      const opacity = +(0.18 + Math.random() * 0.6).toFixed(2);
+      const delay = +(Math.random() * 6).toFixed(2);
+    // tornar flutuação mais perceptível: duração moderada
+  const floatDuration = +(3 + Math.random() * 4).toFixed(2); // 3s - 7s
+    const pulseDuration = +(4 + Math.random() * 6).toFixed(2); // 4s - 10s
+      return {
+        id: i,
+        top,
+        left,
+        size,
+        color,
+        opacity,
+        delay,
+        floatDuration,
+        pulseDuration
+      };
+    });
+  }
+
+  trackById(index: number, item: any) {
+    return item?.id ?? index;
   }
 }

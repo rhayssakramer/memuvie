@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
+import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
 
 @Component({
@@ -10,7 +11,7 @@ import { logoutAll } from '../../utils/auth';
   templateUrl: './interaction.component.html',
   styleUrls: ['./interaction.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent]
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, DotsBackgroundComponent]
 })
 export class InteractionComponent implements OnInit {
   message: string = '';

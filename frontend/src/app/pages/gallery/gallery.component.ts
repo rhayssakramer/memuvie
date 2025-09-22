@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
 import { HeaderComponent } from '../../shared/header/header.component'; // Manter importação do componente de cabeçalho
+import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
 
 interface GalleryItem {
@@ -21,7 +22,7 @@ interface GalleryItem {
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent] // Remove ProfileMenuComponent das importações
+  imports: [CommonModule, RouterModule, HeaderComponent, DotsBackgroundComponent] // Remove ProfileMenuComponent das importações
 })
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;

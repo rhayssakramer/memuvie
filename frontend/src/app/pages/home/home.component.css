@@ -103,29 +103,46 @@
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
-    opacity: .3;
+    background: var(--dot-bg, #fff);
+    opacity: var(--dot-opacity, .35);
+    transform: translate3d(0,0,0);
+    will-change: transform, opacity;
+    /* animation controlled by CSS variables set per-element */
+    animation: float var(--float-duration, 12s) ease-in-out var(--float-delay, 0s) infinite alternate,
+           pulse var(--pulse-duration, 6s) ease-in-out var(--pulse-delay, 0s) infinite;
 }
 
-.dot-top-left { 
-    width: 80px; 
-    height: 80px; 
-    background: #ffffff; 
-    top: 26px; 
-    left: 26px; 
+/* Bounce (quicada) animation - uma 'bóia' rápida com overshoot para simular quicada */
+/* Float animation: pequenos movimentos em X e Y, contínuos e sutis */
+@keyframes float {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    20% { transform: translate3d(16px, -16px, 0) scale(1.03); }
+    40% { transform: translate3d(-14px, 14px, 0) scale(0.99); }
+    60% { transform: translate3d(14px, -14px, 0) scale(1.04); }
+    80% { transform: translate3d(-10px, 10px, 0) scale(1.02); }
+    100% { transform: translate3d(0, 0, 0) scale(1); }
 }
 
-.dot-left { 
-    width: 56px; 
-    height: 56px; 
-    background: #ffffff; 
-    left: 22px; 
-    bottom: 140px; 
+/* Subtle pulsing for depth */
+@keyframes pulse {
+    0% { opacity: var(--op, .35); transform: scale(1); }
+    40% { opacity: calc(var(--op, .35) + 0.09); transform: scale(1.04); }
+    100% { opacity: var(--op, .35); transform: scale(1); }
 }
 
-.dot-right { 
-    width: 110px; 
-    height: 110px; 
-    background: #ffffff; 
-    right: 28px; 
-    bottom: 120px; 
+/* Container to ensure dots are interactive-hidden and cover hero area */
+.decor-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .dot {
+        animation: none !important;
+        transition: none !important;
+        opacity: var(--op, .35);
+        transform: none !important;
+    }
 }

@@ -1,4 +1,5 @@
 <div class="page-bg">
+  <app-dots-background [count]="22"></app-dots-background>
   <app-header></app-header>
   <div class="gallery-grid">
     <div class="gallery-card" *ngFor="let item of galleryItems;" (click)="openModal(item)">

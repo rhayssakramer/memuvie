@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { logoutAll } from '../../utils/auth';
 import { HeaderComponent } from '../../shared/header/header.component';
+import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 
 @Component({
   selector: 'app-interaction',
   templateUrl: './interaction.component.html',
   styleUrls: ['./interaction.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent]
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, DotsBackgroundComponent]
 })
 export class InteractionComponent implements OnInit {
   message: string = '';

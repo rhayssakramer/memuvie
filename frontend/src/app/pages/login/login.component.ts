@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EsqueciSenhaComponent } from '../esqueci-senha/esqueci-senha.component';
+import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { getProfile, logoutAll, saveProfile, UserProfile, saveSession } from '../../utils/auth';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, EsqueciSenhaComponent],
+  imports: [CommonModule, FormsModule, EsqueciSenhaComponent, DotsBackgroundComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

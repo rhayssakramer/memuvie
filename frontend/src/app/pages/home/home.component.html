@@ -1,8 +1,22 @@
 <section class="hero">
-    <!-- Decoração do background circles -->
-    <span class="dot dot-top-left"></span>
-    <span class="dot dot-left"></span>
-    <span class="dot dot-right"></span>
+    <!-- Local dots for Home (kept in addition to global background) -->
+    <div class="decor-dots" aria-hidden="true">
+      <span *ngFor="let d of dots; trackBy: trackById"
+            class="dot"
+            [ngStyle]="{
+              top: d.top,
+              left: d.left,
+              width: d.size + 'px',
+              height: d.size + 'px'
+            }"
+            [style.--dot-bg]="d.color"
+            [style.--dot-opacity]="d.opacity"
+            [style.--float-duration]="d.floatDuration + 's'"
+            [style.--float-delay]="d.delay + 's'"
+            [style.--pulse-duration]="d.pulseDuration + 's'"
+            [style.--pulse-delay]="d.delay + 's'">
+      </span>
+    </div>
 
     <div class="hero-inner">
       <h1 class="title">Chá Revelação</h1>

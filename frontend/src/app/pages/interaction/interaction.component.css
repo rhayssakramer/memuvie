@@ -3,9 +3,12 @@
     background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
     min-height: 100vh; 
     width: 100%;
+    position: relative; /* establish stacking context so background dots stay behind */
+    z-index: 1;
+
 }
 
-/* Header */
+    /* Header */
 .interaction-header {
     max-width: 100%;
     box-shadow: 0 14px 30px rgba(255,95,163,.25); 
@@ -60,8 +63,8 @@
     max-width: 720px; 
     margin: 0 auto; 
     padding: 1.25rem; 
-}
-
+        position: relative; /* ensure main content sits above background */
+        z-index: 2;
 .title-block { 
     text-align:center; 
     margin: 1rem 0 1.25rem; 
@@ -217,17 +220,16 @@
     min-height: 160px; 
     border:1.5px solid #eee; 
     border-radius:14px; 
-    padding: .9rem; 
-    font-size:1rem; 
-    resize:vertical; 
+    padding: 1.25rem; 
+    position: relative; /* ensure main content sits above background */
+    z-index: 2;
+
 }
 
-.textarea-wrap textarea:focus { 
-    outline:none; 
-    border-color:#f7b9cf; 
+.title-block { 
+    text-align:center; 
+    margin: 1rem 0 1.25rem; 
 }
-
-.char-count { 
     text-align:right; 
     color:#666; 
     font-size:.85rem; 
@@ -264,4 +266,10 @@
     color:#e91e63; 
     text-decoration:none; 
     font-weight:600; 
+}
+
+/* Ensure header sits above background */
+.interaction-header {
+    position: relative;
+    z-index: 3;
 }
