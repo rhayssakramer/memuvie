@@ -13,12 +13,12 @@
 }
 
 .login-header .brand { 
-  font-size: 2.6rem;
-  color:#0f2238; 
-  font-weight:700; 
-  display:inline-block;
-  align-items:center; 
-  margin-top: 1.5em;
+    font-size: 2.6rem;
+    color: #252525;
+    font-weight:700; 
+    display:inline-block;
+    align-items:center; 
+    margin-top: 1.5em;
 }
 
 /* Make the main area span full height so children can center vertically */
@@ -56,7 +56,7 @@
 }
 
 .label { 
-  color:#111; 
+  color: #252525;
   font-weight:600; 
   display:block; 
 }
@@ -276,7 +276,7 @@
   margin: 0;
   line-height: 1;
   font-size: 1.6em;
-  color: #323232;
+  color: #252525;
 }
 
 .modal-card .close-button {
@@ -453,6 +453,7 @@
 }
 
 .form-group label {
+  color: #252525;
   display: block;
   margin-bottom: 0.5rem;
   margin-top: -10px;

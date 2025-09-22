@@ -36,22 +36,22 @@
 }
 
 .edit-profile-modal.open .modal-content {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
 .modal-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 .modal-title {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #1a1a1a;
-  margin-top: 5px;
-  margin-bottom: -20px;
+    margin: 0;
+    font-size: 1.5rem;
+    color: #252525;
+    margin-top: 10px;
+    margin-bottom: -10px;
 }
 
 .close-button {
@@ -66,75 +66,72 @@
 }
 
 .close-button:hover {
-  color: #333;
+    color: #333;
 }
 
 .photo-container {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  border-radius: 50%;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    margin-bottom: 1em;
 }
 
 .photo-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.photo-upload {
-  display: none;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .photo-edit-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 6px;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transform: translate(25%, -25%);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: absolute;
+    bottom: 0;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: translate(25%, -25%);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .photo-edit-overlay:hover {
-  transform: translate(25%, -25%) scale(1.1);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    transform: translate(25%, -25%) scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
 .camera-icon {
-  width: 18px;
-  height: 18px;
-  color: white;
+    width: 18px;
+    height: 18px;
+    color: white;
 }
 
 .form-group {
-  margin-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .form-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #1a1a1a;
-  font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
+    color: #252525;
+    font-weight: 500;
 }
 
 .form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1.5px solid #eee; 
-  border-radius: 12px; 
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #eee; 
+    border-radius: 12px; 
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
 }
 
 .form-input::placeholder{
@@ -149,40 +146,40 @@
 }
 
 .button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
 .save-button {
-  width: 125px;
-  height: 40px;
-  border: 0;
-  border-radius: 999px;
-  padding: .5rem 1.6rem;
-  background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 14px 30px rgba(255,95,163,.25);
-  cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
+    width: 125px;
+    height: 40px;
+    border: 0;
+    border-radius: 999px;
+    padding: .5rem 1.6rem;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .save-button:hover {
-  transform: translateY(-2px); 
+    transform: translateY(-2px); 
 }
 
 .cancel-button {
-  border: 0;
-  border-radius: 999px;
-  padding: .5rem 1.6rem;
-  background: #f3f4f6;
-  color: #0f2238;
-  font-weight: 700;
-  box-shadow: 0 14px 30px rgba(90,141,255,0.06);
-  cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
+    border: 0;
+    border-radius: 999px;
+    padding: .5rem 1.6rem;
+    background: #f3f4f6;
+    color: #0f2238;
+    font-weight: 700;
+    box-shadow: 0 14px 30px rgba(90,141,255,0.06);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .cancel-button:hover {
@@ -196,7 +193,8 @@
 }
 
 .success-message {
-  color: #4caf50;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
