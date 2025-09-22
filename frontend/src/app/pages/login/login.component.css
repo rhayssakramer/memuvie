@@ -166,12 +166,12 @@
 
 .help { 
   text-align:center; 
-  margin-top: 14px; 
+  margin-top: 12px; 
   color:#6b7280; 
 }
 
 .help span{
-  font-size: 14px;
+  font-size: 16px;
   color:#e11d48;
 }
 
@@ -275,7 +275,7 @@
 .modal-title {
   margin: 0;
   line-height: 1;
-  font-size: 1.6em;
+  font-size: 14px;
   color: #252525;
 }
 
@@ -516,14 +516,53 @@
 
 .recovery-link {
   text-align: center;
+  cursor: pointer;
   margin: 10px 0;
 }
 
 .recovery-link .link-button {
-  color: #4a90e2;
+  color: #6b7280;
   font-size: 0.9em;
 }
 
 .recovery-link .link-button:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #e11d48;;
+}
+
+/* Password toggle styles */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  padding-right: 44px; /* space for the toggle button */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 8px;
+}
+
+.password-toggle:hover {
+  background: rgba(0,0,0,0.03);
+  color: #111827;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
 }

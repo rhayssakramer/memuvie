@@ -13,7 +13,23 @@
             <input type="email" [(ngModel)]="email" name="email" required class="input soft" placeholder="admin@admin.com" />
 
             <label class="field-label">Senha</label>
-            <input type="password" [(ngModel)]="password" name="password" required class="input soft" placeholder="••••" />
+            <div class="password-field">
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required class="input soft password-input" placeholder="••••" />
+              <button type="button" class="password-toggle" (click)="toggleShowPassword()" aria-label="Mostrar senha">
+                <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <!-- full eye outline -->
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <!-- pupil -->
+                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <!-- slash to indicate hidden -->
+                  <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </div>
 
             <div class="error" *ngIf="error">{{ error }}</div>
 
@@ -21,11 +37,11 @@
           </form>
 
           <div class="recovery-link">
-            <button class="link-button" (click)="esqueceuSenha()"><span>Esqueci minha senha</span></button>
+            <a class="link-button" (click)="esqueceuSenha()"><span>Esqueci minha senha</span></a>
           </div>
 
           <div class="help">
-            Ainda não tem perfil?<button class="link-button" (click)="goToCreate($event)"><span>Crie seu perfil</span></button>
+          Ainda não tem perfil?<button class="link-button" (click)="goToCreate($event)"><span>Crie seu perfil</span></button>
           </div>
         </div>
       </section>

@@ -29,7 +29,14 @@ export class LoginComponent {
   selectedFile: File | null = null;
   previewUrl: string | null = null;
 
+  // Controle da visibilidade da senha
+  showPassword: boolean = false;
+
   constructor(private router: Router, private authService: AuthService) {}
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   onSubmit() {
     this.error = '';
