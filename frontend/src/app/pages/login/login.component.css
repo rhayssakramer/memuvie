@@ -1,191 +1,199 @@
-.login-page { 
+.login-page {
     background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
-    min-height:100vh; 
+    min-height: 100vh;
+    height: 100vh; /* Garantir que ocupe toda a altura da viewport */
     position: relative; /* establish stacking context so background dots behind it */
     z-index: 1; /* sit above the dots-bg-root which uses z-index:-1 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.login-header { 
-    max-width:980px; 
-    margin:0 auto; 
-    padding:0.5rem 1rem; 
+.login-header {
+    max-width:980px;
+    margin:0 auto;
+    padding:0.5rem 1rem;
     border-bottom:none; /* Remove linha fina sob o cabeçalho */
     text-align:center; /* Centralize a marca horizontalmente */
     margin-bottom: 12px; /* Mantenha o cabeçalho um pouco acima do cartão */
 }
 
-.login-header .brand { 
+.login-header .brand {
     font-size: 2.6rem;
     color: #252525;
-    font-weight:700; 
+    font-weight:700;
     display:inline-block;
-    align-items:center; 
+    align-items:center;
     margin-top: 1.5em;
 }
 
 /* Faça a área principal abranger toda a altura para que as crianças possam centralizar verticalmente */
-.login-main { 
+.login-main {
     width: 100%;
-    padding: 0 1rem; 
+    padding: 0 1rem;
     min-height: 100vh; /* Preencher viewport para que as crianças possam ser centralizadas verticalmente */
     display: flex;
     align-items: center; /* Centralizar children verticalmente */
-    justify-content: center; /* Centralizar children horizontalmente em narrow viewports */
+    justify-content: center; /* Centralizar children horizontalmente */
+    position: absolute; /* Para garantir posicionamento absoluto */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-.card { 
-    background: var(--white); 
-    border-radius:16px; 
-    box-shadow: var(--shadow); 
-    padding: 1.25rem 1.25rem; 
-    margin-top: 5em;
+.card {
+    background: var(--white);
+    border-radius:16px;
+    box-shadow: var(--shadow);
+    padding: 1.25rem 1.25rem;
+    margin: 0; /* Removido margin-top para centralização perfeita */
     position: relative; /* ensure cards appear above background */
     z-index: 2; /* above .login-page and the dots */
 }
 
-.card h1 { 
-    margin:0 0 .5rem; 
-    font-size:1.6rem; 
-    color:#111; 
+.card h1 {
+    margin:0 0 .5rem;
+    font-size:1.6rem;
+    color:#111;
 }
 
-.hint { 
-    margin:0 0 1rem; 
-    color:#666; 
+.hint {
+    margin:0 0 1rem;
+    color:#666;
 }
 
-.form { 
-    display:grid; 
-    gap:.8rem; 
+.form {
+    display:grid;
+    gap:.8rem;
 }
 
-.label { 
+.label {
     color: #252525;
-    font-weight:600; 
-    display:block; 
+    font-weight:600;
+    display:block;
 }
 
-.layout { 
-    max-width:980px; 
-    margin: 0 auto; 
-    display:flex; 
-    gap:2rem; 
+.layout {
+    max-width:980px;
+    margin: 0 auto;
+    display:flex;
+    gap:2rem;
     align-items:center; /* Centralizar verticalmente dentro do layout */
+    justify-content: center; /* Centralizar horizontalmente */
     width: 100%;
+    height: 100%; /* Ocupar toda a altura disponível */
 }
 
 /* Left rail mantém o espaçamento em large screens, collapses on small */
-.left-rail { 
-    width: 160px; 
-    height: auto; 
-    background: transparent; 
+.left-rail {
+    display: none; /* Ocultado para permitir centralização perfeita */
 }
 
-.center-area { 
-    flex:1; 
-    display:flex; 
-    justify-content:center; 
-    align-items:center; /* center card verticalmente dentro do layout */
+.center-area {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* center card verticalmente dentro do layout */
     margin: 0;
+    width: 100%; /* Usar toda a largura disponível */
 }
 
 /* Responsivo: stack layout e centralize o conteúdo em narrow viewports */
 @media (max-width: 700px) {
-    .layout { 
-        flex-direction: column; 
-        align-items: stretch; 
-        gap: 1rem; 
+    .layout {
+        flex-direction: column;
+        align-items: center; /* Centralizar verticalmente */
+        justify-content: center; /* Centralizar horizontalmente */
+        gap: 1rem;
     }
 
-    .left-rail { 
-        display: none; 
+    .center-area {
+        padding: 0; /* Remover padding para centralização perfeita */
+        width: 100%; /* Usar toda a largura disponível */
     }
 
-    .center-area { 
-        padding: 1.25rem 0; 
-    }
-
-    .login-card { 
-        width: 100%; 
-        max-width: 420px; 
-        margin: 0 auto; 
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto; /* Centralizar horizontalmente */
     }
 }
 
-.login-card { 
-    width: 100%; 
-    max-width: 460px; 
-    background: #fff; 
-    border-radius: 12px; 
-    box-shadow: 0 12px 30px rgba(15,34,56,0.06); 
+.login-card {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(15,34,56,0.06);
+    margin: 0 auto; /* Centralizar horizontalmente */
 }
 
-.card-title { 
-    margin:0 0 6px; 
-    font-size:1.6rem; 
-    color:#111; 
-    font-weight:700; 
+.card-title {
+    margin:0 0 6px;
+    font-size:1.6rem;
+    color:#111;
+    font-weight:700;
     text-align: center;
 }
 
-.hint { 
-    margin:0 0 18px; 
-    color:#6b7280; 
+.hint {
+    margin:0 0 18px;
+    color:#6b7280;
     text-align: center;
 }
 
-.card { 
-    background: var(--white); 
-    border-radius:16px; 
-    box-shadow: var(--shadow); 
-    padding: 1.25rem 1.25rem; 
-    margin: 2.5rem 0 1rem 0;
+.card {
+    background: var(--white);
+    border-radius:16px;
+    box-shadow: var(--shadow);
+    padding: 1.25rem 1.25rem;
+    margin: 0; /* Removido margins para centralização perfeita */
     position: relative; /* ensure cards appear above background */
     z-index: 2; /* above .login-page and the dots */
 }
 
 
 /* soft input style correspondente à screenshot: pale-blue rounded */
-.input.soft { 
-    width:100%; 
-    border: none; 
-    background: #eef6fb; 
-    padding: 12px 14px; 
-    border-radius: 10px; 
-    box-shadow: inset 0 1px 0 #ffffff99; 
-    font-size:14px; 
+.input.soft {
+    width:100%;
+    border: none;
+    background: #eef6fb;
+    padding: 12px 14px;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 0 #ffffff99;
+    font-size:14px;
 }
 
-.error { 
+.error {
     font-size: 14px;
-    color:#e11d48; 
-    font-weight:700; 
-    margin-top:4px; 
+    color:#e11d48;
+    font-weight:700;
+    margin-top:4px;
 }
 
 /* Gradient pill botão */
-.btn-pill { 
-    display:block; 
-    width:100%; 
-    margin-top:8px; 
-    padding:12px 18px; 
-    border-radius:28px; 
-    border:none; 
-    cursor:pointer; 
-    color:white; 
-    font-weight:700; 
-    background: linear-gradient(90deg,#ff6fb0 0%, #6b8cff 100%); 
-    box-shadow: 0 8px 18px rgba(111,96,255,0.12); 
+.btn-pill {
+    display:block;
+    width:100%;
+    margin-top:8px;
+    padding:12px 18px;
+    border-radius:28px;
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    background: linear-gradient(90deg,#ff6fb0 0%, #6b8cff 100%);
+    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
 }
 
-.btn-pill:active { 
-    transform: translateY(1px); 
+.btn-pill:active {
+    transform: translateY(1px);
 }
 
-.help { 
-    text-align:center; 
-    margin-top: 14px; 
-    color:#6b7280; 
+.help {
+    text-align:center;
+    margin-top: 14px;
+    color:#6b7280;
 }
 
 .help span{
@@ -193,13 +201,13 @@
     color:#e11d48;
 }
 
-.help .link-button { 
-    background:none; 
-    border:none; 
+.help .link-button {
+    background:none;
+    border:none;
     color: #e11d48;
-    font-weight:700; 
-    cursor:pointer; 
-    padding:0; 
+    font-weight:700;
+    cursor:pointer;
+    padding:0;
     margin-left:6px;
 }
 
@@ -308,58 +316,58 @@
     margin-bottom: 15px;
 }
 
-.modal-form { 
-    margin-top: 1rem; 
+.modal-form {
+    margin-top: 1rem;
 }
 
 /* Ajustes para Mobile */
 @media (max-width: 600px) {
-    .modal { 
-      align-items: flex-start; 
-      padding-top: 24px; 
+    .modal {
+      align-items: flex-start;
+      padding-top: 24px;
     }
 
-    .modal-content { 
-      width: 95%; 
-      max-width: 420px; 
+    .modal-content {
+      width: 95%;
+      max-width: 420px;
     }
 
-    .modal-card { 
-      border-radius: 14px; 
-      padding: 1.25rem; 
+    .modal-card {
+      border-radius: 14px;
+      padding: 1.25rem;
     }
 
-    .modal-title { 
-      font-size: 1.6rem; 
+    .modal-title {
+      font-size: 1.6rem;
     }
 
-    .modal-sub { 
-      font-size: .85rem; 
+    .modal-sub {
+      font-size: .85rem;
     }
 }
 
 /* Screens largas */
 @media (min-width: 1200px) {
-    .modal-content { 
-      max-width: 700px; 
+    .modal-content {
+      max-width: 700px;
     }
 
-    .modal-card { 
-      padding: 2.4rem; 
+    .modal-card {
+      padding: 2.4rem;
     }
 }
 
 /* Utilitário: fallback class remove a body scroll se necessário em outro lugar */
-.no-scroll { 
-    overflow: hidden !important; 
+.no-scroll {
+    overflow: hidden !important;
 }
 
-.modal-error { 
+.modal-error {
     font-size: 14px;
-    color: #e91e63; 
-    font-weight: 700; 
-    margin-bottom: .6rem; 
-    text-align:center 
+    color: #e91e63;
+    font-weight: 700;
+    margin-bottom: .6rem;
+    text-align:center
 }
 
 .upload-box {
@@ -385,19 +393,19 @@
     box-shadow: 0 6px 18px rgba(225,29,72,0.08);
 }
 
-.upload-placeholder { 
-    font-size: 2rem; 
+.upload-placeholder {
+    font-size: 2rem;
 }
 
-.upload-hint { 
-    color:#9aa3b2; 
-    font-size:.9rem 
+.upload-hint {
+    color:#9aa3b2;
+    font-size:.9rem
 }
 
-.upload-preview { 
-        max-width: 220px; 
-        max-height: 220px; 
-        border-radius: 12px; 
+.upload-preview {
+        max-width: 220px;
+        max-height: 220px;
+        border-radius: 12px;
         object-fit: cover;
 }
 
@@ -409,7 +417,7 @@
 
 /* Button de remover (X) posicionado no canto superior direito do box */
 .upload-box {
-  position: relative; 
+  position: relative;
 }
 
 .remove-btn {
@@ -432,13 +440,13 @@
     transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
 }
 
-.remove-btn:hover { 
-    transform: translateY(-2px); 
-    background: #d01845; 
+.remove-btn:hover {
+    transform: translateY(-2px);
+    background: #d01845;
 }
 
-.remove-btn:active { 
-    transform: translateY(1px); 
+.remove-btn:active {
+    transform: translateY(1px);
 }
 
 /* Quando houver photo, exibir thumbnail menor e leve escala */
@@ -450,22 +458,22 @@
     box-shadow: 0 6px 18px rgba(15,34,56,0.06);
 }
 
-.form-actions { 
-    display:flex; 
-    justify-content:space-between; 
-    gap:.8rem; 
-    margin-top: .8rem; 
+.form-actions {
+    display:flex;
+    justify-content:space-between;
+    gap:.8rem;
+    margin-top: .8rem;
     margin-bottom: 15px;
 }
 
-.btn-secondary { 
+.btn-secondary {
     width: 130px;
     height: 40px;
-    background:#f3f4f6; 
-    border:none; 
-    padding:.6rem 1rem; 
-    border-radius:10px; 
-    cursor:pointer 
+    background:#f3f4f6;
+    border:none;
+    padding:.6rem 1rem;
+    border-radius:10px;
+    cursor:pointer
 }
 
 /* Modal-specific secondary button: mesmo tamanho/formato/interação do modal primário, mas cor diferente */
@@ -481,25 +489,25 @@
     transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.modal .btn-secondary:hover { 
-    transform: translateY(-2px); 
+.modal .btn-secondary:hover {
+    transform: translateY(-2px);
 }
 
-.btn-gradient { 
-    background: linear-gradient(90deg,#e9edf7,#dfe7ff); 
-    color:#0f2238; 
-    border:none; 
+.btn-gradient {
+    background: linear-gradient(90deg,#e9edf7,#dfe7ff);
+    color:#0f2238;
+    border:none;
     padding:.6rem 1rem;
-    border-radius:10px; 
+    border-radius:10px;
     cursor: pointer;
 }
 
 /* Ajustes inputs style dentro do modal */
-.modal .input { 
-    width:100%; 
-    border:1.5px solid #eee; 
-    border-radius:12px; 
-    padding:.85rem 1rem; 
+.modal .input {
+    width:100%;
+    border:1.5px solid #eee;
+    border-radius:12px;
+    padding:.85rem 1rem;
 }
 
 .form-group label {
@@ -527,8 +535,8 @@
     white-space: nowrap; /* prevent line breaks inside the button label */
 }
 
-.modal .btn-gradient:hover { 
-    transform: translateY(-2px); 
+.modal .btn-gradient:hover {
+    transform: translateY(-2px);
 }
 
 /* Estilos do Modal () */
