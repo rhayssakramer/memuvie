@@ -3,7 +3,13 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 20px;
+    height: 100vh; /* Garantir altura total */
+    padding: 0; /* Remover padding para centralização perfeita */
+    position: fixed; /* Fixar na viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .card {
@@ -13,6 +19,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
     padding: 30px;
+    margin: 0 auto; /* Centralizar horizontalmente */
 }
 
 /* Estilos modais quando incorporados */
@@ -24,11 +31,11 @@
     justify-content: center;
     background: rgba(0, 0, 0, 0.683);
     z-index: 9999;
-    padding: 20px;
+    padding: 0; /* Removido padding para centralização perfeita */
 }
 
 .modal-card.recovery-modal {
-    margin-left: 30px;
+    margin: 0 auto; /* Centralizado horizontalmente */
     max-width: 420px;
     width: 100%;
     background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
@@ -80,7 +87,7 @@
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 16px;
     transition: border-color 0.2s;
 }
@@ -124,6 +131,15 @@
     margin-bottom: 25px;
 }
 
+/* Estilos específicos para centralização do modal */
+.modal-overlay > .modal-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    transform: translateY(0); /* Corrigir qualquer deslocamento vertical */
+}
+
 .form-actions {
     display: flex;
     justify-content: space-between;
@@ -155,7 +171,7 @@
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
 }
 
 .btn-secondary {
@@ -174,7 +190,7 @@
 }
 
 .btn-secondary:hover {
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
 }
 
 .loading {
@@ -198,10 +214,23 @@
 }
 
 @media (max-width: 480px) {
-  .card {
-        padding: 20px;
+  .modal-overlay {
+      padding: 0; /* Garantir que não haja padding em telas pequenas */
   }
-  
+
+  .modal-card.recovery-modal {
+      width: 90%; /* Ajustar largura para telas pequenas */
+      max-width: 360px; /* Limitar largura máxima */
+      padding: 20px; /* Reduzir padding interno */
+      margin: 0 auto; /* Manter centralizado */
+  }
+
+  .card {
+      padding: 20px;
+      width: 90%; /* Ajustar largura para telas pequenas */
+      max-width: 360px; /* Limitar largura máxima */
+  }
+
   /* Keep action buttons side-by-side on small screens */
   .form-actions {
       flex-direction: row;

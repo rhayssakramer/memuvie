@@ -12,13 +12,13 @@
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="email">Email</label>
-            <input 
-              id="email" 
-              type="email" 
-              [(ngModel)]="email" 
-              name="email" 
-              required 
-              class="input" 
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              required
+              class="input"
               placeholder="seu.email@exemplo.com">
           </div>
 
@@ -54,34 +54,34 @@
         <p class="form-description">
           Informe seu email cadastrado para receber um link de redefinição de senha.
         </p>
-        
+
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="email">Email</label>
-            <input 
-              id="email" 
-              type="email" 
-              [(ngModel)]="email" 
-              name="email" 
-              required 
-              class="input" 
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              required
+              class="input"
               placeholder="seu.email@exemplo.com">
           </div>
-          
+
           <div *ngIf="erro" class="error-message">{{ erro }}</div>
-          
+
           <div *ngIf="loading" class="loading">
             <div class="spinner"></div>
             <p>Processando sua solicitação...</p>
           </div>
-          
+
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" (click)="voltar()">Voltar</button>
             <button type="submit" class="btn btn-primary" [disabled]="loading">Enviar</button>
           </div>
         </form>
       </div>
-      
+
       <div *ngIf="enviado" class="success-container">
         <div class="success-icon">✓</div>
         <p class="success-message">{{ mensagem }}</p>
