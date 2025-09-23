@@ -47,15 +47,30 @@ export class AuthService {
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<any>(`${this.apiUrl}/login`, request, httpOptions).pipe(
       tap(response => console.log('Login response:', response)),
-      map(response => ({
-        token: response.token,
-        expiresAt: Date.now() + 3600000, // 1 hora de expiração padrão
-        user: {
-          name: response.usuario?.nome || '',
-          email: response.usuario?.email || '',
-          photo: response.usuario?.fotoPerfil || ''
+      map(response => {
+        // Verificar e registrar os dados do usuário recebidos
+        console.log('Dados de usuário recebidos:', response.usuario);
+
+        const userData = {
+          token: response.token,
+          expiresAt: Date.now() + 3600000, // 1 hora de expiração padrão
+          user: {
+            name: response.usuario?.nome || '',
+            email: response.usuario?.email || '',
+            photo: response.usuario?.fotoPerfil || ''
+          }
+        };
+
+        // Garantir que os dados do usuário também estejam acessíveis no formato antigo
+        localStorage.setItem('userName', userData.user.name);
+        localStorage.setItem('userEmail', userData.user.email);
+        if (userData.user.photo) {
+          localStorage.setItem('userPhoto', userData.user.photo);
         }
-      })),
+
+        console.log('Salvando dados de usuário:', userData);
+        return userData;
+      }),
       catchError(this.handleError<AuthResponse>('login'))
     );
   }

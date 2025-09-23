@@ -53,9 +53,27 @@ export class LoginComponent {
       senha: this.password.trim()  // Alterado de password para password para corresponder ao backend
     }).subscribe({
       next: (response) => {
+        console.log('Login bem-sucedido com resposta:', response);
+
         // Save a sessão e o profile
         saveSession(response.token, response.expiresAt);
-        saveProfile(response.user);
+
+        // Verifica se temos dados de usuário válidos
+        if (response.user && response.user.name) {
+          saveProfile(response.user);
+
+          // Também salvar em formato legado para compatibilidade
+          localStorage.setItem('userName', response.user.name);
+          localStorage.setItem('userEmail', response.user.email);
+          if (response.user.photo) {
+            localStorage.setItem('userPhoto', response.user.photo);
+          }
+
+          console.log('Perfil de usuário salvo:', response.user);
+        } else {
+          console.error('Dados de usuário inválidos na resposta de login');
+        }
+
         this.router.navigate(['/interaction']);
       },
       error: (err) => {
@@ -229,9 +247,20 @@ export class LoginComponent {
     // Registrar no backend
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
+        console.log('Registro bem-sucedido com resposta:', response);
+
         // save a sessão e o profile
         saveSession(response.token, response.expiresAt);
         saveProfile(response.user);
+
+        // Também salvar em formato legado para compatibilidade
+        localStorage.setItem('userName', response.user.name);
+        localStorage.setItem('userEmail', response.user.email);
+        if (response.user.photo) {
+          localStorage.setItem('userPhoto', response.user.photo);
+        }
+
+        console.log('Perfil de usuário salvo após registro:', response.user);
 
         // Preencher o formulário de login
         this.email = this.newEmail.trim();

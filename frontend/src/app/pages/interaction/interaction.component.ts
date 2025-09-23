@@ -77,7 +77,7 @@ export class InteractionComponent implements OnInit {
         const posts = JSON.parse(raw);
         // Primeiro tenta manter 10 posts
         let recentPosts = posts.slice(0, 10);
-        
+
         try {
           localStorage.setItem('posts', JSON.stringify(recentPosts));
         } catch (e) {
@@ -109,6 +109,12 @@ export class InteractionComponent implements OnInit {
     this.currentFileReader = null;
     this.selectedVideo = null;
     this.videoPreviewUrl = null;
+
+    // Importar a função syncUserData
+    import('../../utils/auth').then(auth => {
+      // Garantir que os dados do usuário estejam sincronizados
+      auth.syncUserData();
+    });
 
     // Limpar os inputs de file
     setTimeout(() => {
@@ -147,11 +153,11 @@ export class InteractionComponent implements OnInit {
       this.selectedPhoto = input.files[0];
       const reader = new FileReader();
       this.isReadingPhoto = true;
-      
+
       reader.onload = () => {
         console.log('Foto carregada, iniciando redimensionamento');
         const base64Str = reader.result as string;
-        
+
         this.resizeImage(base64Str)
           .then(resizedBase64 => {
             console.log('Foto redimensionada com sucesso');
@@ -165,14 +171,14 @@ export class InteractionComponent implements OnInit {
             this.photoPreviewUrl = null;
           });
       };
-      
+
       reader.onerror = () => {
         console.error('Erro ao ler foto');
         this.isReadingPhoto = false;
         this.selectedPhoto = null;
         this.photoPreviewUrl = null;
       };
-      
+
       reader.readAsDataURL(this.selectedPhoto);
     }
   }
@@ -196,7 +202,7 @@ export class InteractionComponent implements OnInit {
 
   async submitMessage() {
     console.log('Iniciando submitMessage');
-    
+
     // Verificar se há conteúdo para enviar
     const hasContent = this.message.trim() || this.selectedPhoto || this.selectedVideo || this.photoPreviewUrl;
     console.log('Tem conteúdo para enviar?', hasContent, {
@@ -211,7 +217,39 @@ export class InteractionComponent implements OnInit {
       return;
     }
 
-    const userName = localStorage.getItem('userName') || 'Convidado';
+    // Obter dados do usuário do localStorage
+    // Primeiro, tenta do formato atual userProfile
+    const userProfileStr = localStorage.getItem('userProfile');
+    let userName = 'Convidado';
+    let userPhoto = 'assets/avatar-1.jpg';
+
+    if (userProfileStr) {
+      try {
+        const userProfile = JSON.parse(userProfileStr);
+        userName = userProfile.name || 'Convidado';
+        userPhoto = userProfile.photo || 'assets/avatar-1.jpg';
+        console.log('Dados do usuário carregados do userProfile:', userName, userPhoto);
+      } catch (error) {
+        console.error('Erro ao carregar perfil do usuário de userProfile:', error);
+      }
+    } else {
+      // Tenta obter do formato anterior
+      const storedName = localStorage.getItem('userName');
+      const storedPhoto = localStorage.getItem('userPhoto');
+
+      if (storedName) {
+        userName = storedName;
+        console.log('Nome do usuário carregado do armazenamento antigo:', userName);
+      }
+
+      if (storedPhoto) {
+        userPhoto = storedPhoto;
+        console.log('Foto do usuário carregada do armazenamento antigo:', userPhoto);
+      }
+    }
+
+    // Log para depuração
+    console.log('Dados finais do usuário para o post:', { userName, userPhoto });
 
     const savePost = (photoDataUrl?: string, videoDataUrl?: string) => {
       try {
@@ -220,8 +258,8 @@ export class InteractionComponent implements OnInit {
         const posts = raw ? JSON.parse(raw) : [];
         posts.unshift({
           id: Date.now(),
-          userName,
-          userPhoto: localStorage.getItem('userPhoto') || 'assets/avatar-1.jpg',
+          userName: userName, // Usando o nome real do usuário
+          userPhoto: userPhoto, // Usando a foto real do usuário
           photo: photoDataUrl || null,
           video: videoDataUrl || null,
           message: this.message || '',

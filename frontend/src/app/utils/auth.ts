@@ -68,12 +68,15 @@ export function logoutAll() {
 
 // Função para manter compatibilidade entre formato antigo e novo de usuário
 export function syncUserData() {
+  console.log('Sincronizando dados de usuário...');
   // Primeiro, tentar obter do profile
   const profile = getProfile();
 
   if (profile) {
+    console.log('Profile encontrado, sincronizando para formato legado:', profile);
     // Se temos profile, garantir que os dados legados estão sincronizados
     localStorage.setItem('userName', profile.name);
+    localStorage.setItem('userEmail', profile.email || 'usuario@local.com');
     if (profile.photo) {
       localStorage.setItem('userPhoto', profile.photo);
     }
@@ -81,18 +84,21 @@ export function syncUserData() {
   } else {
     // Se do not temos profile mas temos dados legados, criar profile
     const oldUserName = localStorage.getItem('userName');
+    const oldUserEmail = localStorage.getItem('userEmail');
     const oldUserPhoto = localStorage.getItem('userPhoto');
 
     if (oldUserName) {
+      console.log('Dados legados encontrados, criando novo profile');
       const newProfile = {
         name: oldUserName,
-        email: 'usuario@local.com', // Email padrão para usuários legados
+        email: oldUserEmail || 'usuario@local.com', // Email padrão para usuários legados
         photo: oldUserPhoto || 'assets/avatar-1.jpg'
       };
       saveProfile(newProfile);
       return true;
     }
   }
+  console.log('Nenhum dado de usuário encontrado para sincronizar');
   return false;
 }
 

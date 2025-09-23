@@ -31,6 +31,12 @@ export class GalleryComponent implements OnInit {
   constructor(private router: Router, private location: Location) {}
 
   ngOnInit() {
+    // Importar a função syncUserData
+    import('../../utils/auth').then(auth => {
+      // Garantir que os dados do usuário estejam sincronizados
+      auth.syncUserData();
+    });
+
     const raw = localStorage.getItem('posts');
     if (raw) {
       try {
@@ -82,7 +88,7 @@ export class GalleryComponent implements OnInit {
 
     const text = `${item.userName} compartilhou uma homenagem no Chá Revelação\n\n${item.message || ''}`.trim();
     const url = location.href;
-    
+
     try {
       // Verificar se a API está realmente disponível
       if (typeof navigator.share === 'function') {
@@ -140,7 +146,7 @@ export class GalleryComponent implements OnInit {
     const title = 'Galeria - Chá Revelação';
     const text = 'Veja a nossa Galeria de Memórias do Chá Revelação';
     const url = location.href;
-    
+
     try {
       if (typeof navigator.share === 'function') {
         await navigator.share({ title, text, url });
