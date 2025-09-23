@@ -38,7 +38,7 @@
     visibility: hidden !important;
     transition: all 0.18s ease !important;
     width: auto !important;
-    min-width: 220px !important;
+    min-width: 320px !important; /* Aumentado para 320px para acomodar emails mais longos */
     max-width: 95vw !important;
     transform-origin: top right !important;
     overflow: hidden !important;
@@ -49,6 +49,13 @@
     opacity: 1 !important;
     transform: translateY(0) !important;
     visibility: visible !important;
+}
+
+/* Estado aberto no mobile */
+@media (max-width: 480px) {
+    .menu-content.open {
+        transform: translateY(0) !important;
+    }
 }
 
 .profile-header {
@@ -62,17 +69,34 @@
 
 .profile-info {
     flex: 1 !important;
-    min-width: 120px !important;
+    min-width: 0 !important;
+    max-width: 270px !important; /* Aumentado para 270px para acomodar emails mais longos */
+    overflow: hidden !important; /* Alterado para hidden para controlar overflow */
 }
 
-.profile-name { font-weight: 600; color: #333; font-size: 14px; margin-bottom: 0.2rem; }
-.profile-email { color: #666; font-size: 0.85rem; }
+.profile-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 0.2rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.profile-email {
+    color: #666;
+    font-size: 0.85rem;
+    white-space: nowrap; /* Alterado de normal para nowrap para manter em uma única linha */
+    overflow: hidden; /* Alterado de visible para hidden */
+    text-overflow: ellipsis; /* Adiciona reticências se o texto não couber */
+}
 
 .menu-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem;
+    padding: 0.5rem;
     font-size: 16px;
     color: #333;
     text-decoration: none;
@@ -88,14 +112,41 @@
 /* Adjustments for small screens */
 @media (max-width: 480px) {
     .profile-avatar { width: 40px; height: 40px; }
-    .menu-content { right: 8px !important; left: auto !important; padding: .6rem !important; transform-origin: top right !important; }
+    .menu-content {
+        right: 0 !important;
+        left: auto !important;
+        padding: .6rem !important;
+        transform-origin: top right !important;
+        width: 260px !important;
+        /* Garantir que o card não ultrapasse a tela à esquerda */
+        max-width: calc(100vw - 30px) !important;
+        transform: translateY(-6px) !important;
+    }
     .profile-header { gap: .5rem !important; padding-bottom: .6rem !important; }
-    .profile-info { min-width: 0 !important; }
+    .profile-info {
+        min-width: 0 !important;
+        max-width: 200px !important;
+    }
+    .profile-email {
+        max-width: 100%;
+        font-size: 0.8rem;
+        /* Mantenha os mesmos estilos do modo web para consistência */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media (max-width: 768px) {
-    .menu-content { max-width: 300px; right: -6px; }
+    .menu-content {
+        max-width: 320px;
+        right: 5px; /* Ajustado para ficar mais à direita */
+        max-width: calc(100vw - 30px) !important; /* Margem de 30px da borda */
+    }
+    .profile-info {
+        max-width: 220px !important;
+    }
 }
 
-.profile-name, .profile-email { white-space: normal; }
- 
+.profile-name { white-space: normal; }
+/* O nome pode ocupar múltiplas linhas, mas o email fica em uma única linha com reticências */
