@@ -2,6 +2,7 @@ package cha_revelacao.security;
 
 import cha_revelacao.model.Usuario;
 import cha_revelacao.repository.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
@@ -22,9 +24,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmailAndAtivo(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o email: " + email));
-
+        log.debug("Carregando usuário pelo email: {}", email);
+        
+        // Normaliza o email para evitar problemas de case-sensitivity
+        String emailNormalizado = email.toLowerCase().trim();
+        
+        Usuario usuario = usuarioRepository.findByEmailAndAtivo(emailNormalizado)
+                .orElseThrow(() -> {
+                    log.warn("Usuário não encontrado ou inativo com o email: {}", emailNormalizado);
+                    return new UsernameNotFoundException("Usuário não encontrado com o email: " + emailNormalizado);
+                });
+        
+        log.debug("Usuário encontrado: {}. Está ativo: {}", usuario.getEmail(), usuario.getAtivo());
+        
         return User.builder()
                 .username(usuario.getEmail())
                 .password(usuario.getSenha())

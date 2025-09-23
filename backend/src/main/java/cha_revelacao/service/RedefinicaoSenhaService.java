@@ -96,28 +96,44 @@ public class RedefinicaoSenhaService {
     public boolean validarToken(String token) {
         log.info("Validando token de redefinição: {}", token);
         
+        // Verificação de entrada
         if (token == null || token.trim().isEmpty()) {
             log.warn("Token nulo ou vazio recebido para validação");
             return false;
         }
         
-        return tokenRepository.findByToken(token)
-            .map(tokenEntity -> {
-                boolean valido = !tokenEntity.isExpirado();
-                log.info("Token encontrado para o usuário: {}. Token válido: {}", 
-                    tokenEntity.getUsuario().getEmail(), valido);
-                
-                if (!valido) {
-                    log.info("Token expirado. Data expiração: {}, Data atual: {}", 
-                        tokenEntity.getDataExpiracao(), LocalDateTime.now());
-                }
-                
-                return valido;
-            })
-            .orElseGet(() -> {
-                log.warn("Token não encontrado no banco de dados: {}", token);
-                return false;
-            });
+        try {
+            // Busca o token no banco de dados
+            return tokenRepository.findByToken(token)
+                .map(tokenEntity -> {
+                    try {
+                        // Verifica se o token expirou
+                        boolean valido = !tokenEntity.isExpirado();
+                        
+                        log.info("Token encontrado para o usuário: {}. Token válido: {}", 
+                            tokenEntity.getUsuario().getEmail(), valido);
+                        
+                        if (!valido) {
+                            log.info("Token expirado. Data expiração: {}, Data atual: {}", 
+                                tokenEntity.getDataExpiracao(), LocalDateTime.now());
+                        }
+                        
+                        return valido;
+                    } catch (Exception e) {
+                        // Log de erro detalhado
+                        log.error("Erro ao verificar validade do token: {}", e.getMessage(), e);
+                        return false;
+                    }
+                })
+                .orElseGet(() -> {
+                    log.warn("Token não encontrado no banco de dados: {}", token);
+                    return false;
+                });
+        } catch (Exception e) {
+            // Log de erro detalhado da operação de banco de dados
+            log.error("Erro ao processar validação de token: {}", e.getMessage(), e);
+            throw new RuntimeException("Erro ao validar token", e);
+        }
     }
     
     /**
@@ -130,24 +146,53 @@ public class RedefinicaoSenhaService {
     public void redefinirSenha(String token, String novaSenha) {
         log.info("Tentativa de redefinição de senha com token");
         
+        if (token == null || token.trim().isEmpty()) {
+            log.error("Token nulo ou vazio fornecido para redefinição");
+            throw new BusinessException("Token inválido");
+        }
+        
+        if (novaSenha == null || novaSenha.trim().isEmpty()) {
+            log.error("Nova senha nula ou vazia fornecida");
+            throw new BusinessException("Nova senha inválida");
+        }
+        
         TokenRedefinicaoSenha tokenEntity = tokenRepository.findByToken(token)
-            .orElseThrow(() -> new BusinessException("Token inválido"));
+            .orElseThrow(() -> {
+                log.error("Token de redefinição não encontrado: {}", token);
+                return new BusinessException("Token inválido");
+            });
         
         if (tokenEntity.isExpirado()) {
+            log.warn("Token expirado para o usuário: {}", tokenEntity.getUsuario().getEmail());
             tokenRepository.delete(tokenEntity);
             throw new BusinessException("Token expirado. Solicite uma nova redefinição de senha.");
         }
         
         Usuario usuario = tokenEntity.getUsuario();
-        usuario.setSenha(passwordEncoder.encode(novaSenha));
         
-        // Salva a nova senha
-        usuarioRepository.save(usuario);
+        // Verifica se o usuário está ativo
+        if (!usuario.getAtivo()) {
+            log.error("Tentativa de redefinir senha para usuário inativo: {}", usuario.getEmail());
+            throw new BusinessException("Usuário inativo não pode redefinir senha");
+        }
         
-        // Remove o token usado
-        tokenRepository.delete(tokenEntity);
+        // Garantindo que a nova senha seja corretamente codificada
+        String senhaCodificada = passwordEncoder.encode(novaSenha);
+        usuario.setSenha(senhaCodificada);
         
-        log.info("Senha redefinida com sucesso para o usuário: {}", usuario.getEmail());
+        try {
+            // Salva a nova senha
+            usuarioRepository.saveAndFlush(usuario); // Usando saveAndFlush para garantir que seja salvo imediatamente
+            
+            // Remove o token usado
+            tokenRepository.delete(tokenEntity);
+            tokenRepository.flush(); // Garante que o token seja removido imediatamente
+            
+            log.info("Senha redefinida com sucesso para o usuário: {}", usuario.getEmail());
+        } catch (Exception e) {
+            log.error("Erro ao salvar nova senha: {}", e.getMessage(), e);
+            throw new BusinessException("Erro ao processar a redefinição de senha");
+        }
     }
     
     /**

@@ -7,20 +7,22 @@ import cha_revelacao.dto.response.UsuarioResponse;
 import cha_revelacao.exception.BusinessException;
 import cha_revelacao.model.Usuario;
 import cha_revelacao.repository.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UsuarioService {
-    private static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
+    // Mensagem de erro padrão
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -60,17 +62,34 @@ public class UsuarioService {
 
     public JwtResponse autenticar(LoginRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha())
+            // Normaliza o email para evitar problemas de case-sensitivity
+            String emailNormalizado = request.getEmail().toLowerCase().trim();
+            
+            // Log para debug
+            log.info("Tentativa de autenticação para usuário: {}", emailNormalizado);
+            
+            // Verifica primeiro se o usuário existe e está ativo
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndAtivo(emailNormalizado);
+            if (usuarioOpt.isEmpty()) {
+                log.warn("Tentativa de login para usuário inexistente ou inativo: {}", emailNormalizado);
+                throw new BusinessException("Credenciais inválidas");
+            }
+            
+            // Tenta autenticar com o AuthenticationManager
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(emailNormalizado, request.getSenha())
             );
-
-            String jwt = jwtService.generateJwtToken(request.getEmail());
-            Usuario usuario = usuarioRepository.findByEmailAndAtivo(request.getEmail())
-                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
-
+            
+            log.info("Autenticação bem-sucedida para o usuário: {}", emailNormalizado);
+            
+            // Gera o token JWT
+            String jwt = jwtService.generateJwtToken(emailNormalizado);
+            Usuario usuario = usuarioOpt.get();
+            
             UsuarioResponse usuarioResponse = modelMapper.map(usuario, UsuarioResponse.class);
             return new JwtResponse(jwt, usuarioResponse);
         } catch (AuthenticationException e) {
+            log.error("Falha na autenticação: {}", e.getMessage());
             throw new BusinessException("Credenciais inválidas");
         }
     }

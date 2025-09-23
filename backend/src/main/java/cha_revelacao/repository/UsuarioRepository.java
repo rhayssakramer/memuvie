@@ -15,6 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByEmail(String email);
 
-    @Query("SELECT u FROM Usuario u WHERE u.email = :email AND u.ativo = true")
+    // Método corrigido para garantir que apenas busque usuários ativos
+    @Query("SELECT u FROM Usuario u WHERE LOWER(u.email) = LOWER(:email) AND u.ativo = true")
     Optional<Usuario> findByEmailAndAtivo(@Param("email") String email);
 }

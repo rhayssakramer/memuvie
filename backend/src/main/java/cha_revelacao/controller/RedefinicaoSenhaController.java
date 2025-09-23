@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,21 +52,43 @@ public class RedefinicaoSenhaController {
      */
     @GetMapping("/verificar-token")
     public ResponseEntity<?> validarToken(@RequestParam String token) {
+        // Log para diagnóstico
+        System.out.println("Verificando token: " + token);
+        
+        // Validar entrada
+        if (token == null || token.trim().isEmpty()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("valido", false);
+            response.put("mensagem", "Token não fornecido");
+            return ResponseEntity.badRequest().body(response);
+        }
+        
         try {
+            // Validar o token
             boolean valido = redefinicaoSenhaService.validarToken(token);
             
-            Map<String, Boolean> response = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             response.put("valido", valido);
             
-            if (!valido) {
+            if (valido) {
+                response.put("mensagem", "Token válido");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("mensagem", "Token inválido ou expirado");
                 return ResponseEntity.badRequest().body(response);
             }
-            
-            return ResponseEntity.ok(response);
         } catch (Exception e) {
+            // Log detalhado do erro
+            System.err.println("Erro ao validar token: " + token);
             e.printStackTrace();
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Erro ao validar token: " + e.getMessage());
+            
+            // Resposta para o cliente
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 500);
+            errorResponse.put("valido", false);
+            errorResponse.put("message", "Ocorreu um erro interno no servidor");
+            errorResponse.put("timestamp", LocalDateTime.now().toString());
+            
             return ResponseEntity.status(500).body(errorResponse);
         }
     }

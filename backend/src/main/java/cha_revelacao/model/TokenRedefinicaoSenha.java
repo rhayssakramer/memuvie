@@ -17,8 +17,8 @@ public class TokenRedefinicaoSenha {
     @Column(nullable = false, unique = true)
     private String token;
     
-    @OneToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "usuario_id", unique = true)
+    @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
     
     @Column(nullable = false)
