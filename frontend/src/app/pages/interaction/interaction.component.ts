@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
+import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
   selector: 'app-interaction',
@@ -22,6 +23,7 @@ export class InteractionComponent implements OnInit {
   selectedVideo: File | null = null;
   videoPreviewUrl: string | null = null;
   maxLength: number = 5000;
+  isUploading: boolean = false;
 
   private resizeImage(base64Str: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -98,7 +100,7 @@ export class InteractionComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private fileUploadService: FileUploadService) {}
 
   ngOnInit() {
     // Limpar todo o estado quando o componente é inicializado
@@ -193,6 +195,18 @@ export class InteractionComponent implements OnInit {
       this.selectedVideo = input.files[0];
       const url = URL.createObjectURL(this.selectedVideo);
       this.videoPreviewUrl = url;
+
+      // Verificar se o vídeo pode ser reproduzido
+      console.log("Vídeo selecionado:", {
+        nome: this.selectedVideo.name,
+        tipo: this.selectedVideo.type,
+        tamanho: Math.round(this.selectedVideo.size / 1024 / 1024 * 100) / 100 + "MB",
+        url: this.videoPreviewUrl
+      });
+
+      // Limpe qualquer foto que possa estar selecionada para evitar confusão
+      this.selectedPhoto = null;
+      this.photoPreviewUrl = null;
     }
   }
 
@@ -217,124 +231,179 @@ export class InteractionComponent implements OnInit {
       return;
     }
 
-    // Obter dados do usuário do localStorage
-    // Primeiro, tenta do formato atual userProfile
-    const userProfileStr = localStorage.getItem('userProfile');
-    let userName = 'Convidado';
-    let userPhoto = 'assets/avatar-1.jpg';
-
-    if (userProfileStr) {
-      try {
-        const userProfile = JSON.parse(userProfileStr);
-        userName = userProfile.name || 'Convidado';
-        userPhoto = userProfile.photo || 'assets/avatar-1.jpg';
-        console.log('Dados do usuário carregados do userProfile:', userName, userPhoto);
-      } catch (error) {
-        console.error('Erro ao carregar perfil do usuário de userProfile:', error);
-      }
-    } else {
-      // Tenta obter do formato anterior
-      const storedName = localStorage.getItem('userName');
-      const storedPhoto = localStorage.getItem('userPhoto');
-
-      if (storedName) {
-        userName = storedName;
-        console.log('Nome do usuário carregado do armazenamento antigo:', userName);
-      }
-
-      if (storedPhoto) {
-        userPhoto = storedPhoto;
-        console.log('Foto do usuário carregada do armazenamento antigo:', userPhoto);
-      }
-    }
-
-    // Log para depuração
-    console.log('Dados finais do usuário para o post:', { userName, userPhoto });
-
-    const savePost = (photoDataUrl?: string, videoDataUrl?: string) => {
-      try {
-        // Salva o post
-        const raw = localStorage.getItem('posts');
-        const posts = raw ? JSON.parse(raw) : [];
-        posts.unshift({
-          id: Date.now(),
-          userName: userName, // Usando o nome real do usuário
-          userPhoto: userPhoto, // Usando a foto real do usuário
-          photo: photoDataUrl || null,
-          video: videoDataUrl || null,
-          message: this.message || '',
-          date: new Date().toISOString()
-        });
-        localStorage.setItem('posts', JSON.stringify(posts));
-
-        // Limpar o estado
-        this.message = '';
-        this.selectedPhoto = null;
-        this.photoPreviewUrl = null;
-        this.isReadingPhoto = false;
-        this.currentFileReader = null;
-
-        if (this.videoPreviewUrl) {
-          try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
-        }
-        this.selectedVideo = null;
-        this.videoPreviewUrl = null;
-
-        // Limpar inputs de file
-        ['photoInput', 'videoInput'].forEach(inputId => {
-          const input = document.getElementById(inputId) as HTMLInputElement | null;
-          if (input) {
-            input.value = '';
-            input.files = null;
-          }
-        });
-
-        // Navegar após um pequeno delay para garantir que tudo foi limpo
-        setTimeout(() => {
-          this.router.navigate(['/gallery']);
-        }, 100);
-      } catch (error) {
-        console.error('Erro ao salvar o post:', error);
-      }
-    };
-
-    // Auxiliar para ler um arquivo como DataURL
-    const readFileAsDataURL = (file: File) => {
-      return new Promise<string>((resolve, reject) => {
-        const r = new FileReader();
-        this.currentFileReader = r;
-        r.onload = () => { this.currentFileReader = null; resolve(r.result as string); };
-        r.onerror = () => { this.currentFileReader = null; reject(new Error('read error')); };
-        r.onabort = () => { this.currentFileReader = null; reject(new Error('aborted')); };
-        r.readAsDataURL(file);
-      });
-    };
+    this.isUploading = true;
 
     try {
-      let photoDataUrl: string | undefined = undefined;
-      let videoDataUrl: string | undefined = undefined;
+      // Obter dados do usuário do localStorage
+      // Primeiro, tenta do formato atual userProfile
+      const userProfileStr = localStorage.getItem('userProfile');
+      let userName = 'Convidado';
+      let userPhoto = 'assets/avatar-1.jpg';
 
-      if (this.photoPreviewUrl) {
-        // Já tem uma prévia do DataURL
-        photoDataUrl = this.photoPreviewUrl;
-      } else if (this.selectedPhoto) {
-        photoDataUrl = await readFileAsDataURL(this.selectedPhoto);
+      if (userProfileStr) {
+        try {
+          const userProfile = JSON.parse(userProfileStr);
+          userName = userProfile.name || 'Convidado';
+          userPhoto = userProfile.photo || 'assets/avatar-1.jpg';
+          console.log('Dados do usuário carregados do userProfile:', userName, userPhoto);
+        } catch (error) {
+          console.error('Erro ao carregar perfil do usuário de userProfile:', error);
+        }
+      } else {
+        // Tenta obter do formato anterior
+        const storedName = localStorage.getItem('userName');
+        const storedPhoto = localStorage.getItem('userPhoto');
+
+        if (storedName) {
+          userName = storedName;
+          console.log('Nome do usuário carregado do armazenamento antigo:', userName);
+        }
+
+        if (storedPhoto) {
+          userPhoto = storedPhoto;
+          console.log('Foto do usuário carregada do armazenamento antigo:', userPhoto);
+        }
       }
 
+      // Log para depuração
+      console.log('Dados finais do usuário para o post:', { userName, userPhoto });
+
+      // Upload para Cloudinary em vez de armazenar no localStorage
+      let photoUrl: string | null = null;
+      let videoUrl: string | null = null;
+
+      // Upload da foto para o Cloudinary, se existir
+      if (this.selectedPhoto) {
+        console.log('Fazendo upload da foto para o Cloudinary');
+        try {
+          photoUrl = await new Promise<string>((resolve, reject) => {
+            this.fileUploadService.uploadImage(this.selectedPhoto as File).subscribe(
+              url => resolve(url),
+              error => reject(error)
+            );
+          });
+        } catch (error) {
+          console.error('Erro no upload da foto:', error);
+        }
+      } else if (this.photoPreviewUrl) {
+        // Se temos apenas um preview base64, podemos convertê-lo em um Blob e fazer upload
+        const blob = this.dataURLtoBlob(this.photoPreviewUrl);
+        const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+        console.log('Fazendo upload da foto base64 para o Cloudinary');
+        try {
+          photoUrl = await new Promise<string>((resolve, reject) => {
+            this.fileUploadService.uploadImage(file).subscribe(
+              url => resolve(url),
+              error => reject(error)
+            );
+          });
+        } catch (error) {
+          console.error('Erro no upload da foto base64:', error);
+        }
+      }
+
+      // Upload do vídeo para o Cloudinary, se existir
       if (this.selectedVideo) {
-        // Converte o arquivo de vídeo para DataURL para que ele persista
-        videoDataUrl = await readFileAsDataURL(this.selectedVideo);
-      } else if (this.videoPreviewUrl && !this.selectedVideo) {
-        // Caso videoPreviewUrl tenha sido criado com createObjectURL, mas o arquivo não esteja definido, evite armazenar a URL do objeto
-        videoDataUrl = undefined;
+        console.log('Fazendo upload do vídeo para o Cloudinary');
+        try {
+          videoUrl = await new Promise<string>((resolve, reject) => {
+            this.fileUploadService.uploadVideo(this.selectedVideo as File).subscribe(
+              url => {
+                console.log('Vídeo enviado com sucesso:', url);
+                resolve(url);
+              },
+              error => {
+                console.error('Falha no upload do vídeo:', error);
+                reject(error);
+              }
+            );
+          });
+        } catch (error) {
+          console.error('Erro no upload do vídeo:', error);
+        }
       }
 
-      savePost(photoDataUrl, videoDataUrl);
+      // Salvar apenas as URLs no localStorage (muito mais eficiente)
+      const savePost = () => {
+        try {
+          // Limpar posts antigos se necessário
+          this.cleanupOldPosts();
+
+          // Salva o post apenas com URLs (não os arquivos completos)
+          const raw = localStorage.getItem('posts');
+          const posts = raw ? JSON.parse(raw) : [];
+
+          // Log das URLs antes de salvar
+          console.log('Salvando post com URLs:', {
+            photo: photoUrl,
+            video: videoUrl
+          });
+
+          posts.unshift({
+            id: Date.now(),
+            userName: userName,
+            userPhoto: userPhoto,
+            photo: photoUrl,  // URL da Cloudinary, não o arquivo completo
+            video: videoUrl,  // URL da Cloudinary, não o arquivo completo
+            message: this.message || '',
+            date: new Date().toISOString()
+          });
+          localStorage.setItem('posts', JSON.stringify(posts));
+
+          // Limpar o estado
+          this.message = '';
+          this.selectedPhoto = null;
+          this.photoPreviewUrl = null;
+          this.isReadingPhoto = false;
+          this.currentFileReader = null;
+
+          if (this.videoPreviewUrl) {
+            try { URL.revokeObjectURL(this.videoPreviewUrl); } catch(e) {}
+          }
+          this.selectedVideo = null;
+          this.videoPreviewUrl = null;
+
+          // Limpar inputs de file
+          ['photoInput', 'videoInput'].forEach(inputId => {
+            const input = document.getElementById(inputId) as HTMLInputElement | null;
+            if (input) {
+              input.value = '';
+              input.files = null;
+            }
+          });
+
+          // Navegar após um pequeno delay para garantir que tudo foi limpo
+          setTimeout(() => {
+            this.router.navigate(['/gallery']);
+          }, 100);
+        } catch (error) {
+          console.error('Erro ao salvar o post:', error);
+        } finally {
+          this.isUploading = false;
+        }
+      };
+
+      // Salvar o post com as URLs do Cloudinary
+      savePost();
+
     } catch (e) {
-      // Leitura falhou - não navegue para longe
-      // Saia do estado para que o usuário possa tentar novamente
-      return;
+      console.error('Erro ao enviar conteúdo:', e);
+      this.isUploading = false;
+      // Mostrar mensagem de erro para o usuário se necessário
     }
+  }
+
+  // Converte DataURL para Blob para upload
+  private dataURLtoBlob(dataURL: string): Blob {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
   }
 
   cancelUpload() {

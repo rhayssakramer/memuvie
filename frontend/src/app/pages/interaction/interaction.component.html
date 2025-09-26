@@ -55,17 +55,30 @@
           </div>
         </ng-template>
 
+        <!-- Preview de vídeo -->
+        <div class="upload-preview" *ngIf="videoPreviewUrl">
+          <div class="preview-inner">
+            <div class="upload-preview-container">
+              <div class="upload-preview">
+                <video [src]="videoPreviewUrl" controls preload="metadata" style="width: 100%; max-height: 200px;"></video>
+              </div>
+              <button class="cancel-upload" (click)="cancelUpload()">✕</button>
+            </div>
+          </div>
+        </div>
+
       <div class="textarea-wrap">
         <textarea [(ngModel)]="message" [maxlength]="maxLength" placeholder="Escreva sua mensagem aqui... (até 5000 caracteres)"></textarea>
         <div class="char-count">{{ remainingCharacters }} caracteres restantes</div>
       </div>
 
-  <button 
-    class="send-button" 
+  <button
+    class="send-button"
     (click)="submitMessage()"
     [class.has-content]="message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl"
-    [disabled]="!message.trim() && !selectedPhoto && !selectedVideo && !photoPreviewUrl">
-    {{ (message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl) ? 'Enviar Mensagem' : 'Envie sua mensagem' }}
+    [disabled]="isUploading || (!message.trim() && !selectedPhoto && !selectedVideo && !photoPreviewUrl)">
+    <span *ngIf="!isUploading">{{ (message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl) ? 'Enviar Mensagem' : 'Envie sua mensagem' }}</span>
+    <span *ngIf="isUploading">Enviando... Por favor aguarde</span>
   </button>
     </section>
   </main>
