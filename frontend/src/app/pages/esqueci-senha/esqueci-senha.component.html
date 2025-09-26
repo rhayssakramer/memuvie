@@ -11,7 +11,7 @@
 
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">E-mail</label>
             <input
               id="email"
               type="email"
@@ -19,7 +19,7 @@
               name="email"
               required
               class="input"
-              placeholder="seu.email@exemplo.com">
+              placeholder="email@exemplo.com">
           </div>
 
           <div *ngIf="erro" class="error-message">{{ erro }}</div>

@@ -21,6 +21,8 @@ export class RedefinirSenhaComponent implements OnInit {
   tokenValido: boolean = false;
   sucesso: boolean = false;
   verificandoToken: boolean = true;
+  mostrarNovaSenha: boolean = false;
+  mostrarConfirmarSenha: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +33,7 @@ export class RedefinirSenhaComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
-      
+
       if (!this.token) {
         this.erro = 'Token de redefinição não encontrado';
         this.verificandoToken = false;
@@ -65,17 +67,17 @@ export class RedefinirSenhaComponent implements OnInit {
 
   onSubmit(): void {
     this.erro = '';
-    
+
     if (!this.novaSenha) {
       this.erro = 'Por favor, informe a nova senha';
       return;
     }
-    
+
     if (this.novaSenha.length < 6) {
       this.erro = 'A senha deve ter pelo menos 6 caracteres';
       return;
     }
-    
+
     if (this.novaSenha !== this.confirmarSenha) {
       this.erro = 'As senhas não coincidem';
       return;
@@ -100,5 +102,13 @@ export class RedefinirSenhaComponent implements OnInit {
 
   voltar(): void {
     this.router.navigate(['/login']);
+  }
+
+  toggleMostrarNovaSenha(): void {
+    this.mostrarNovaSenha = !this.mostrarNovaSenha;
+  }
+
+  toggleMostrarConfirmarSenha(): void {
+    this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
   }
 }

@@ -11,11 +11,11 @@
 
           <form (ngSubmit)="onSubmit()" class="form">
             <label class="field-label">E-mail</label>
-            <input type="email" [(ngModel)]="email" name="email" required class="input soft" placeholder="admin@admin.com" />
+            <input type="email" [(ngModel)]="email" name="email" required class="input soft" placeholder="email@exemplo.com" />
 
             <label class="field-label">Senha</label>
             <div class="password-field">
-              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required class="input soft password-input" placeholder="••••" />
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required class="input soft password-input" placeholder="••••••" />
               <button type="button" class="password-toggle" (click)="toggleShowPassword()" aria-label="Mostrar senha">
                 <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>

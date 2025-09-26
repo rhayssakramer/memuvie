@@ -35,7 +35,7 @@
 .card-title {
   color: #252525;
   font-size: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -53,21 +53,62 @@ label {
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
-  color: #333;
+  color: #252525;
 }
 
 .input {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   transition: border-color 0.2s;
 }
 
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-container .input {
+  padding-right: 44px; /* Espaço para o botão de mostrar/ocultar */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 8px;
+  z-index: 3;
+  outline: none;
+}
+
+.password-toggle:hover {
+  background: rgba(0,0,0,0.03);
+  color: #111827;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 .input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #000000;
   box-shadow: 0 0 0 2px rgba(74,144,226,0.2);
 }
 
@@ -84,6 +125,7 @@ label {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .btn:disabled {
@@ -92,7 +134,7 @@ label {
 }
 
 .btn-primary {
-  width: 125px;
+  min-width: 125px;
   height: 40px;
   border: 0;
   border-radius: 999px;
@@ -103,19 +145,30 @@ label {
   box-shadow: 0 14px 30px rgba(255,95,163,.25);
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
+  margin-top: 10px;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #3a7bc8;
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background-color: #e2e2e2;
-  color: #333;
+  min-width: 125px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  padding: .5rem 1.6rem;
+  background: #f3f4f6;
+  color: #0f2238;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(90,141,255,0.06);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+  margin-top: 10px;
 }
 
 .btn-secondary:hover {
-  background-color: #d5d5d5;
+  transform: translateY(-2px);
 }
 
 .error-message {

@@ -3,9 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Redefinição de Senha</title>
+    <!-- Add Google Fonts import -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
             line-height: 1.6;
             color: #333333;
             max-width: 600px;
@@ -13,19 +16,21 @@
             padding: 20px;
         }
 
-            .header {
+        .header {
             background-color: #7030A0;
             color: white;
             padding: 20px;
             text-align: center;
             border-radius: 5px 5px 0 0;
-            position: relative; /* permite posicionar elementos dentro */
         }
 
-        .header img {
-            display: block;
-            margin: 0 auto; /* centraliza */
-            max-height: 80px; /* ajuste de tamanho */
+        .logo {
+            font-family: 'Nunito', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 40px;
+            color: #FFD100;
+            margin: 0;
+            padding: 0;
         }
 
         .content {
@@ -35,14 +40,18 @@
             border-radius: 0 0 5px 5px;
         }
 
-        .button {
+        .btn {
             display: inline-block;
-            background-color: #FFBC01;
-            color: white;
+            background-color: #7030A0;
+            color: white !important;
             padding: 12px 24px;
-            border-radius: 12px;
+            border-radius: 20px;
             margin: 20px 0;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
         }
+
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -52,48 +61,48 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="../../../../../assets/memuvie.png" alt="logo memuvie">
-    </div>
-    
-    <div class="content">
-        <h2>Redefinição de Senha</h2>
-        
-        <p>Olá <span th:text="${nome}">Usuário</span>,</p>
-        
-        <p>Recebemos uma solicitação para redefinir sua senha de acesso ao memuvie. Para criar uma nova senha, clique no botão abaixo:</p>
-        
-        <p style="text-align: center;">
-            <button class="button" th:href="${resetUrl}" target="_blank">Redefinir minha senha</button>
-        </p>
-        
-        <p>Se o botão não funcionar, você também pode copiar e colar o link abaixo em seu navegador:</p>
-        
-        <p style="word-break: break-all;">
-            <a th:href="${resetUrl}" th:text="${resetUrl}" target="_blank">Link de redefinição</a>
-        </p>
-        
-        <p>Este link expirará em <span th:text="${validade}">30 minutos</span>.</p>
-        
-        <h3>Como redefinir sua senha:</h3>
-        <ol>
-            <li><strong>Clique no botão</strong> <strong>"Redefinir minha senha"</strong> acima ou use o link fornecido.</li>
-            <li>Você será redirecionado para uma página segura do memuvie.</li>
-            <li><strong>Crie uma nova senha</strong> que seja forte e segura.</li>
-            <li>Sua senha deve ter pelo menos 8 caracteres e incluir letras, números e caracteres especiais.</li>
-            <li>Após confirmar sua nova senha, você poderá fazer login imediatamente com suas novas credenciais.</li>
-        </ol>
-        
-        <p><strong>Dica de segurança:</strong> Evite usar senhas que você já usa em outros sites. Crie uma senha única para o memuvie.</p>
-        
-        <p>Se você não solicitou a redefinição da sua senha, ignore este e-mail ou entre em contato conosco imediatamente, pois alguém pode estar tentando acessar sua conta.</p>
-        
-        <p>Atenciosamente,<br/>Equipe memuvie</p>
-    </div>
-    
-    <div class="footer">
-        <p>Esta é uma mensagem automática, por favor não responda este e-mail.</p>
-        <p>&copy; 2025 Memuvie. Todos os direitos reservados.</p>
-    </div>
+<div class="header">
+    <div class="logo">memuvie</div>
+</div>
+
+<div class="content">
+    <h2>Redefinição de Senha</h2>
+
+    <p>Olá <span th:text="${nome}">Usuário</span>,</p>
+
+    <p>Recebemos uma solicitação para redefinir sua senha de acesso ao memuvie. Para criar uma nova senha, clique no botão abaixo:</p>
+
+    <p style="text-align: center;">
+        <a class="btn" th:href="${resetUrl}" href="http://localhost:4200/redefinir-senha" target="_blank">Redefinir minha senha</a>
+    </p>
+
+    <p>Se o botão não funcionar, você também pode copiar e colar o link abaixo em seu navegador:</p>
+
+    <p style="word-break: break-all;">
+        <a th:href="${resetUrl}" th:text="${resetUrl}" target="_blank">Link de redefinição</a>
+    </p>
+
+    <p>Este link expirará em <span th:text="${validade}">30 minutos</span>.</p>
+
+    <h3>Como redefinir sua senha:</h3>
+    <ol>
+        <li><strong>Clique no botão</strong> <strong>"Redefinir minha senha"</strong> acima ou use o link fornecido.</li>
+        <li>Você será redirecionado para uma página segura do memuvie.</li>
+        <li><strong>Crie uma nova senha</strong> que seja forte e segura.</li>
+        <li>Sua senha deve ter pelo menos 8 caracteres e incluir letras, números e caracteres especiais.</li>
+        <li>Após confirmar sua nova senha, você poderá fazer login imediatamente com suas novas credenciais.</li>
+    </ol>
+
+    <p><strong>Dica de segurança:</strong> Evite usar senhas que você já usa em outros sites. Crie uma senha única para o memuvie.</p>
+
+    <p>Se você não solicitou a redefinição da sua senha, ignore este e-mail ou entre em contato conosco imediatamente, pois alguém pode estar tentando acessar sua conta.</p>
+
+    <p>Atenciosamente,<br/>Equipe memuvie</p>
+</div>
+
+<div class="footer">
+    <p>Esta é uma mensagem automática, por favor não responda este e-mail.</p>
+    <p>&copy; 2025 Memuvie. Todos os direitos reservados.</p>
+</div>
 </body>
 </html>
