@@ -6,7 +6,7 @@
       <button class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
 
       <ng-container *ngIf="item.video; else photoTpl">
-        <video [src]="item.video" controls class="card-image" style="background:#000"></video>
+        <video [src]="item.video" preload="metadata" controls class="card-image" style="background:#000"></video>
       </ng-container>
       <ng-template #photoTpl>
         <img *ngIf="item.photo" [src]="item.photo" [alt]="'Post by ' + item.userName" class="card-image">
@@ -32,7 +32,7 @@
     <button class="modal-close">✕</button>
     <div class="modal-content" (click)="$event.stopPropagation()">
       <ng-container *ngIf="selectedItem.video; else modalPhoto">
-        <video [src]="selectedItem.video" controls class="modal-image" style="background:#000"></video>
+        <video [src]="selectedItem.video" controls autoplay preload="auto" class="modal-image" style="background:#000"></video>
       </ng-container>
       <ng-template #modalPhoto>
         <img *ngIf="selectedItem.photo" [src]="selectedItem.photo" [alt]="'Post by ' + selectedItem.userName" class="modal-image">
