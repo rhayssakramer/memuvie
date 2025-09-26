@@ -17,9 +17,12 @@ public class UsuarioRequest {
     @Size(max = 150, message = "Email deve ter no máximo 150 caracteres")
     private String email;
 
-    @NotBlank(message = "Senha é obrigatória")
+    // A senha pode ser opcional em atualizações
     @Size(min = 6, max = 100, message = "Senha deve ter entre 6 e 100 caracteres")
     private String senha;
+    
+    // Campo para verificação da senha atual em alterações de senha
+    private String senhaAtual;
     
     @Size(max = 1000000, message = "URL da foto de perfil deve ter no máximo 1MB")
     private String fotoPerfil;
@@ -55,5 +58,13 @@ public class UsuarioRequest {
 
     public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
+    }
+    
+    public String getSenhaAtual() {
+        return senhaAtual;
+    }
+    
+    public void setSenhaAtual(String senhaAtual) {
+        this.senhaAtual = senhaAtual;
     }
 }

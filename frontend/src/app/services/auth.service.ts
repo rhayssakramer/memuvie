@@ -55,11 +55,17 @@ export class AuthService {
           token: response.token,
           expiresAt: Date.now() + 3600000, // 1 hora de expiração padrão
           user: {
+            id: response.usuario?.id || '',
             name: response.usuario?.nome || '',
             email: response.usuario?.email || '',
             photo: response.usuario?.fotoPerfil || ''
           }
         };
+
+        // Armazenar o token separadamente para uso em chamadas API
+        localStorage.setItem('token', userData.token);
+        // Armazenar o ID do usuário para referência
+        localStorage.setItem('userId', userData.user.id);
 
         // Garantir que os dados do usuário também estejam acessíveis no formato antigo
         localStorage.setItem('userName', userData.user.name);

@@ -113,9 +113,42 @@ export class EditProfileComponent implements OnInit {
         photo: photoBase64 || this.profile.photo
       };
 
-      // TODO: Implementar atualização de password no backend
-      if (this.form.newPassword) {
-        // updatePassword(this.form.currentPassword, this.form.newPassword);
+      // Atualizar senha se fornecida
+      if (this.form.newPassword && this.form.currentPassword) {
+        try {
+          const userId = localStorage.getItem('userId');
+          if (!userId) {
+            throw new Error('ID do usuário não encontrado');
+          }
+          
+          const token = localStorage.getItem('token');
+          if (!token) {
+            throw new Error('Token não encontrado');
+          }
+          
+          // Chamar o endpoint de alteração de senha
+          const response = await fetch(`http://localhost:8080/api/usuario/alterar-senha`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              senhaAtual: this.form.currentPassword,
+              novaSenha: this.form.newPassword
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao alterar senha');
+          }
+          
+          this.successMessage = 'Senha alterada com sucesso!';
+        } catch (error: any) {
+          this.errorMessage = error.message || 'Erro ao alterar senha';
+          return;
+        }
       }
 
       updateProfile(updatedProfile);
