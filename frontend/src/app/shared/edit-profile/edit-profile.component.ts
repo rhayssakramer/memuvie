@@ -32,6 +32,9 @@ export class EditProfileComponent implements OnInit {
   };
   errorMessage = '';
   successMessage = '';
+  mostrarSenhaAtual: boolean = false;
+  mostrarNovaSenha: boolean = false;
+  mostrarConfirmarSenha: boolean = false;
 
   ngOnInit() {
     this.profile = getProfile();
@@ -61,7 +64,7 @@ export class EditProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      
+
       // Verifica o size do file (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.errorMessage = 'A foto deve ter no máximo 5MB';
@@ -117,10 +120,10 @@ export class EditProfileComponent implements OnInit {
 
       updateProfile(updatedProfile);
       this.successMessage = 'Perfil atualizado com sucesso!';
-      
+
       // Atualiza o profile local
       this.profile = updatedProfile;
-      
+
       // Fecha o modal após 2 segundos
       setTimeout(() => this.close(), 2000);
 
@@ -144,5 +147,17 @@ export class EditProfileComponent implements OnInit {
     if (!target.closest('.modal-content')) {
       this.close();
     }
+  }
+
+  toggleMostrarSenhaAtual(): void {
+    this.mostrarSenhaAtual = !this.mostrarSenhaAtual;
+  }
+
+  toggleMostrarNovaSenha(): void {
+    this.mostrarNovaSenha = !this.mostrarNovaSenha;
+  }
+
+  toggleMostrarConfirmarSenha(): void {
+    this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
   }
 }

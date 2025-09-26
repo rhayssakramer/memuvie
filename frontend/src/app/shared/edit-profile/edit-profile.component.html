@@ -32,19 +32,67 @@
         </div>
 
         <!-- Seção de Alteração de password -->
-            <div class="form-group">
-                <label class="form-label">Senha Atual</label>
-                <input placeholder="Digite sua senha atual" type="password" class="form-input" [(ngModel)]="form.currentPassword" name="currentPassword" required>
+        <div class="form-group">
+            <label class="form-label">Senha Atual</label>
+            <div class="password-field">
+                <input placeholder="Digite sua senha atual" [type]="mostrarSenhaAtual ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.currentPassword" name="currentPassword" required>
+                <button type="button" class="password-toggle" (click)="toggleMostrarSenhaAtual()">
+                    <svg *ngIf="!mostrarSenhaAtual" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarSenhaAtual" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
             </div>
+        </div>
 
         <div class="form-group">
             <label class="form-label">Nova Senha</label>
-            <input placeholder="Digite uma nova senha" type="password" class="form-input" [(ngModel)]="form.newPassword" name="newPassword" required>
+            <div class="password-field">
+                <input placeholder="Digite uma nova senha" [type]="mostrarNovaSenha ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.newPassword" name="newPassword" required>
+                <button type="button" class="password-toggle" (click)="toggleMostrarNovaSenha()">
+                    <svg *ngIf="!mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div class="form-group">
             <label class="form-label">Confirmar Nova Senha</label>
-        <input placeholder="Confirme sua nova senha" type="password" class="form-input" [(ngModel)]="form.confirmPassword" name="confirmPassword">
+            <div class="password-field">
+                <input placeholder="Confirme sua nova senha" [type]="mostrarConfirmarSenha ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.confirmPassword" name="confirmPassword">
+                <button type="button" class="password-toggle" (click)="toggleMostrarConfirmarSenha()">
+                    <svg *ngIf="!mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Mensagens de error/sucesso -->
