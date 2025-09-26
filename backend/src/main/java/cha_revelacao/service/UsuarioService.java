@@ -1,5 +1,6 @@
 package cha_revelacao.service;
 
+import cha_revelacao.dto.request.AlterarSenhaRequest;
 import cha_revelacao.dto.request.LoginRequest;
 import cha_revelacao.dto.request.UsuarioRequest;
 import cha_revelacao.dto.response.JwtResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,10 +34,10 @@ public class UsuarioService {
 
     // Constructor explícito para injeção de dependências
     public UsuarioService(UsuarioRepository usuarioRepository,
-                         PasswordEncoder passwordEncoder,
-                         JwtService jwtService,
-                         AuthenticationManager authenticationManager,
-                         ModelMapper modelMapper) {
+                          PasswordEncoder passwordEncoder,
+                          JwtService jwtService,
+                          AuthenticationManager authenticationManager,
+                          ModelMapper modelMapper) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -64,28 +66,28 @@ public class UsuarioService {
         try {
             // Normaliza o email para evitar problemas de case-sensitivity
             String emailNormalizado = request.getEmail().toLowerCase().trim();
-            
+
             // Log para debug
             log.info("Tentativa de autenticação para usuário: {}", emailNormalizado);
-            
+
             // Verifica primeiro se o usuário existe e está ativo
             Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndAtivo(emailNormalizado);
             if (usuarioOpt.isEmpty()) {
                 log.warn("Tentativa de login para usuário inexistente ou inativo: {}", emailNormalizado);
                 throw new BusinessException("Credenciais inválidas");
             }
-            
+
             // Tenta autenticar com o AuthenticationManager
             authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(emailNormalizado, request.getSenha())
+                    new UsernamePasswordAuthenticationToken(emailNormalizado, request.getSenha())
             );
-            
+
             log.info("Autenticação bem-sucedida para o usuário: {}", emailNormalizado);
-            
+
             // Gera o token JWT
             String jwt = jwtService.generateJwtToken(emailNormalizado);
             Usuario usuario = usuarioOpt.get();
-            
+
             UsuarioResponse usuarioResponse = modelMapper.map(usuario, UsuarioResponse.class);
             return new JwtResponse(jwt, usuarioResponse);
         } catch (AuthenticationException e) {
@@ -96,41 +98,60 @@ public class UsuarioService {
 
     public UsuarioResponse buscarPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
         return modelMapper.map(usuario, UsuarioResponse.class);
     }
 
     public UsuarioResponse buscarPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmailAndAtivo(email)
-            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
         return modelMapper.map(usuario, UsuarioResponse.class);
     }
 
     public List<UsuarioResponse> listarTodos() {
         return usuarioRepository.findAll().stream()
-            .map(usuario -> modelMapper.map(usuario, UsuarioResponse.class))
-            .collect(Collectors.toList());
+                .map(usuario -> modelMapper.map(usuario, UsuarioResponse.class))
+                .collect(Collectors.toList());
     }
 
     public UsuarioResponse atualizarUsuario(Long id, UsuarioRequest request) {
         Usuario usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
         if (!usuario.getEmail().equals(request.getEmail()) &&
-            usuarioRepository.existsByEmail(request.getEmail())) {
+                usuarioRepository.existsByEmail(request.getEmail())) {
             throw new BusinessException("Email já está em uso");
         }
 
         usuario.setNome(request.getNome());
         usuario.setEmail(request.getEmail());
-        
+
         // Atualiza a foto de perfil se fornecida
         if (request.getFotoPerfil() != null && !request.getFotoPerfil().isEmpty()) {
             usuario.setFotoPerfil(request.getFotoPerfil());
         }
 
+        // Se a senha estiver sendo atualizada
         if (request.getSenha() != null && !request.getSenha().isEmpty()) {
-            usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+            // Verifica se a senha atual está presente para autenticar
+            if (request.getSenhaAtual() != null && !request.getSenhaAtual().isEmpty()) {
+                // Verifica se a senha atual está correta
+                if (!passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenha())) {
+                    throw new BusinessException("Senha atual incorreta");
+                }
+
+                // Verifica se a nova senha não é igual à senha atual
+                if (passwordEncoder.matches(request.getSenha(), usuario.getSenha())) {
+                    throw new BusinessException("A nova senha não pode ser igual à senha atual");
+                }
+
+                // Atualiza a senha
+                usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+                log.info("Senha alterada com sucesso para usuário ID: {}", id);
+            } else {
+                // Se não houver senha atual, considera como cadastro inicial de senha
+                usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+            }
         }
 
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
@@ -139,7 +160,7 @@ public class UsuarioService {
 
     public void desativarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
         usuario.setAtivo(false);
         usuarioRepository.save(usuario);
     }
