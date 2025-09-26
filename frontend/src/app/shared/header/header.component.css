@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 .header {
     max-width: 100%;
     box-shadow: 0 14px 30px rgba(255,95,163,.25);
@@ -12,10 +14,11 @@
 }
 
 .brand {
+    font-family: 'Nunito', sans-serif;
     width: auto;
     color: #3a7bff;
-    font-weight: 700;
-    font-size: 20px;
+    font-weight: 900;
+    font-size: 30px;
     margin-left: 130px;
     white-space: nowrap;
 }

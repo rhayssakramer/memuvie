@@ -172,7 +172,8 @@ label {
 }
 
 .error-message {
-  color: #e91e63;
+  color: #e11d48;
+  font-weight: 600;
   margin-top: 5px;
   margin-bottom: 15px;
   padding: 10px;

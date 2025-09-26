@@ -33,6 +33,8 @@ export class LoginComponent {
 
   // Controle da visibilidade da password
   showPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -320,5 +322,13 @@ export class LoginComponent {
         }
       }
     });
+  }
+
+  toggleShowNewPassword() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleShowConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }
