@@ -197,7 +197,7 @@
 }
 
 .help span{
-    font-size: 14px;
+    font-size: 16px;
     color:#e11d48;
 }
 
@@ -272,7 +272,7 @@
 .modal-card {
     width: 100%;
     /* Mantenha invisível o card background e shadow. */
-    background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+    background: white;
     border-radius: 18px;
     padding: 2rem 2rem 1.6rem 2rem;
     box-shadow: 0 12px 30px rgba(15,34,56,0.08);

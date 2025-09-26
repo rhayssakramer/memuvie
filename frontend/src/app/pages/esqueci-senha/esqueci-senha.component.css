@@ -38,7 +38,7 @@
     margin: 0 auto; /* Centralizado horizontalmente */
     max-width: 420px;
     width: 100%;
-    background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+    background: white;
     border-radius: 12px;
     padding: 28px;
     position: relative;
