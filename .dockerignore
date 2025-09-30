@@ -1,0 +1,9 @@
+frontend/
+.git/
+.gitignore
+.idea/
+.vscode/
+README.md
+render.yaml
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
