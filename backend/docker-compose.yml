@@ -1,0 +1,89 @@
+services:
+#  app:
+#    build: .
+#    container_name: revelacao-cha-backend
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/revelacao_cha_db
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SERVER_SERVLET_CONTEXT_PATH=/api
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+#      - SPRING_JPA_SHOW_SQL=true
+#      - SPRING_FLYWAY_ENABLED=true
+#      - JWT_SECRET=mySecretKey123456789mySecretKey123456789
+#      - JWT_EXPIRATION=86400000
+#    networks:
+#      - revelacao-network
+#    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 60s
+
+  # Serviço Flyway opcional para rodar Migrate manualmente (NÃO inicia automaticamente)
+  # Execute quando precisar aplicar novas migrações sem reiniciar o app:
+  # docker compose run --rm flyway migrate
+  # Para fazer repair: docker compose run --rm flyway repair
+  flyway:
+    image: flyway/flyway:latest
+    profiles: ["tools"]
+    depends_on:
+      - postgres
+    environment:
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/revelacao_cha_db
+      FLYWAY_USER: postgres
+      FLYWAY_PASSWORD: postgres
+      FLYWAY_CONNECT_RETRIES: 20
+    command: -baselineOnMigrate=true info
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql
+    networks:
+      - revelacao-network
+
+  # Serviço de administração do banco (Adminer)
+  adminer:
+    image: adminer:4.8.1
+    container_name: revelacao-cha-adminer
+    restart: unless-stopped
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - revelacao-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: revelacao-cha-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=revelacao_cha_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - revelacao-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  revelacao-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

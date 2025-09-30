@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "name": "memuvie-frontend",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/cha-revelacao",
+  "installCommand": "npm install",
+  "framework": "angular",
+  "public": false,
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

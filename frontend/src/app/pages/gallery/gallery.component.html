@@ -1,0 +1,55 @@
+<div class="page-bg">
+  <app-dots-background [count]="22"></app-dots-background>
+  <app-header></app-header>
+  <div class="gallery-grid">
+    <div class="gallery-card" *ngFor="let item of galleryItems;" (click)="openModal(item)">
+      <button class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
+
+      <ng-container *ngIf="item.video; else photoTpl">
+        <video [src]="item.video" preload="metadata" controls class="card-image" style="background:#000"></video>
+      </ng-container>
+      <ng-template #photoTpl>
+        <img *ngIf="item.photo" [src]="item.photo" [alt]="'Post by ' + item.userName" class="card-image">
+      </ng-template>
+      <div class="card-content">
+        <div class="user-info">
+          <img [src]="item.userPhoto" [alt]="item.userName" class="user-avatar">
+          <div class="user-details">
+            <div class="user-name">{{ item.userName }}</div>
+            <div class="post-date">{{ formatDate(item.date) }}</div>
+          </div>
+        </div>
+        <p class="card-message">{{ item.message }}</p>
+        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+          <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="$event.stopPropagation(); share(item)">Compartilhar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" *ngIf="selectedItem" (click)="closeModal()">
+    <button class="modal-close">✕</button>
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <ng-container *ngIf="selectedItem.video; else modalPhoto">
+        <video [src]="selectedItem.video" controls autoplay preload="auto" class="modal-image" style="background:#000"></video>
+      </ng-container>
+      <ng-template #modalPhoto>
+        <img *ngIf="selectedItem.photo" [src]="selectedItem.photo" [alt]="'Post by ' + selectedItem.userName" class="modal-image">
+      </ng-template>
+      <div class="modal-details">
+        <div class="modal-user-info">
+          <img [src]="selectedItem.userPhoto" [alt]="selectedItem.userName" class="modal-avatar">
+          <div class="user-details">
+            <div class="user-name">{{ selectedItem.userName }}</div>
+            <div class="post-date">{{ formatDate(selectedItem.date) }}</div>
+          </div>
+        </div>
+        <p class="modal-message">{{ selectedItem.message }}</p>
+        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+          <button class="btn-gradient" style="padding:.5rem 1rem" (click)="share(selectedItem)">Compartilhar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

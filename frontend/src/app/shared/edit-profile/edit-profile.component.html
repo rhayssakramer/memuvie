@@ -1,0 +1,110 @@
+<div class="edit-profile-modal" [class.open]="isOpen" (click)="onClickOutside($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Editar Perfil</h2>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <!-- Seção de photo -->
+        <div class="photo-section">
+            <div class="photo-container">
+                <img [src]="photoPreview || 'assets/images/default-avatar.png'" [alt]="form.name" class="photo-preview">
+                <input type="file" id="photo-upload" accept="image/*" (change)="onPhotoSelected($event)" style="display: none;">
+                <label for="photo-upload" class="photo-edit-overlay">
+                    <svg class="camera-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15.2C13.7673 15.2 15.2 13.7673 15.2 12C15.2 10.2327 13.7673 8.8 12 8.8C10.2327 8.8 8.8 10.2327 8.8 12C8.8 13.7673 10.2327 15.2 12 15.2Z" fill="currentColor"/>
+                    <path d="M9 3L7.17 5H4C2.9 5 2 5.9 2 7V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V7C22 5.9 21.1 5 20 5H16.83L15 3H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z" fill="currentColor"/>
+                    </svg>
+                </label>
+            </div>
+        </div>
+
+        <!-- Informações do Usuário -->
+        <div class="user-info-section">
+            <div class="form-group">
+                <label class="form-label">Nome</label>
+                <div class="readonly-field">{{form.name}}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <div class="readonly-field">{{form.email}}</div>
+            </div>
+        </div>
+
+        <!-- Seção de Alteração de password -->
+        <div class="form-group">
+            <label class="form-label">Senha Atual</label>
+            <div class="password-field">
+                <input placeholder="Digite sua senha atual" [type]="mostrarSenhaAtual ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.currentPassword" name="currentPassword" required>
+                <button type="button" class="password-toggle" (click)="toggleMostrarSenhaAtual()">
+                    <svg *ngIf="!mostrarSenhaAtual" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarSenhaAtual" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nova Senha</label>
+            <div class="password-field">
+                <input placeholder="Digite uma nova senha" [type]="mostrarNovaSenha ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.newPassword" name="newPassword" required>
+                <button type="button" class="password-toggle" (click)="toggleMostrarNovaSenha()">
+                    <svg *ngIf="!mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Confirmar Nova Senha</label>
+            <div class="password-field">
+                <input placeholder="Confirme sua nova senha" [type]="mostrarConfirmarSenha ? 'text' : 'password'" class="form-input password-input" [(ngModel)]="form.confirmPassword" name="confirmPassword">
+                <button type="button" class="password-toggle" (click)="toggleMostrarConfirmarSenha()">
+                    <svg *ngIf="!mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <!-- Full eye outline -->
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <!-- Pupil -->
+                        <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <!-- Slash para indicar escondido -->
+                        <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mensagens de error/sucesso -->
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+        <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+
+        <!-- Botões -->
+        <div class="button-group">
+        <button type="button" class="cancel-button" (click)="close()">Cancelar</button>
+        <button type="submit" class="save-button">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>

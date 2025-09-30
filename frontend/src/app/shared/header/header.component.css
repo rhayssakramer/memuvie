@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+.header {
+    max-width: 100%;
+    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    align-items: center;
+    padding: .4rem 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: #ffffff;
+    border-radius: 0 0 5px 5px;
+}
+
+.brand {
+    font-family: 'Nunito', sans-serif;
+    width: auto;
+    color: #3a7bff;
+    font-weight: 900;
+    font-size: 30px;
+    margin-left: 130px;
+    white-space: nowrap;
+}
+
+.brand span {
+    color: #ff69b4;
+}
+
+.nav-button {
+    width: 70px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    padding: .95rem 1.6rem;
+    gap: .5rem;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    white-space: nowrap;
+}
+
+#gallery{
+    margin-left: -2px;
+}
+
+.nav-gallery {
+    width: 140px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    padding: .95rem 1.6rem;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    white-space: nowrap;
+    margin-left: -2px;
+}
+
+.nav-gallery:hover {
+    transform: translateY(-2px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-list {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.8rem;
+        margin: 0;
+        padding: 0;
+}
+
+/* Responsive header - arrange as two-row grid on small screens
+     Top row: brand (left) and profile menu (right)
+     Second row: nav centered */
+@media (max-width: 768px) {
+    .header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-areas: "brand menu" "nav nav";
+        gap: .4rem;
+        padding: .6rem .8rem;
+        align-items: center;
+    }
+    .brand { grid-area: brand; text-align: left; margin: 0; font-size: 18px; }
+    app-profile-menu { grid-area: menu; justify-self: end; align-self: center; }
+    .nav-container { grid-area: nav; justify-self: center; width: 100%; }
+    .nav-list { justify-content: center; gap: .5rem; flex-wrap: wrap; }
+    .nav-button, .nav-gallery { padding: .6rem 1rem; font-size: .95rem; width: auto; }
+}
+
+@media (max-width: 420px) {
+    .brand { font-size: 16px; }
+    .nav-list { gap: .4rem; }
+    .nav-button, .nav-gallery { padding: .5rem .8rem; font-size: .9rem; }
+}
+
+.nav-gallery{
+    width: 110px;
+    height: 35px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    padding: .95rem 1.6rem;
+    gap:.5rem;
+    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.nav-gallery:hover{
+    transform: translateY(-2px);
+}

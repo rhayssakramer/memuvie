@@ -1,1 +1,185 @@
-/* You can add global styles to this file, and also import other style files */
+/* Pode adicionar estilos globais a este arquivo e também importar outros arquivos de estilo */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure main content sits above global backgrounds */
+.app-content {
+  position: relative;
+  z-index: 1;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  --primary-color: #ff69b4;
+  --secondary-color: #ff1493;
+  --text-color: #2c3e50;
+  --background-color: #f8f9fa;
+  --white: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --blue: #5a8dff;
+  --rose: #ff5fa3;
+  --soft-rose: #fff4f9;
+  --soft-blue: #f0f5ff;
+  --surface: rgba(255,255,255,.72);
+  --glass-blur: 8px;
+}
+
+/* Layout helpers */
+.page-bg {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
+  padding: 2rem 1rem;
+}
+
+.glass-card {
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.08);
+}
+
+.section-title {
+  color: #0f2238;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.subtitle-accent { color: var(--rose); font-weight: 700; text-align: center; }
+
+.btn-gradient {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border: 0;
+  border-radius: 999px;
+  padding: .9rem 1.4rem;
+  background: linear-gradient(90deg, var(--rose) 0%, var(--blue) 100%);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(255,95,163,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn-gradient:hover { transform: translateY(-2px); }
+
+/* Ensure button transitions also work on touch and keyboard focus
+   - Provide transitions on the base element so they animate when :active or :focus-visible
+   - Use touch-action to improve responsiveness on mobile and remove tap highlight */
+.btn-gradient, .nav-button, .nav-gallery, .btn-pill, .cta, .btn-secondary {
+  transition: transform .18s ease, box-shadow .18s ease, background-color .12s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Mirror hover effect for active (touch) and focus-visible (keyboard) so mobile shows the interaction */
+.btn-gradient:active, .nav-button:active, .nav-gallery:active, .btn-pill:active, .cta:active, .btn-secondary:active,
+.btn-gradient:focus-visible, .nav-button:focus-visible, .nav-gallery:focus-visible, .btn-pill:focus-visible, .cta:focus-visible {
+  transform: translateY(-2px);
+  /* gentle shadow change for pressed state */
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+}
+
+/* For coarse pointers (touch devices) ensure the same active effect is visible immediately */
+@media (hover: none) and (pointer: coarse) {
+  .btn-gradient:active, .nav-button:active, .nav-gallery:active, .btn-pill:active, .cta:active, .btn-secondary:active {
+    transform: translateY(-1.5px);
+    transition: transform .12s ease;
+  }
+}
+
+.input-field, .textarea-field {
+  width: 100%;
+  padding: .9rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #e7e9ef;
+  background: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.input-field:focus, .textarea-field:focus {
+  border-color: #c6d2ff;
+  box-shadow: 0 0 0 4px rgba(90,141,255,.14);
+}
+.textarea-field { min-height: 160px; resize: vertical; }
+
+.upload-box {
+  border: 2px dashed #e1e4ef;
+  border-radius: 16px;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: #fff;
+  transition: border-color .2s ease, background .2s ease;
+}
+.upload-box:hover { border-color: #d6b7ff; background: #fcf7ff; }
+
+.nav-area {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; margin-bottom: 1.25rem;
+}
+
+.decor-dots { position: relative; }
+.decor-dots::before, .decor-dots::after {
+  content: ""; position: absolute; border-radius: 50%; opacity: .6; pointer-events: none;
+}
+.decor-dots::before { width: 70px; height: 70px; background: #ffc1dc; left: -20px; top: -20px; }
+.decor-dots::after  { width: 90px; height: 90px; background: #b5d1ff; right: -20px; bottom: -20px; }
+
+/* Responsive helpers and breakpoints */
+:root {
+  --container-max-width: 1100px;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+img, svg, picture {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Typography scaling for smaller screens */
+@media (max-width: 900px) {
+  body { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+}
+
+/* Utility helpers */
+.row { display:flex; gap:1rem; flex-wrap:wrap; }
+.col { flex: 1 1 0; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+/* Make glass cards and sections responsive */
+.glass-card { padding: 1rem; border-radius: 16px; }
+.page-bg { padding: 1rem 0.6rem; }
+
+/* Global breakpoint tweaks */
+@media (max-width: 768px) {
+  .nav-area { padding: 0 .5rem; }
+  .btn-gradient { padding: .75rem 1rem; font-size: .95rem; }
+  .section-title { font-size: 1.1rem; }
+  .subtitle-accent { font-size: .9rem; }
+}

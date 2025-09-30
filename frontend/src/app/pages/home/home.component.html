@@ -1,0 +1,50 @@
+<section class="hero">
+    <!-- Local dots for Home (kept in addition to global background) -->
+    <div class="decor-dots" aria-hidden="true">
+      <span *ngFor="let d of dots; trackBy: trackById"
+            class="dot"
+            [ngStyle]="{
+              top: d.top,
+              left: d.left,
+              width: d.size + 'px',
+              height: d.size + 'px'
+            }"
+            [style.--dot-bg]="d.color"
+            [style.--dot-opacity]="d.opacity"
+            [style.--float-duration]="d.floatDuration + 's'"
+            [style.--float-delay]="d.delay + 's'"
+            [style.--pulse-duration]="d.pulseDuration + 's'"
+            [style.--pulse-delay]="d.delay + 's'">
+      </span>
+    </div>
+
+    <div class="hero-inner">
+      <h1 class="title">Chá Revelação</h1>
+      <p class="subtitle"><span>Pedro ou</span> Eduarda?</p>
+
+      <div class="countdown" aria-live="polite">
+        <div class="time">
+
+          <div class="value pink">{{ days | number:'2.0-0' }}</div>
+          <div class="label">DIAS</div>
+        </div>
+
+        <div class="time">
+          <div class="value">{{ hours | number:'2.0-0' }}</div>
+          <div class="label">HORAS</div>
+        </div>
+        <div class="time">
+          <div class="value blue">{{ minutes | number:'2.0-0' }}</div>
+          <div class="label">MINUTOS</div>
+        </div>
+
+        <div class="time">
+          <div class="value">{{ seconds | number:'2.0-0' }}</div>
+          <div class="label">SEGUNDOS</div>
+        </div>
+      </div>
+      <button class="cta" (click)="onEnter()">
+        Entrar na Festa
+      </button>
+    </div>
+</section>

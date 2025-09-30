@@ -1,0 +1,98 @@
+<div class="redefinir-senha-container">
+  <app-dots-background [count]="12"></app-dots-background>
+  <div class="card">
+    <h1 class="card-title">Redefinição de Senha</h1>
+
+    <div *ngIf="verificandoToken" class="loading">
+      <div class="spinner"></div>
+      <p>Verificando token...</p>
+    </div>
+
+    <div *ngIf="!verificandoToken && !tokenValido && !sucesso" class="error-container">
+      <p class="error-message">{{ erro }}</p>
+      <button class="btn btn-primary" style="width: 100%;" (click)="voltar()">Voltar ao Login</button>
+    </div>
+
+    <div *ngIf="!verificandoToken && tokenValido && !sucesso">
+      <p class="form-description">
+        Digite sua nova senha para continuar.
+      </p>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="novaSenha">Nova Senha</label>
+          <div class="password-input-container">
+            <input
+              id="novaSenha"
+              [type]="mostrarNovaSenha ? 'text' : 'password'"
+              [(ngModel)]="novaSenha"
+              name="novaSenha"
+              required
+              class="input"
+              placeholder="Digite sua nova senha">
+            <button type="button" class="password-toggle" (click)="toggleMostrarNovaSenha()">
+              <svg *ngIf="!mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg *ngIf="mostrarNovaSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Full eye outline -->
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                <!-- Pupil -->
+                <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                <!-- Slash para indicar escondido -->
+                <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmarSenha">Confirmar Senha</label>
+          <div class="password-input-container">
+            <input
+              id="confirmarSenha"
+              [type]="mostrarConfirmarSenha ? 'text' : 'password'"
+              [(ngModel)]="confirmarSenha"
+              name="confirmarSenha"
+              required
+              class="input"
+              placeholder="Confirme sua nova senha">
+            <button type="button" class="password-toggle" (click)="toggleMostrarConfirmarSenha()">
+              <svg *ngIf="!mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg *ngIf="mostrarConfirmarSenha" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Full eye outline -->
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                <!-- Pupil -->
+                <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                <!-- Slash para indicar escondido -->
+                <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="erro" class="error-message">{{ erro }}</div>
+
+        <div *ngIf="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Processando sua solicitação...</p>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="voltar()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">Alterar Senha</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="sucesso" class="success-container">
+      <div class="success-icon">✓</div>
+      <p class="success-message">Sua senha foi alterada com sucesso!</p>
+      <button class="btn btn-primary" style="width: 100%;" (click)="voltar()">Ir para Login</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="login-page">
+  <app-dots-background [count]="14"></app-dots-background>
+  <main class="login-main">
+    <div class="layout">
+      <aside class="left-rail"></aside>
+
+      <section class="center-area">
+        <div class="card login-card">
+          <h1 class="card-title">Entrar</h1>
+          <p class="hint">Use o e-mail cadastrado ao criar seu perfil.</p>
+
+          <form (ngSubmit)="onSubmit()" class="form">
+            <label class="field-label">E-mail</label>
+            <input type="email" [(ngModel)]="email" name="email" required class="input soft" placeholder="email@exemplo.com" />
+
+            <label class="field-label">Senha</label>
+            <div class="password-field">
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required class="input soft password-input" placeholder="••••••" />
+              <button type="button" class="password-toggle" (click)="toggleShowPassword()" aria-label="Mostrar senha">
+                <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <!-- Full eye outline -->
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <!-- Pupil -->
+                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <!-- Slash para indicar escondido -->
+                  <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="error" *ngIf="error">{{ error }}</div>
+
+            <button class="btn-pill" type="submit">Entrar</button>
+          </form>
+
+          <div class="recovery-link">
+            <a class="link-button" (click)="esqueceuSenha()"><span>Esqueci minha senha</span></a>
+          </div>
+
+          <div class="help">
+          Ainda não tem perfil?<button class="link-button" (click)="goToCreate($event)"><span>Crie seu perfil</span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal de criação de profile -->
+  <div class="modal" *ngIf="showCreateProfile">
+    <div class="modal-content">
+      <div class="modal-card">
+        <div class="modal-top">
+          <h1 class="modal-title">Crie seu perfil</h1>
+        </div>
+
+        <form (ngSubmit)="createProfile()" class="modal-form">
+          <div class="modal-error" *ngIf="error">{{ error }}</div>
+
+          <div class="form-group">
+            <label for="newName">Seu Nome</label>
+            <input id="newName" [(ngModel)]="newUserName" name="newUserName" required class="input" placeholder="Digite seu nome">
+          </div>
+
+          <div class="form-group">
+            <label for="newEmail">E-mail</label>
+            <input id="newEmail" type="email" [(ngModel)]="newEmail" name="newEmail" required class="input" placeholder="email@exemplo.com">
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Senha</label>
+            <div class="password-field">
+              <input id="newPassword" [type]="showNewPassword ? 'text' : 'password'" [(ngModel)]="newPassword" name="newPassword" required minlength="6" class="input password-input" placeholder="Crie uma senha (mín. 6 caracteres)">
+              <button type="button" class="password-toggle" (click)="toggleShowNewPassword()" aria-label="Mostrar senha">
+                <svg *ngIf="!showNewPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg *ngIf="showNewPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <!-- Full eye outline -->
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <!-- Pupil -->
+                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <!-- Slash para indicar escondido -->
+                  <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar Senha</label>
+            <div class="password-field">
+              <input id="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="newConfirmPassword" name="newConfirmPassword" required minlength="6" class="input password-input" placeholder="Digite a senha novamente">
+              <button type="button" class="password-toggle" (click)="toggleShowConfirmPassword()" aria-label="Mostrar senha">
+                <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg *ngIf="showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <!-- Full eye outline -->
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <!-- Pupil -->
+                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <!-- Slash para indicar escondido -->
+                  <path d="M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label id="label">Adicione sua foto</label>
+            <!-- Vincular uma classe has-photo quando houver previewUrl; button X permite remover sem abrir o seletor -->
+            <div class="upload-box" (click)="fileInput.click()" [class.has-photo]="previewUrl">
+              <ng-container *ngIf="!previewUrl">
+                <div class="upload-placeholder">📷</div>
+                <small class="upload-hint">Clique para escolher uma imagem</small>
+              </ng-container>
+
+              <!-- Mostrar preview quando houver image selecionada -->
+              <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="upload-preview">
+
+              <!-- Button para remover a image; stopPropagation evita abrir o seletor ao clicar no X -->
+              <button *ngIf="previewUrl" type="button" class="remove-btn" (click)="removeSelected($event)" aria-label="Remover foto">&times;</button>
+            </div>
+            <input #fileInput id="fileInput" type="file" (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/gif" style="display: none">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="closeCreateProfile()">Cancelar</button>
+            <button type="submit" class="btn-gradient">Criar Perfil</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Embedded recovery modal - positioned at root level for proper centering -->
+<app-esqueci-senha *ngIf="showRecoveryModal" [embedded]="true" (close)="closeRecovery()"></app-esqueci-senha>

@@ -1,0 +1,19 @@
+<header class="header">
+  <div class="brand">Pedro ou <span>Eduarda?</span></div>
+  <nav class="nav-container">
+    <ul class="nav-list">
+      <li>
+        <button routerLink="/home" routerLinkActive="active" class="nav-button">Home</button>
+      </li>
+      <li>
+        <ng-container *ngIf="currentUrl === '/interaction'">
+          <button id="gallery" routerLink="/gallery" routerLinkActive="active" class="nav-button">Galeria</button>
+        </ng-container>
+        <ng-container *ngIf="currentUrl === '/gallery'">
+          <button routerLink="/interaction" routerLinkActive="active" class="nav-gallery">Compartilhe</button>
+        </ng-container>
+      </li>
+    </ul>
+  </nav>
+  <app-profile-menu></app-profile-menu>
+</header>

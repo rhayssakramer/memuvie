@@ -1,0 +1,39 @@
+.dots-bg-root {
+  /* Fixed to viewport so dots are always in the background */
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  pointer-events: none; /* don't block clicks */
+  overflow: hidden;
+  z-index: -1; /* ensure it's behind everything */
+}
+
+.dots-bg-root .bg-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--dot-bg, #fff);
+  opacity: var(--dot-opacity, .35);
+  transform: translate3d(0,0,0);
+  will-change: transform, opacity;
+  animation: float var(--float-duration, 6s) ease-in-out var(--float-delay, 0s) infinite alternate,
+             pulse var(--pulse-duration, 6s) ease-in-out var(--pulse-delay, 0s) infinite;
+}
+
+@keyframes float {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  20% { transform: translate3d(16px, -16px, 0) scale(1.03); }
+  40% { transform: translate3d(-14px, 14px, 0) scale(0.99); }
+  60% { transform: translate3d(14px, -14px, 0) scale(1.04); }
+  80% { transform: translate3d(-10px, 10px, 0) scale(1.02); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes pulse {
+  0% { opacity: var(--op, .35); transform: scale(1); }
+  40% { opacity: calc(var(--op, .35) + 0.09); transform: scale(1.04); }
+  100% { opacity: var(--op, .35); transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots-bg-root .bg-dot { animation: none !important; transform: none !important; }
+}
