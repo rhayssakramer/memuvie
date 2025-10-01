@@ -337,8 +337,6 @@
     transform: scale(0.95);
 }
 
-
-
 .btn-secondary {
     width: 125px;
     height: 40px;
@@ -357,7 +355,6 @@
 .btn-secondary:hover {
     transform: translateY(-2px);
 }
-
 
 /* Estilos para o seletor de emoji */
 .emoji-selector {
@@ -476,6 +473,18 @@
 /* Sem tooltip para reações */
 .reaction-tooltip {
     position: relative;
+}
+
+/* Só o botão dentro do reaction-tooltip */
+.reaction-tooltip .btn-icon.reaction-btn.share-btn-modal {
+  background-color: rgba(58, 123, 255, 0.1) !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover do botão de reação */
+.reaction-tooltip .btn-icon.reaction-btn.share-btn-modal:hover {
+  background-color: rgba(58, 123, 255, 0.15) !important;
 }
 
 /* Adaptações para dispositivos móveis */
