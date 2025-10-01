@@ -244,7 +244,7 @@
     align-items: center;
     justify-content: center;
     padding: 8px;
-    border-radius: 50%;
+    border-radius: 100%;
     color: #e91e63;
     transition: all 0.2s ease;
     background-color: #fde8ed;
@@ -290,21 +290,45 @@
 
 /* Estilo para o botão de compartilhar */
 .modal-actions .btn-icon.share-btn-modal {
-    background-color: rgba(var(--accent-rgb), 0.1);
+    width: 45px !important;      /* força largura */
+    height: 45px !important;     /* força altura */
+    border-radius: 50% !important; /* círculo perfeito */
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;       /* remove espaçamento interno */
+    min-width: unset !important; /* evita largura mínima herdada */
+    min-height: unset !important;
+    background-color: #fde8ed;
+    box-sizing: border-box;      /* garante cálculo certo */
 }
 
 .modal-actions .btn-icon.share-btn-modal:hover {
-    background-color: #fde8ed;
+    background-color: #ffe0e7;
     transform: scale(1.1);
 }
 
 /* Estilo para o botão de emoji quando não há reação */
 .modal-actions .emoji-btn-icon.share-btn-modal {
-    border-radius: 100px;
-    background-color: rgba(58, 123, 255, 0.08);
+    width: 45px !important;      /* força largura */
+    height: 45px !important;     /* força altura */
+    border-radius: 50% !important; /* círculo perfeito */
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;       /* remove espaçamento interno */
+    min-width: unset !important; /* evita largura mínima herdada */
+    min-height: unset !important;
+    background-color: rgba(58, 123, 255, 0.08); /* fundo */
+    box-sizing: border-box;      /* garante cálculo certo */
 }
 
 .modal-actions .emoji-btn-icon.share-btn-modal:hover {
+    width: 45px !important;          /* mesmo valor da altura */
+    aspect-ratio: 1 / 1;      /* quadrado */
+    border-radius: 50% !important;
     background-color: rgba(58, 123, 255, 0.15);
     transform: scale(1.1);
 }
@@ -313,16 +337,7 @@
     transform: scale(0.95);
 }
 
-/* Versão maior para o modal */
-.share-btn-modal {
-    padding: 12px;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
 
 .btn-secondary {
     width: 125px;
