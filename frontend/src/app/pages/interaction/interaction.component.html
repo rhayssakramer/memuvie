@@ -25,7 +25,7 @@
       <h2>Ou deixe uma mensagem especial</h2>
 
       <!-- Upload dashed área ou preview -->
-        <div class="upload-dashed" (click)="openPhotoCapture()" *ngIf="!photoPreviewUrl && !isReadingPhoto; else photoPreview">
+        <div class="upload-dashed" (click)="openGalleryPhotoCapture()" *ngIf="!photoPreviewUrl && !isReadingPhoto; else photoPreview">
           <div class="upload-icon">📷</div>
           <div class="upload-text">
             <strong>Adicionar foto</strong>
@@ -45,7 +45,7 @@
             <ng-template #showPreview>
               <div class="preview-inner">
                 <div class="upload-preview-container">
-                  <div class="upload-preview" (click)="openPhotoCapture()">
+                  <div class="upload-preview" (click)="openGalleryPhotoCapture()">
                     <img [src]="photoPreviewUrl!" alt="Pré-visualização da imagem" />
                   </div>
                   <button class="cancel-upload" (click)="cancelUpload()">✕</button>
@@ -84,6 +84,12 @@
   </main>
 
   <!-- Entradas ocultas para captura de câmera/arquivo -->
+  <!-- Input para upload direto de vídeo para o Cloudinary (botão de depoimento) -->
   <input type="file" id="videoInput" accept="video/*" capture style="display:none" (change)="onVideoSelected($event)">
+  
+  <!-- Input para upload direto de fotos para o Cloudinary (botão de fotos da festa) -->
   <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
+  
+  <!-- Input para fotos que serão exibidas na galeria (mensagem especial) -->
+  <input type="file" id="galleryPhotoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
 </div>

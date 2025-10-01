@@ -122,8 +122,10 @@ export class InteractionComponent implements OnInit {
     setTimeout(() => {
       const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
       const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
+      const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
       if (photoInput) photoInput.value = '';
       if (videoInput) videoInput.value = '';
+      if (galleryPhotoInput) galleryPhotoInput.value = '';
     }, 0);
 
     // Garantir que a rolagem do body esteja habilitada ao entrar na página.
@@ -151,8 +153,44 @@ export class InteractionComponent implements OnInit {
   onPhotoSelected(event: Event) {
     console.log('Foto selecionada');
     const input = event.target as HTMLInputElement;
+    // Verifica se foi chamado a partir do botão "Envie Fotos/Vídeos da Festa"
+    // Identifica o botão pelo ID do input, verificando se é photoInput ou algum outro ID específico
+    const isDirectUpload = (input.id === 'photoInput');
+    
     if (input.files && input.files[0]) {
       this.selectedPhoto = input.files[0];
+      
+      if (isDirectUpload) {
+        // Se for upload direto para o Cloudinary sem exibir na galeria
+        this.isUploading = true;
+        console.log('Enviando foto diretamente para o Cloudinary...');
+        
+        this.fileUploadService.uploadImage(this.selectedPhoto).subscribe(
+          (url) => {
+            console.log('Foto enviada com sucesso para o Cloudinary:', url);
+            this.isUploading = false;
+            // Limpar após o upload bem-sucedido
+            this.selectedPhoto = null;
+            
+            // Mostrar mensagem de sucesso temporária
+            alert('Foto enviada com sucesso!');
+            
+            // Limpar o input
+            if (input) {
+              input.value = '';
+            }
+          },
+          (error) => {
+            console.error('Erro no upload da foto:', error);
+            this.isUploading = false;
+            alert('Erro ao enviar a foto. Tente novamente.');
+          }
+        );
+        
+        return; // Sai do método após iniciar o upload direto
+      }
+      
+      // Comportamento normal para fotos que serão mostradas na galeria
       const reader = new FileReader();
       this.isReadingPhoto = true;
 
@@ -191,8 +229,44 @@ export class InteractionComponent implements OnInit {
 
   onVideoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+    // Verifica se foi chamado a partir do botão "Deixe seu depoimento em vídeo"
+    // Identifica pelo ID do input
+    const isDirectUpload = (input.id === 'videoInput');
+    
     if (input.files && input.files[0]) {
       this.selectedVideo = input.files[0];
+      
+      if (isDirectUpload) {
+        // Se for upload direto para o Cloudinary sem exibir na galeria
+        this.isUploading = true;
+        console.log('Enviando vídeo diretamente para o Cloudinary...');
+        
+        this.fileUploadService.uploadVideo(this.selectedVideo).subscribe(
+          (url) => {
+            console.log('Vídeo enviado com sucesso para o Cloudinary:', url);
+            this.isUploading = false;
+            // Limpar após o upload bem-sucedido
+            this.selectedVideo = null;
+            
+            // Mostrar mensagem de sucesso temporária
+            alert('Depoimento em vídeo enviado com sucesso!');
+            
+            // Limpar o input
+            if (input) {
+              input.value = '';
+            }
+          },
+          (error) => {
+            console.error('Erro no upload do vídeo:', error);
+            this.isUploading = false;
+            alert('Erro ao enviar o vídeo. Tente novamente.');
+          }
+        );
+        
+        return; // Sai do método após iniciar o upload direto
+      }
+      
+      // Comportamento normal para vídeos que serão mostrados na galeria
       const url = URL.createObjectURL(this.selectedVideo);
       this.videoPreviewUrl = url;
 
@@ -212,6 +286,10 @@ export class InteractionComponent implements OnInit {
 
   openPhotoCapture() {
     (document.getElementById('photoInput') as HTMLInputElement)?.click();
+  }
+  
+  openGalleryPhotoCapture() {
+    (document.getElementById('galleryPhotoInput') as HTMLInputElement)?.click();
   }
 
   async submitMessage() {
@@ -431,6 +509,8 @@ export class InteractionComponent implements OnInit {
     if (photoInput) photoInput.value = '';
     const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
     if (videoInput) videoInput.value = '';
+    const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
+    if (galleryPhotoInput) galleryPhotoInput.value = '';
   }
 
   get remainingCharacters() {
