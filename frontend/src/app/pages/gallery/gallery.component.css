@@ -209,13 +209,14 @@
 }
 
 .delete-confirm-modal .modal-actions button {
-    min-width: 120px;
+    width: 80px;
+    height: 50px;
     margin: 0;
 }
 
 .modal-btn {
-    width: auto !important;
-    height: auto !important;
+    width: 80px;
+    height: 50px;
     margin-top: 0 !important;
     display: inline-flex;
     align-items: center;
@@ -228,7 +229,6 @@
     align-items: center;
     gap: 1.5rem;
     margin-top: 1.5rem;
-    width: 100%;
 }
 
 .modal-actions button {
@@ -247,7 +247,7 @@
     border-radius: 50%;
     color: #e91e63;
     transition: all 0.2s ease;
-    background-color: rgba(var(--accent-rgb), 0.1);
+    background-color: #fde8ed;
 }
 
 .btn-icon.emoji-btn-icon {
@@ -260,8 +260,7 @@
 }
 
 .btn-icon:hover {
-    background-color: #fde8ed;
-    transform: scale(1.05);
+    background-color: #ffe0e7;
 }
 
 .btn-icon.emoji-btn-icon:hover {
@@ -301,6 +300,7 @@
 
 /* Estilo para o botão de emoji quando não há reação */
 .modal-actions .emoji-btn-icon.share-btn-modal {
+    border-radius: 100px;
     background-color: rgba(58, 123, 255, 0.08);
 }
 
@@ -325,7 +325,7 @@
 }
 
 .btn-secondary {
-  width: 125px;
+    width: 125px;
     height: 40px;
     border: 0;
     border-radius: 999px;
@@ -343,23 +343,6 @@
     transform: translateY(-2px);
 }
 
-.btn-primary {
-    width: 125px;
-    height: 40px;
-    border: 0;
-    border-radius: 999px;
-    padding: .5rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform .2s ease, box-shadow .2s ease;
-    margin-top: -20px;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-}
 
 /* Estilos para o seletor de emoji */
 .emoji-selector {
