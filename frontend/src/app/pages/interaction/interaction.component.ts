@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
 import { FileUploadService } from '../../services/file-upload.service';
+import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
 
 @Component({
   selector: 'app-interaction',
@@ -100,7 +101,11 @@ export class InteractionComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private fileUploadService: FileUploadService) {}
+  constructor(
+    private router: Router, 
+    private fileUploadService: FileUploadService,
+    private galeriaService: GaleriaService
+  ) {}
 
   ngOnInit() {
     // Limpar todo o estado quando o componente é inicializado
@@ -401,23 +406,11 @@ export class InteractionComponent implements OnInit {
         }
       }
 
-      // Salvar apenas as URLs no localStorage (muito mais eficiente)
+      // Salvar o post no backend e no localStorage como fallback
       const savePost = () => {
         try {
-          // Limpar posts antigos se necessário
-          this.cleanupOldPosts();
-
-          // Salva o post apenas com URLs (não os arquivos completos)
-          const raw = localStorage.getItem('posts');
-          const posts = raw ? JSON.parse(raw) : [];
-
-          // Log das URLs antes de salvar
-          console.log('Salvando post com URLs:', {
-            photo: photoUrl,
-            video: videoUrl
-          });
-
-          posts.unshift({
+          // Preparar o objeto para salvar
+          const postData = {
             id: Date.now(),
             userName: userName,
             userPhoto: userPhoto,
@@ -425,8 +418,50 @@ export class InteractionComponent implements OnInit {
             video: videoUrl,  // URL da Cloudinary, não o arquivo completo
             message: this.message || '',
             date: new Date().toISOString()
+          };
+          
+          // Log das URLs antes de salvar
+          console.log('Salvando post com URLs:', {
+            photo: photoUrl,
+            video: videoUrl
           });
-          localStorage.setItem('posts', JSON.stringify(posts));
+
+          // Salvar no localStorage como fallback
+          try {
+            // Limpar posts antigos se necessário
+            this.cleanupOldPosts();
+            
+            const raw = localStorage.getItem('posts');
+            const posts = raw ? JSON.parse(raw) : [];
+            posts.unshift(postData);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            console.log('Post salvo no localStorage como fallback');
+          } catch (e) {
+            console.error('Erro ao salvar no localStorage:', e);
+          }
+          
+          // Salvar no backend (apenas se for mensagem com foto para a galeria)
+          // Não enviar para o backend se for upload direto de foto ou vídeo (botões principais)
+          if (this.isGalleryContent()) {
+            // Criar objeto no formato esperado pelo backend
+            const backendPost: GaleriaPost = {
+              mensagem: this.message || '',
+              fotoUrl: photoUrl || undefined,
+              videoUrl: videoUrl || undefined
+              // O backend irá associar ao usuário logado e ao evento atual
+            };
+            
+            this.galeriaService.createPost(backendPost).subscribe({
+              next: (response) => {
+                console.log('Post salvo com sucesso no backend:', response);
+              },
+              error: (error) => {
+                console.error('Erro ao salvar post no backend:', error);
+                // Já salvamos no localStorage como fallback, então não precisamos
+                // fazer mais nada aqui
+              }
+            });
+          }
 
           // Limpar o estado
           this.message = '';
@@ -442,7 +477,7 @@ export class InteractionComponent implements OnInit {
           this.videoPreviewUrl = null;
 
           // Limpar inputs de file
-          ['photoInput', 'videoInput'].forEach(inputId => {
+          ['photoInput', 'videoInput', 'galleryPhotoInput'].forEach(inputId => {
             const input = document.getElementById(inputId) as HTMLInputElement | null;
             if (input) {
               input.value = '';
@@ -515,6 +550,22 @@ export class InteractionComponent implements OnInit {
 
   get remainingCharacters() {
     return this.maxLength - this.message.length;
+  }
+  
+  /**
+   * Verifica se o conteúdo atual deve ir para a galeria
+   * Os botões principais (foto/vídeo da festa e depoimento) não vão para a galeria
+   * Apenas o conteúdo de "Deixe uma mensagem especial" vai para a galeria
+   */
+  isGalleryContent(): boolean {
+    // Se for uma mensagem com foto da área "Deixe uma mensagem especial"
+    // O identificador é o uso do input galleryPhotoInput
+    const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
+    const hasGalleryPhoto = this.photoPreviewUrl && galleryPhotoInput?.files && galleryPhotoInput.files.length > 0;
+    const hasMessage = this.message && this.message.trim().length > 0;
+    
+    // Se tem mensagem ou foto da galeria, é conteúdo para a galeria
+    return !!hasGalleryPhoto || !!hasMessage;
   }
 
 }

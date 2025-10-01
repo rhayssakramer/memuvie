@@ -6,6 +6,7 @@ import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.com
 import { HeaderComponent } from '../../shared/header/header.component'; // Manter importação do componente de cabeçalho
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
+import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
 
 interface GalleryItem {
   id: number;
@@ -27,8 +28,14 @@ interface GalleryItem {
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;
   galleryItems: GalleryItem[] = [];
+  isLoading: boolean = false;
+  error: string | null = null;
 
-  constructor(private router: Router, private location: Location) {}
+  constructor(
+    private router: Router, 
+    private location: Location,
+    private galeriaService: GaleriaService
+  ) {}
 
   ngOnInit() {
     // Importar a função syncUserData
@@ -37,13 +44,70 @@ export class GalleryComponent implements OnInit {
       auth.syncUserData();
     });
 
+    this.loadGalleryPosts();
+  }
+
+  /**
+   * Carrega posts da galeria a partir do backend
+   */
+  loadGalleryPosts() {
+    this.isLoading = true;
+    this.error = null;
+
+    this.galeriaService.getPosts().subscribe({
+      next: (posts) => {
+        console.log('Posts carregados do backend:', posts);
+        // Converter os posts do backend para o formato de exibição da galeria
+        this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar posts da galeria:', err);
+        this.error = 'Não foi possível carregar as publicações. Tente novamente mais tarde.';
+        this.isLoading = false;
+        
+        // Fallback para o localStorage se o backend não estiver disponível
+        this.loadFromLocalStorage();
+      }
+    });
+  }
+
+  /**
+   * Carrega posts do localStorage como fallback caso o backend falhe
+   */
+  private loadFromLocalStorage() {
+    console.log('Tentando carregar posts do localStorage como fallback...');
     const raw = localStorage.getItem('posts');
     if (raw) {
       try {
         const items = JSON.parse(raw) as GalleryItem[];
-        this.galleryItems = items;
-      } catch {}
+        this.galleryItems = items.filter(item => {
+          // Filtra posts inválidos ou corrompidos
+          return !(item.photo === "[object Object]" || 
+                 (typeof item.photo === 'object' && item.photo !== null) ||
+                 item.video === "[object Object]" ||
+                 (typeof item.video === 'object' && item.video !== null));
+        });
+        console.log('Posts carregados do localStorage:', this.galleryItems.length);
+      } catch (e) {
+        console.error('Erro ao carregar do localStorage:', e);
+      }
     }
+  }
+
+  /**
+   * Converte posts do backend para o formato usado na galeria
+   */
+  private mapBackendPostsToGalleryItems(posts: GaleriaPost[]): GalleryItem[] {
+    return posts.map(post => ({
+      id: post.id || Date.now(),
+      userName: post.usuario?.nome || 'Usuário',
+      userPhoto: post.usuario?.fotoPerfil || 'assets/avatar-1.jpg',
+      photo: post.fotoUrl || null,
+      video: post.videoUrl || null,
+      message: post.mensagem || '',
+      date: post.dataCriacao || new Date().toISOString()
+    }));
   }
 
   openModal(item: GalleryItem) {
@@ -135,10 +199,36 @@ export class GalleryComponent implements OnInit {
   }
 
   removeItem(item: GalleryItem) {
+    // Primeiro, remove do array local para feedback imediato ao usuário
     const index = this.galleryItems.findIndex(i => i.id === item.id);
     if (index > -1) {
       this.galleryItems.splice(index, 1);
-      localStorage.setItem('posts', JSON.stringify(this.galleryItems));
+      
+      // Também remove do localStorage (como fallback se estiver usando)
+      try {
+        const raw = localStorage.getItem('posts');
+        if (raw) {
+          const localItems = JSON.parse(raw) as GalleryItem[];
+          const newLocalItems = localItems.filter(i => i.id !== item.id);
+          localStorage.setItem('posts', JSON.stringify(newLocalItems));
+        }
+      } catch (e) {
+        console.error('Erro ao atualizar localStorage:', e);
+      }
+      
+      // Tenta remover do backend
+      if (typeof item.id === 'number') {
+        this.galeriaService.deletePost(item.id).subscribe({
+          next: () => {
+            console.log(`Post ${item.id} removido com sucesso do backend`);
+          },
+          error: (err) => {
+            console.error(`Erro ao remover post ${item.id} do backend:`, err);
+            // Se não conseguir remover do backend, poderia recarregar a lista
+            // para garantir consistência, mas isso pode ser frustrante para o usuário
+          }
+        });
+      }
     }
   }
 
