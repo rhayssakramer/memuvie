@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -27,12 +27,16 @@ interface GalleryItem {
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderComponent, DotsBackgroundComponent] // Remove ProfileMenuComponent das importações
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, OnDestroy {
   selectedItem: GalleryItem | null = null;
   itemToDelete: GalleryItem | null = null;
   galleryItems: GalleryItem[] = [];
   isLoading: boolean = false;
   error: string | null = null;
+  showEmojiSelector: boolean = false;
+  showModalEmojiSelector: boolean = false;
+  currentEmojiItem: GalleryItem | null = null;
+  userReactions: Map<number, string> = new Map(); // Armazenar reações por ID do item
 
   constructor(
     private router: Router, 
@@ -41,6 +45,8 @@ export class GalleryComponent implements OnInit {
     private toastService: ToastService
   ) {}
 
+  private documentClickListener: any;
+
   ngOnInit() {
     // Importar a função syncUserData
     import('../../utils/auth').then(auth => {
@@ -48,7 +54,23 @@ export class GalleryComponent implements OnInit {
       auth.syncUserData();
     });
 
+    // Fechar seletor de emoji quando clicar fora
+    this.documentClickListener = () => {
+      this.showEmojiSelector = false;
+      this.currentEmojiItem = null;
+      // Não fechamos o modal aqui para não afetar a experiência do usuário
+    };
+    
+    document.addEventListener('click', this.documentClickListener);
+
     this.loadGalleryPosts();
+  }
+  
+  ngOnDestroy() {
+    // Remover o event listener quando o componente for destruído
+    if (this.documentClickListener) {
+      document.removeEventListener('click', this.documentClickListener);
+    }
   }
 
   /**
@@ -123,14 +145,121 @@ export class GalleryComponent implements OnInit {
 
   openModal(item: GalleryItem) {
     this.selectedItem = item;
+    this.showEmojiSelector = false;
+    this.showModalEmojiSelector = false;
   }
 
   closeModal() {
     this.selectedItem = null;
+    this.showModalEmojiSelector = false;
+  }
+  
+  toggleEmojiSelector(item: GalleryItem) {
+    // Se o seletor já está aberto para este item, feche-o
+    if (this.showEmojiSelector && this.currentEmojiItem?.id === item.id) {
+      this.showEmojiSelector = false;
+      this.currentEmojiItem = null;
+    } else {
+      // Caso contrário, abra o seletor para este item
+      this.showEmojiSelector = true;
+      this.currentEmojiItem = item;
+      // Feche o seletor modal se estiver aberto
+      this.showModalEmojiSelector = false;
+    }
+  }
+  
+  toggleModalEmojiSelector() {
+    this.showModalEmojiSelector = !this.showModalEmojiSelector;
+    // Feche o seletor do card se estiver aberto
+    this.showEmojiSelector = false;
+    this.currentEmojiItem = null;
+  }
+  
+  selectEmoji(item: GalleryItem, emojiType: string) {
+    if (!item) return;
+    
+    // Armazenar a reação do usuário
+    this.userReactions.set(item.id, emojiType);
+    
+    // Esta função seria conectada ao backend em uma implementação real
+    // Por enquanto, apenas simule a ação e mostre feedback ao usuário
+    console.log(`Emoji ${emojiType} selecionado para o post de ${item.userName}`);
+    
+    // Feedback visual para o usuário
+    this.toastService.success(`Você reagiu com ${emojiType} ao post de ${item.userName}`);
+    
+    // Feche os seletores após a escolha
+    this.showEmojiSelector = false;
+    this.showModalEmojiSelector = false;
+    this.currentEmojiItem = null;
+  }
+  
+  // Método para verificar se um item tem reação
+  hasReaction(itemId: number): boolean {
+    return this.userReactions.has(itemId);
+  }
+  
+  // Método para obter a reação de um item
+  getReaction(itemId: number): string | null {
+    return this.userReactions.get(itemId) || null;
+  }
+  
+  // Método para obter o contador de reações para o tooltip
+  getReactionUsers(itemId: number): string {
+    const reactionType = this.getReaction(itemId);
+    if (!reactionType) return '';
+    
+    // Em uma aplicação real, buscaríamos o número de reações do backend
+    // Para simulação, definiremos um contador para cada tipo
+    const reactionCounts = {
+      'curtir': 3,
+      'gostei': 4,
+      'festejar': 3
+    };
+    
+    const count = reactionCounts[reactionType as keyof typeof reactionCounts] || 1;
+    
+    // Retorna apenas o número de reações
+    return count.toString();
+  }
+  
+  // Método para converter o tipo de reação em emoji
+  getReactionEmoji(reactionType: string): string {
+    const emojis = {
+      'curtir': '👍',
+      'gostei': '❤️',
+      'festejar': '🥳'
+    };
+    return emojis[reactionType as keyof typeof emojis] || '👍';
   }
 
   goToInteraction() {
     this.router.navigate(['/interaction']);
+  }
+
+  // Método para lidar com toque longo em reações em dispositivos móveis
+  handleTouchStart(event: TouchEvent, itemId: number): void {
+    // Prevenir comportamento padrão de toque longo
+    event.preventDefault();
+    
+    // Adicionar classe para exibir o tooltip
+    const element = event.currentTarget as HTMLElement;
+    if (element) {
+      element.classList.add('touch-active');
+      
+      // Definir um temporizador para remover a classe após 3 segundos
+      setTimeout(() => {
+        element.classList.remove('touch-active');
+      }, 3000);
+    }
+  }
+  
+  // Método para cancelar toque longo
+  handleTouchEnd(event: TouchEvent): void {
+    const element = event.currentTarget as HTMLElement;
+    if (element) {
+      element.classList.remove('touch-active');
+    }
   }
 
   goBack() {

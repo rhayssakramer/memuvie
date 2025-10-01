@@ -15,7 +15,6 @@
     margin: 0 auto;
     margin-top: 20px;
     position: relative; /* ensure grid content appears above the background */
-    z-index: 2;
 }
 
 .gallery-card {
@@ -126,7 +125,7 @@
 
 .modal-content {
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 15px;
     width: 90%;
     max-width: 800px;
     max-height: 90vh;
@@ -200,15 +199,40 @@
     color: var(--text-secondary);
 }
 
+/* Estilo específico para os botões no modal de confirmação de exclusão */
+.delete-confirm-modal .modal-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.delete-confirm-modal .modal-actions button {
+    min-width: 120px;
+    margin: 0;
+}
+
+.modal-btn {
+    width: auto !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .modal-actions {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+    gap: 1.5rem;
     margin-top: 1.5rem;
+    width: 100%;
 }
 
 .modal-actions button {
-    min-width: 100px;
+    min-width: 120px;
 }
 
 /* Botão de ícone */
@@ -221,14 +245,68 @@
     justify-content: center;
     padding: 8px;
     border-radius: 50%;
-    color: #e91e63;;
+    color: #e91e63;
     transition: all 0.2s ease;
     background-color: rgba(var(--accent-rgb), 0.1);
 }
 
+.btn-icon.emoji-btn-icon {
+    color: #3a7bff;
+    background-color: rgba(58, 123, 255, 0.1);
+}
+
+.btn-icon.reaction-btn {
+    background-color: rgba(58, 123, 255, 0.08);
+}
+
 .btn-icon:hover {
-    background-color: #fde8ed; ;
+    background-color: #fde8ed;
     transform: scale(1.05);
+}
+
+.btn-icon.emoji-btn-icon:hover {
+    background-color: rgba(58, 123, 255, 0.15);
+}
+
+.btn-icon.reaction-btn:hover {
+    background-color: rgba(58, 123, 255, 0.18);
+}
+
+/* Estilos especiais para botões de reação no modal */
+.modal-actions .reaction-btn.share-btn-modal {
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.modal-actions .reaction-btn.share-btn-modal:hover {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.2s ease;
+}
+
+/* Estilo para o botão de compartilhar */
+.modal-actions .btn-icon.share-btn-modal {
+    background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.modal-actions .btn-icon.share-btn-modal:hover {
+    background-color: #fde8ed;
+    transform: scale(1.1);
+}
+
+/* Estilo para o botão de emoji quando não há reação */
+.modal-actions .emoji-btn-icon.share-btn-modal {
+    background-color: rgba(58, 123, 255, 0.08);
+}
+
+.modal-actions .emoji-btn-icon.share-btn-modal:hover {
+    background-color: rgba(58, 123, 255, 0.15);
+    transform: scale(1.1);
 }
 
 .btn-icon:active {
@@ -238,9 +316,17 @@
 /* Versão maior para o modal */
 .share-btn-modal {
     padding: 12px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-secondary {
+  width: 125px;
+    height: 40px;
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;
@@ -250,6 +336,7 @@
     box-shadow: 0 14px 30px rgba(90,141,255,0.06);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
+    margin-top: -20px;
 }
 
 .btn-secondary:hover {
@@ -257,20 +344,143 @@
 }
 
 .btn-primary {
-    min-width: 140px; /* allow enough space for two words without wrapping */
-    width: auto;
+    width: 125px;
     height: 40px;
     border: 0;
     border-radius: 999px;
-    padding: .45rem 1.2rem;
+    padding: .5rem 1.6rem;
     background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
-    white-space: nowrap; /* prevent line breaks inside the button label */
+    margin-top: -20px;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
+}
+
+/* Estilos para o seletor de emoji */
+.emoji-selector {
+    position: absolute;
+    bottom: 60px;
+    right: 10px;
+    background: white;
+    border-radius: 40px;
+    padding: 12px;
+    z-index: 1002;
+    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 10px 25px rgba(128, 128, 128, 0.2);
+    width: 180px;
+}
+
+.modal-emoji-selector {
+    position: absolute;
+    bottom: 80px;
+    left: 80%;
+    transform: translateX(-50%);
+    border-radius: 40px;
+    box-shadow: 0 10px 25px rgba(128, 128, 128, 0.2);
+    padding: 8x;
+    width: 200px;
+}
+
+@media (max-width: 480px) {
+    .emoji-selector {
+        width: 210px;
+        right: 5px;
+    }
+    
+    .modal-emoji-selector {
+        bottom: 70px;
+        width: 90%;
+        max-width: 300px;
+    }
+    
+    .modal-actions .btn-icon.share-btn-modal,
+    .modal-actions .reaction-btn.share-btn-modal {
+        width: 45px;
+        height: 45px;
+        padding: 10px;
+    }
+    
+    .emoji-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.emoji-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.emoji-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.2s ease;
+}
+
+.emoji-btn:hover {
+    transform: scale(1.15);
+}
+
+.emoji-btn svg {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.modal-emoji-selector .emoji-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.modal-emoji-selector .emoji-btn:hover {
+    transform: scale(1.15);
+}
+
+.emoji-btn.selected {
+    background-color: rgba(var(--accent-rgb), 0.2);
+}
+
+/* Card e Modal action bars */
+.card-actions, .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0.8rem;
+    position: relative;
+}
+
+/* Sem tooltip para reações */
+.reaction-tooltip {
+    position: relative;
+}
+
+/* Adaptações para dispositivos móveis */
+@media (max-width: 768px) {
+    /* Removido tooltip de reações */
 }

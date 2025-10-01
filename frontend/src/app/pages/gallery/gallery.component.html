@@ -20,7 +20,54 @@
           </div>
         </div>
         <p class="card-message">{{ item.message }}</p>
-        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+        <div class="card-actions">
+          <!-- Botão de emoji quando não há reação -->
+          <button *ngIf="!hasReaction(item.id)" class="btn-icon emoji-btn-icon" (click)="$event.stopPropagation(); toggleEmojiSelector(item)" title="Reagir com emoji">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="#3a7bff" stroke-width="2"></circle>
+              <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="#3a7bff" stroke-width="2" stroke-linecap="round"></path>
+              <circle cx="8.5" cy="9.5" r="1.5" fill="#3a7bff"></circle>
+              <circle cx="15.5" cy="9.5" r="1.5" fill="#3a7bff"></circle>
+            </svg>
+          </button>
+          
+          <!-- Mostrar o emoji curtir quando selecionado -->
+          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'curtir'" class="reaction-tooltip" 
+               (touchstart)="handleTouchStart($event, item.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+              <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Mostrar o emoji coração quando selecionado -->
+          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'gostei'" class="reaction-tooltip"
+               (touchstart)="handleTouchStart($event, item.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+              <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Mostrar o emoji festa quando selecionado -->
+          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'festejar'" class="reaction-tooltip"
+               (touchstart)="handleTouchStart($event, item.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+              <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
+                <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
+                <circle cx="8.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <circle cx="15.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
+                <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
+              </svg>
+            </button>
+          </div>
           <button class="btn-icon" (click)="$event.stopPropagation(); share(item)" title="Compartilhar">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="18" cy="5" r="3"></circle>
@@ -30,6 +77,37 @@
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
             </svg>
           </button>
+        </div>
+        
+        <!-- Seletor de Emoji Card -->
+        <div class="emoji-selector" *ngIf="showEmojiSelector && currentEmojiItem?.id === item.id" (click)="$event.stopPropagation()">
+          <div class="emoji-grid">
+            <!-- Curtir (Like) -->
+            <button class="emoji-btn" (click)="$event.stopPropagation(); selectEmoji(item, 'curtir')" title="Curtir">
+              <svg viewBox="0 0 24 24" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#3a7bff"/>
+              </svg>
+            </button>
+            
+            <!-- Coração (Gostei) -->
+            <button class="emoji-btn" (click)="$event.stopPropagation(); selectEmoji(item, 'gostei')" title="Gostei">
+              <svg viewBox="0 0 24 24" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"/>
+              </svg>
+            </button>
+            
+            <!-- Festa (Festejar) -->
+            <button class="emoji-btn" (click)="$event.stopPropagation(); selectEmoji(item, 'festejar')" title="Festejar">
+              <svg viewBox="0 0 24 24" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
+                <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
+                <circle cx="8.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <circle cx="15.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
+                <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -41,8 +119,8 @@
       <h3>Confirmar exclusão</h3>
       <p>Tem certeza que deseja excluir esta publicação?</p>
       <div class="modal-actions">
-        <button class="btn-secondary" (click)="cancelDelete()">Cancelar</button>
-        <button class="btn-gradient" (click)="confirmDelete()">Excluir</button>
+        <button class="btn-secondary modal-btn" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-gradient modal-btn" (click)="confirmDelete()">Excluir</button>
       </div>
     </div>
   </div>
@@ -66,7 +144,54 @@
           </div>
         </div>
         <p class="modal-message">{{ selectedItem.message }}</p>
-        <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
+        <div class="modal-actions">
+          <!-- Botão de emoji quando não há reação -->
+          <button *ngIf="!selectedItem || !hasReaction(selectedItem.id)" class="btn-icon emoji-btn-icon share-btn-modal" (click)="toggleModalEmojiSelector()" title="Reagir com emoji">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="#3a7bff" stroke-width="2"></circle>
+              <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="#3a7bff" stroke-width="2" stroke-linecap="round"></path>
+              <circle cx="8.5" cy="9.5" r="1.5" fill="#3a7bff"></circle>
+              <circle cx="15.5" cy="9.5" r="1.5" fill="#3a7bff"></circle>
+            </svg>
+          </button>
+          
+          <!-- Mostrar o emoji curtir quando selecionado -->
+          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'curtir'" class="reaction-tooltip"
+               (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Mostrar o emoji coração quando selecionado -->
+          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'gostei'" class="reaction-tooltip"
+               (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Mostrar o emoji festa quando selecionado -->
+          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'festejar'" class="reaction-tooltip"
+               (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
+               (touchend)="handleTouchEnd($event)">
+            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
+                <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
+                <circle cx="8.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <circle cx="15.5" cy="9.5" r="1.5" fill="#263238"></circle>
+                <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
+                <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
+              </svg>
+            </button>
+          </div>
           <button class="btn-icon share-btn-modal" (click)="share(selectedItem)" title="Compartilhar">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="18" cy="5" r="3"></circle>
@@ -76,6 +201,38 @@
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
             </svg>
           </button>
+        </div>
+        
+        <!-- Seletor de Emoji Modal -->
+        <div class="emoji-selector modal-emoji-selector" *ngIf="showModalEmojiSelector" (click)="$event.stopPropagation()">
+          <div class="emoji-grid">
+            <!-- Curtir (Like) -->
+            <button class="emoji-btn" (click)="selectEmoji(selectedItem, 'curtir')" title="Curtir">
+              <svg viewBox="0 0 24 24" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"/>
+              </svg>
+            </button>
+            
+            <!-- Coração (Gostei) -->
+            <button class="emoji-btn" (click)="selectEmoji(selectedItem, 'gostei')" title="Gostei">
+              <svg viewBox="0 0 24 24" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"/>
+              </svg>
+            </button>
+            
+            <!-- Festa (Festejar) -->
+            <button class="emoji-btn" (click)="selectEmoji(selectedItem, 'festejar')" title="Festejar">
+              <svg viewBox="0 0 24 24" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="#FFCA28"/>
+                <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="8.5" cy="9.5" r="1.5" fill="#263238"/>
+                <circle cx="15.5" cy="9.5" r="1.5" fill="#263238"/>
+                <!-- Chapéu de festa -->
+                <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
