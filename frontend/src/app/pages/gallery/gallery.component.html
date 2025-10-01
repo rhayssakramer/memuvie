@@ -3,7 +3,7 @@
   <app-header></app-header>
   <div class="gallery-grid">
     <div class="gallery-card" *ngFor="let item of galleryItems;" (click)="openModal(item)">
-      <button class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
+      <button *ngIf="isCurrentUserOwner(item)" class="cancel-upload" (click)="$event.stopPropagation(); removeItem(item)">✕</button>
 
       <ng-container *ngIf="item.video; else photoTpl">
         <video [src]="item.video" preload="metadata" controls class="card-image" style="background:#000"></video>
@@ -23,6 +23,18 @@
         <div style="display:flex; gap:.5rem; margin-top:.5rem; align-items:center">
           <button class="btn-gradient" style="padding:.4rem .7rem; font-size:.85rem" (click)="$event.stopPropagation(); share(item)">Compartilhar</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmação de exclusão -->
+  <div class="modal-backdrop" *ngIf="itemToDelete" (click)="cancelDelete()">
+    <div class="modal-content delete-confirm-modal" (click)="$event.stopPropagation()">
+      <h3>Confirmar exclusão</h3>
+      <p>Tem certeza que deseja excluir esta publicação?</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-gradient" (click)="confirmDelete()">Excluir</button>
       </div>
     </div>
   </div>

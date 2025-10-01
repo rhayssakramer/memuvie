@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
 import { HeaderComponent } from '../../shared/header/header.component'; // Manter importação do componente de cabeçalho
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
-import { logoutAll } from '../../utils/auth';
+import { logoutAll, getProfile } from '../../utils/auth';
 import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
 import { ToastService } from '../../services/toast.service';
 
@@ -17,6 +17,7 @@ interface GalleryItem {
   video?: string | null;
   message: string;
   date: Date | string;
+  userEmail?: string; // Email do usuário que criou o post
 }
 
 @Component({
@@ -115,7 +116,8 @@ export class GalleryComponent implements OnInit {
       photo: post.fotoUrl || null,
       video: post.videoUrl || null,
       message: post.mensagem || '',
-      date: post.dataCriacao || new Date().toISOString()
+      date: post.dataCriacao || new Date().toISOString(),
+      userEmail: post.usuario?.email // Adicionar o email do usuário para verificar propriedade
     }));
   }
 
@@ -208,8 +210,40 @@ export class GalleryComponent implements OnInit {
   }
 
   removeItem(item: GalleryItem) {
-    // Em vez de excluir diretamente, mostra o modal de confirmação
-    this.itemToDelete = item;
+    // Verificar se o usuário atual é o proprietário do post
+    const currentUserEmail = this.getCurrentUserEmail();
+    
+    // Se o item pertence ao usuário atual ou é um post local (sem ID de usuário)
+    if (this.isCurrentUserOwner(item)) {
+      // Mostra o modal de confirmação
+      this.itemToDelete = item;
+    } else {
+      this.toastService.error('Você só pode excluir seus próprios posts');
+    }
+  }
+  
+  // Verifica se o usuário atual é o proprietário do post
+  isCurrentUserOwner(item: GalleryItem): boolean {
+    const profile = getProfile();
+    
+    // Se não tiver profile, não pode excluir nada
+    if (!profile) {
+      return false;
+    }
+    
+    // Verifica se o email do usuário atual corresponde ao email do post
+    // Ou se é um post local sem ID definido (backwards compatibility)
+    const isNameMatch = item.userName === profile.name;
+    const isLocalPost = typeof item.id !== 'number';
+    const isEmailMatch = !!item.userEmail && item.userEmail === profile.email;
+    
+    return Boolean(isNameMatch || isLocalPost || isEmailMatch);
+  }
+  
+  // Obtém o email do usuário atual
+  getCurrentUserEmail(): string | null {
+    const profile = getProfile();
+    return profile ? profile.email : null;
   }
   
   cancelDelete() {

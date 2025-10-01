@@ -91,7 +91,6 @@
     background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
   }
