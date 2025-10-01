@@ -7,6 +7,7 @@ import { DotsBackgroundComponent } from '../../shared/dots-background/dots-backg
 import { logoutAll } from '../../utils/auth';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-interaction',
@@ -104,7 +105,8 @@ export class InteractionComponent implements OnInit {
   constructor(
     private router: Router, 
     private fileUploadService: FileUploadService,
-    private galeriaService: GaleriaService
+    private galeriaService: GaleriaService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -178,7 +180,7 @@ export class InteractionComponent implements OnInit {
             this.selectedPhoto = null;
             
             // Mostrar mensagem de sucesso temporária
-            alert('Foto enviada com sucesso!');
+            this.toastService.success('Foto enviada com sucesso!');
             
             // Limpar o input
             if (input) {
@@ -188,7 +190,7 @@ export class InteractionComponent implements OnInit {
           (error) => {
             console.error('Erro no upload da foto:', error);
             this.isUploading = false;
-            alert('Erro ao enviar a foto. Tente novamente.');
+            this.toastService.error('Erro ao enviar a foto. Tente novamente.');
           }
         );
         
@@ -254,7 +256,7 @@ export class InteractionComponent implements OnInit {
             this.selectedVideo = null;
             
             // Mostrar mensagem de sucesso temporária
-            alert('Depoimento em vídeo enviado com sucesso!');
+            this.toastService.success('Depoimento em vídeo enviado com sucesso!');
             
             // Limpar o input
             if (input) {
@@ -264,7 +266,7 @@ export class InteractionComponent implements OnInit {
           (error) => {
             console.error('Erro no upload do vídeo:', error);
             this.isUploading = false;
-            alert('Erro ao enviar o vídeo. Tente novamente.');
+            this.toastService.error('Erro ao enviar o vídeo. Tente novamente.');
           }
         );
         
@@ -454,11 +456,12 @@ export class InteractionComponent implements OnInit {
             this.galeriaService.createPost(backendPost).subscribe({
               next: (response) => {
                 console.log('Post salvo com sucesso no backend:', response);
+                this.toastService.success('Sua mensagem foi publicada com sucesso!');
               },
               error: (error) => {
                 console.error('Erro ao salvar post no backend:', error);
-                // Já salvamos no localStorage como fallback, então não precisamos
-                // fazer mais nada aqui
+                // Já salvamos no localStorage como fallback, então mostramos uma mensagem informativa
+                this.toastService.warning('Sua mensagem foi salva localmente, mas houve um problema ao conectar com o servidor.');
               }
             });
           }

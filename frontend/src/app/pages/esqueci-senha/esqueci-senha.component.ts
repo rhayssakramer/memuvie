@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-esqueci-senha',
@@ -20,7 +21,7 @@ export class EsqueciSenhaComponent {
   enviado: boolean = false;
   loading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {}
 
   onSubmit() {
     // Limpa mensagens anteriores
@@ -29,6 +30,7 @@ export class EsqueciSenhaComponent {
     
     // Valida o email
     if (!this.email.trim()) {
+      this.toastService.error('Por favor, informe seu email');
       this.erro = 'Por favor, informe seu email';
       return;
     }
@@ -42,6 +44,7 @@ export class EsqueciSenhaComponent {
         this.loading = false;
         this.enviado = true;
         this.mensagem = response.mensagem || 'Email enviado com sucesso! Verifique sua caixa de entrada.';
+        this.toastService.success(this.mensagem);
       },
       error: (err) => {
         console.error('Erro ao solicitar redefinição de senha:', err);
@@ -51,6 +54,7 @@ export class EsqueciSenhaComponent {
         // quais emails estão cadastrados no sistema
         this.enviado = true;
         this.mensagem = 'Se o email estiver cadastrado em nosso sistema, você receberá um link para redefinir sua senha em instantes.';
+        this.toastService.info(this.mensagem);
         
         // Para debug only
         // this.error = err.message || 'Ocorreu um error ao processar sua solicitação.';

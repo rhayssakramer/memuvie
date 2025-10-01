@@ -6,6 +6,7 @@ import { EsqueciSenhaComponent } from '../esqueci-senha/esqueci-senha.component'
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { getProfile, logoutAll, saveProfile, UserProfile, saveSession } from '../../utils/auth';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,7 @@ export class LoginComponent {
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private toastService: ToastService) {}
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -45,7 +46,7 @@ export class LoginComponent {
   onSubmit() {
     this.error = '';
     if (!this.email.trim() || !this.password.trim()) {
-      this.error = 'Preencha e-mail e senha';
+      this.toastService.error('Preencha e-mail e senha');
       return;
     }
 
@@ -93,7 +94,7 @@ export class LoginComponent {
           saveSession(session.token, session.expiresAt);
           this.router.navigate(['/interaction']);
         } else {
-          this.error = 'Email ou senha inválidos. Crie seu perfil primeiro.';
+          this.toastService.error('E-mail ou senha inválidos.   Tente novamente.');
         }
       }
     });
@@ -280,7 +281,7 @@ export class LoginComponent {
         this.showCreateProfile = false;
 
         // Mostrar message de sucesso
-        this.error = 'Perfil criado com sucesso! Faça login para continuar.';
+        this.error = 'Perfil criado com sucesso!    Faça login para continuar.';
       },
       error: (err) => {
         console.error('Registration failed:', err);
@@ -316,9 +317,9 @@ export class LoginComponent {
           this.showCreateProfile = false;
 
           // Mostra message de sucesso (com aviso)
-          this.error = 'Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.';
+          this.toastService.warning('Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.');
         } catch (e) {
-          this.error = 'Erro ao criar perfil. Tente novamente.';
+          this.toastService.error('Erro ao criar perfil. Tente novamente.');
         }
       }
     });

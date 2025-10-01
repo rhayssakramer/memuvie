@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-redefinir-senha',
@@ -27,7 +28,8 @@ export class RedefinirSenhaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class RedefinirSenhaComponent implements OnInit {
 
       if (!this.token) {
         this.erro = 'Token de redefinição não encontrado';
+        this.toastService.error('Token de redefinição não encontrado');
         this.verificandoToken = false;
         return;
       }
@@ -56,8 +59,10 @@ export class RedefinirSenhaComponent implements OnInit {
       error: (error) => {
         if (error.status === 400) {
           this.erro = 'Este token de redefinição é inválido ou expirou';
+          this.toastService.error('Este token de redefinição é inválido ou expirou');
         } else {
           this.erro = 'Erro ao verificar o token. Tente novamente mais tarde.';
+          this.toastService.error('Erro ao verificar o token. Tente novamente mais tarde.');
         }
         this.tokenValido = false;
         this.verificandoToken = false;
@@ -70,16 +75,19 @@ export class RedefinirSenhaComponent implements OnInit {
 
     if (!this.novaSenha) {
       this.erro = 'Por favor, informe a nova senha';
+      this.toastService.error('Por favor, informe a nova senha');
       return;
     }
 
     if (this.novaSenha.length < 6) {
       this.erro = 'A senha deve ter pelo menos 6 caracteres';
+      this.toastService.error('A senha deve ter pelo menos 6 caracteres');
       return;
     }
 
     if (this.novaSenha !== this.confirmarSenha) {
       this.erro = 'As senhas não coincidem';
+      this.toastService.error('As senhas não coincidem');
       return;
     }
 
@@ -88,12 +96,15 @@ export class RedefinirSenhaComponent implements OnInit {
       next: () => {
         this.sucesso = true;
         this.loading = false;
+        this.toastService.success('Senha redefinida com sucesso');
       },
       error: (error) => {
         if (error.status === 400) {
           this.erro = 'Token inválido ou expirado';
+          this.toastService.error('Token inválido ou expirado');
         } else {
           this.erro = 'Erro ao redefinir senha. Tente novamente mais tarde.';
+          this.toastService.error('Erro ao redefinir senha. Tente novamente mais tarde.');
         }
         this.loading = false;
       }

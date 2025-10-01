@@ -32,8 +32,6 @@
               </button>
             </div>
 
-            <div class="error" *ngIf="error">{{ error }}</div>
-
             <button class="btn-pill" type="submit">Entrar</button>
           </form>
 
@@ -58,8 +56,6 @@
         </div>
 
         <form (ngSubmit)="createProfile()" class="modal-form">
-          <div class="modal-error" *ngIf="error">{{ error }}</div>
-
           <div class="form-group">
             <label for="newName">Seu Nome</label>
             <input id="newName" [(ngModel)]="newUserName" name="newUserName" required class="input" placeholder="Digite seu nome">

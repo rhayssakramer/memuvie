@@ -7,6 +7,7 @@ import { HeaderComponent } from '../../shared/header/header.component'; // Mante
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
 import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
+import { ToastService } from '../../services/toast.service';
 
 interface GalleryItem {
   id: number;
@@ -27,6 +28,7 @@ interface GalleryItem {
 })
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;
+  itemToDelete: GalleryItem | null = null;
   galleryItems: GalleryItem[] = [];
   isLoading: boolean = false;
   error: string | null = null;
@@ -34,7 +36,8 @@ export class GalleryComponent implements OnInit {
   constructor(
     private router: Router, 
     private location: Location,
-    private galeriaService: GaleriaService
+    private galeriaService: GaleriaService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -60,11 +63,17 @@ export class GalleryComponent implements OnInit {
         // Converter os posts do backend para o formato de exibição da galeria
         this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
         this.isLoading = false;
+        
+        if (posts.length === 0) {
+          this.toastService.info('A galeria está vazia. Seja o primeiro a compartilhar algo especial!');
+        }
       },
       error: (err) => {
         console.error('Erro ao carregar posts da galeria:', err);
         this.error = 'Não foi possível carregar as publicações. Tente novamente mais tarde.';
         this.isLoading = false;
+        
+        this.toastService.error('Não foi possível conectar ao servidor. Mostrando conteúdo local.');
         
         // Fallback para o localStorage se o backend não estiver disponível
         this.loadFromLocalStorage();
@@ -199,6 +208,21 @@ export class GalleryComponent implements OnInit {
   }
 
   removeItem(item: GalleryItem) {
+    // Em vez de excluir diretamente, mostra o modal de confirmação
+    this.itemToDelete = item;
+  }
+  
+  cancelDelete() {
+    this.itemToDelete = null;
+    this.toastService.info('Exclusão cancelada');
+  }
+  
+  confirmDelete() {
+    if (!this.itemToDelete) return;
+    
+    const item = this.itemToDelete;
+    this.itemToDelete = null; // Fecha o modal
+    
     // Primeiro, remove do array local para feedback imediato ao usuário
     const index = this.galleryItems.findIndex(i => i.id === item.id);
     if (index > -1) {
@@ -214,6 +238,7 @@ export class GalleryComponent implements OnInit {
         }
       } catch (e) {
         console.error('Erro ao atualizar localStorage:', e);
+        this.toastService.error('Erro ao atualizar o armazenamento local');
       }
       
       // Tenta remover do backend
@@ -221,13 +246,17 @@ export class GalleryComponent implements OnInit {
         this.galeriaService.deletePost(item.id).subscribe({
           next: () => {
             console.log(`Post ${item.id} removido com sucesso do backend`);
+            this.toastService.success('Post removido com sucesso');
           },
           error: (err) => {
             console.error(`Erro ao remover post ${item.id} do backend:`, err);
+            this.toastService.warning('O post foi removido da galeria, mas houve um problema ao remover do servidor');
             // Se não conseguir remover do backend, poderia recarregar a lista
             // para garantir consistência, mas isso pode ser frustrante para o usuário
           }
         });
+      } else {
+        this.toastService.success('Post removido com sucesso');
       }
     }
   }
