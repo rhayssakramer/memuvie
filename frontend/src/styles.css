@@ -37,6 +37,8 @@ button {
   --soft-blue: #f0f5ff;
   --surface: rgba(255,255,255,.72);
   --glass-blur: 8px;
+  --accent-color: #ff5fa3;
+  --accent-rgb: 255, 95, 163;
 }
 
 /* Layout helpers */

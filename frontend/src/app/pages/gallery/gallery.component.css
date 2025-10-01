@@ -211,6 +211,35 @@
     min-width: 100px;
 }
 
+/* Botão de ícone */
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    color: #e91e63;;
+    transition: all 0.2s ease;
+    background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.btn-icon:hover {
+    background-color: #fde8ed; ;
+    transform: scale(1.05);
+}
+
+.btn-icon:active {
+    transform: scale(0.95);
+}
+
+/* Versão maior para o modal */
+.share-btn-modal {
+    padding: 12px;
+}
+
 .btn-secondary {
     border: 0;
     border-radius: 999px;
