@@ -37,6 +37,7 @@
   font-size: 20px;
   margin-bottom: 10px;
   text-align: center;
+  margin-bottom: 10px ;
 }
 
 .form-description {
@@ -115,7 +116,7 @@ label {
 .form-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .btn {
@@ -134,7 +135,7 @@ label {
 }
 
 .btn-primary {
-  min-width: 125px;
+  width: 100px;
   height: 40px;
   border: 0;
   border-radius: 999px;
@@ -163,21 +164,17 @@ label {
   box-shadow: 0 14px 30px rgba(90,141,255,0.06);
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
-  margin-top: 10px;
 }
 
 .btn-secondary:hover {
   transform: translateY(-2px);
 }
 
-.error-message {
-  color: #e11d48;
-  font-weight: 600;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: rgba(231, 76, 60, 0.1);
+.error-description{
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .loading {

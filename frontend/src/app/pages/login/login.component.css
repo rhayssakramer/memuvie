@@ -190,6 +190,10 @@
     transform: translateY(1px);
 }
 
+.btn-pill:hover{
+    transform: translateY(-2px);
+}
+
 .help {
     text-align:center;
     margin-top: 14px;
@@ -466,8 +470,8 @@
 }
 
 .btn-secondary {
-    width: 130px;
-    height: 40px;
+    width: 125px;
+    height: 50px;
     background:#f3f4f6;
     border:none;
     padding:.6rem 1rem;
@@ -519,9 +523,9 @@
 
 /* Estilos do button (modal) - atualizado conforme solicitado */
 .modal .btn-gradient {
-    min-width: 140px; /* allow enough space for two words without wrapping */
+    min-width: 125px; /* allow enough space for two words without wrapping */
     width: auto;
-    height: 40px;
+    height: 50px;
     border: 0;
     border-radius: 999px;
     padding: .45rem 1.2rem;
