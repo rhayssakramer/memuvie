@@ -19,7 +19,7 @@ public class CorsConfig {
         
         // Permitir requisições do frontend Angular
         config.addAllowedOrigin("http://localhost:4200"); // Desenvolvimento local
-        config.addAllowedOrigin("https://memuvie.netlify.app"); // Netlify
+        config.addAllowedOrigin("https://memuviee.onrender.com"); // Netlify
         config.addAllowedOrigin("https://memuvie.com.br"); // Produção (se houver um domínio específico)
         
         // Permitir todos os métodos HTTP
