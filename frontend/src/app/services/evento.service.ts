@@ -20,7 +20,7 @@ export interface Evento {
   providedIn: 'root'
 })
 export class EventoService {
-  private apiUrl = `${environment.apiUrl}/eventos`;
+  private apiUrl = `${environment.apiUrl}/api/eventos`;
 
   constructor(private http: HttpClient) { }
 
