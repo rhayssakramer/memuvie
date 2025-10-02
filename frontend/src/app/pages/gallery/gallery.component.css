@@ -250,47 +250,15 @@
     background-color: #fde8ed;
 }
 
-.btn-icon.emoji-btn-icon {
-    color: #3a7bff;
-    background-color: rgba(58, 123, 255, 0.1);
-}
 
-.btn-icon.reaction-btn {
-    background-color: rgba(58, 123, 255, 0.08);
-    position: relative;
-}
 
 .btn-icon:hover {
     background-color: #ffe0e7;
 }
 
-.btn-icon.emoji-btn-icon:hover {
-    background-color: rgba(58, 123, 255, 0.15);
-    transform: scale(1.1);
-}
 
-.btn-icon.reaction-btn:hover {
-    background-color: rgba(58, 123, 255, 0.18);
-    transform: scale(1.1);
-}
 
-/* Estilos especiais para botões de reação no modal */
-.modal-actions .reaction-btn.share-btn-modal {
-    background-color: rgba(255, 255, 255, 0.9);
-    transition: all 0.3s ease;
-    position: relative;
-}
 
-.modal-actions .reaction-btn.share-btn-modal:hover {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    transition: all 0.2s ease;
-}
 
 /* Estilo para o botão de compartilhar */
 .modal-actions .btn-icon.share-btn-modal {
@@ -313,29 +281,7 @@
     transform: scale(1.1);
 }
 
-/* Estilo para o botão de emoji quando não há reação */
-.modal-actions .emoji-btn-icon.share-btn-modal {
-    width: 45px !important;      /* força largura */
-    height: 45px !important;     /* força altura */
-    border-radius: 50% !important; /* círculo perfeito */
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;       /* remove espaçamento interno */
-    min-width: unset !important; /* evita largura mínima herdada */
-    min-height: unset !important;
-    background-color: rgba(58, 123, 255, 0.08); /* fundo */
-    box-sizing: border-box;      /* garante cálculo certo */
-}
 
-.modal-actions .emoji-btn-icon.share-btn-modal:hover {
-    width: 45px !important;          /* mesmo valor da altura */
-    aspect-ratio: 1 / 1;      /* quadrado */
-    border-radius: 50% !important;
-    background-color: rgba(58, 123, 255, 0.15);
-    transform: scale(1.1);
-}
 
 .btn-icon:active {
     transform: scale(0.95);
@@ -360,34 +306,7 @@
     transform: translateY(-2px);
 }
 
-/* Estilos para o seletor de emoji */
-.emoji-selector {
-    position: absolute;
-    bottom: 59px;
-    right: 10px;
-    background: white;
-    border-radius: 40px;
-    padding: 12px;
-    z-index: 1002;
-    animation: slideUp 0.3s ease-out;
-    box-shadow: 0 10px 25px rgba(128, 128, 128, 0.2);
-    width: 180px;
-    opacity: 1;
-    pointer-events: all;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
 
-.modal-emoji-selector {
-    position: absolute;
-    bottom: 70px;
-    left: 60px;
-    border-radius: 40px;
-    box-shadow: 0 10px 25px rgba(128, 128, 128, 0.2);
-    padding: 8px;
-    width: 200px;
-    background: white;
-    z-index: 1003;
-}
 
 @media (max-width: 480px) {
     .emoji-selector {
@@ -431,85 +350,11 @@
     gap: 12px;
 }
 
-.emoji-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-.emoji-btn:hover {
-    transform: scale(1.15);
-}
-
-.emoji-btn:active {
-    transform: scale(1.05);
-}
-
-.emoji-btn svg {
-    width: 35px;
-    height: 35px;
-    border-radius: 20px;
-    transition: all 0.2s ease;
-}
-
-.modal-emoji-selector .emoji-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 20px;
-    transition: all 0.2s ease;
-}
-
-.modal-emoji-selector .emoji-btn:hover {
-    transform: scale(1.15);
-}
-
-.emoji-btn.selected {
-    background-color: rgba(var(--accent-rgb), 0.2);
-}
-
-/* Feedback visual para toque longo */
-.btn-icon.long-press-active {
-    background-color: rgba(58, 123, 255, 0.25) !important;
-    transform: scale(0.95);
-}
-
 /* Melhorar resposta ao toque em dispositivos móveis */
 @media (hover: none) and (pointer: coarse) {
     .btn-icon:active {
         background-color: rgba(58, 123, 255, 0.2);
         transform: scale(0.95);
-    }
-    
-    .emoji-btn:active {
-        background-color: rgba(0, 0, 0, 0.1);
-        transform: scale(0.95);
-    }
-}
-
-/* Animações suaves para transições */
-.emoji-selector.fade-in {
-    animation: fadeIn 0.2s ease-out;
-}
-
-.modal-emoji-selector.fade-in {
-    animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
     }
 }
 
@@ -528,103 +373,3 @@
     justify-content: flex-start;
 }
 
-/* Mostrador de reações individuais */
-.reactions-display {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 16px 0;
-    flex-wrap: wrap;
-}
-
-.reaction-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: default;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.reaction-item svg {
-    flex-shrink: 0;
-}
-
-.reaction-count-display {
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
-    line-height: 1;
-    cursor: default;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Sem tooltip para reações */
-.reaction-tooltip {
-    position: relative;
-}
-
-/* Só o botão dentro do reaction-tooltip */
-.reaction-tooltip .btn-icon.reaction-btn.share-btn-modal {
-  background-color: rgba(58, 123, 255, 0.1) !important;
-  border-radius: 50% !important;
-  transition: background-color 0.2s ease;
-}
-
-/* Hover do botão de reação */
-.reaction-tooltip .btn-icon.reaction-btn.share-btn-modal:hover {
-  background-color: rgba(58, 123, 255, 0.15) !important;
-}
-
-/* Estilos para o contador de reações */
-.reaction-count {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    background: #3a7bff;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 2px 5px;
-    border-radius: 8px;
-    min-width: 16px;
-    text-align: center;
-    line-height: 1.2;
-    border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
-/* Contador para o modal (um pouco maior) */
-.reaction-count-modal {
-    bottom: -3px;
-    right: -3px;
-    font-size: 11px;
-    padding: 3px 6px;
-    min-width: 18px;
-    border-radius: 9px;
-}
-
-/* Adaptações para dispositivos móveis */
-@media (max-width: 768px) {
-    /* Removido tooltip de reações */
-    
-    .reaction-count {
-        font-size: 9px;
-        padding: 2px 4px;
-        min-width: 14px;
-        border-radius: 7px;
-    }
-    
-    .reaction-count-modal {
-        font-size: 10px;
-        padding: 2px 5px;
-        min-width: 16px;
-        border-radius: 8px;
-    }
-}
