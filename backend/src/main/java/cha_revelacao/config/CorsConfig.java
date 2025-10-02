@@ -18,12 +18,9 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         
         // Permitir requisições do frontend Angular
-        config.addAllowedOrigin("http://localhost:4200"); // Desenvolvimento
-        config.addAllowedOrigin("https://memuvie.vercel.app"); // Vercel (padrão)
-        config.addAllowedOrigin("https://memuvie-frontend.vercel.app"); // Vercel alternativo
-        config.addAllowedOriginPattern("https://*-memuvie.vercel.app"); // Preview deployments
-        config.addAllowedOriginPattern("https://memuvie-*.vercel.app"); // Preview deployments
-        config.addAllowedOrigin("https://memuvie.com"); // Produção (se houver um domínio específico)
+        config.addAllowedOrigin("http://localhost:4200"); // Desenvolvimento local
+        config.addAllowedOrigin("https://memuvie.netlify.app"); // Netlify
+        config.addAllowedOrigin("https://memuvie.com.br"); // Produção (se houver um domínio específico)
         
         // Permitir todos os métodos HTTP
         config.addAllowedMethod("*");
