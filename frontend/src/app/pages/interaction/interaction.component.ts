@@ -291,12 +291,26 @@ export class InteractionComponent implements OnInit {
     }
   }
 
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
   openPhotoCapture() {
-    (document.getElementById('photoInput') as HTMLInputElement)?.click();
+    const input = document.getElementById('photoInput') as HTMLInputElement;
+    if (input) {
+      // Em dispositivos móveis, o atributo capture="environment" já prioriza a câmera
+      // mas ainda permite acesso à galeria através do seletor nativo
+      input.click();
+    }
   }
   
   openGalleryPhotoCapture() {
-    (document.getElementById('galleryPhotoInput') as HTMLInputElement)?.click();
+    const input = document.getElementById('galleryPhotoInput') as HTMLInputElement;
+    if (input) {
+      // Em dispositivos móveis, o atributo capture="environment" já prioriza a câmera
+      // mas ainda permite acesso à galeria através do seletor nativo
+      input.click();
+    }
   }
 
   async submitMessage() {

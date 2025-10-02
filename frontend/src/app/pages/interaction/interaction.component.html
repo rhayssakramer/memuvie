@@ -85,11 +85,13 @@
 
   <!-- Entradas ocultas para captura de câmera/arquivo -->
   <!-- Input para upload direto de vídeo para o Cloudinary (botão de depoimento) -->
-  <input type="file" id="videoInput" accept="video/*" capture style="display:none" (change)="onVideoSelected($event)">
+  <input type="file" id="videoInput" accept="video/*" capture="environment" style="display:none" (change)="onVideoSelected($event)">
   
   <!-- Input para upload direto de fotos para o Cloudinary (botão de fotos da festa) -->
+  <!-- Prioriza câmera mas permite galeria através do accept múltiplo -->
   <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
   
   <!-- Input para fotos que serão exibidas na galeria (mensagem especial) -->
+  <!-- Prioriza câmera mas permite galeria através do accept múltiplo -->
   <input type="file" id="galleryPhotoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
 </div>
