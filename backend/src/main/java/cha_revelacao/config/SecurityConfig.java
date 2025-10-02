@@ -65,7 +65,7 @@ public class SecurityConfig {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/auth/**", "/*/auth/**").permitAll()
+                .requestMatchers("/auth/**", "/*/auth/**", "/api/auth/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/eventos/publicos/**", "/*/eventos/publicos/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll() // Necessário para healthcheck do Docker
