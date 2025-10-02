@@ -22,7 +22,7 @@
         <p class="card-message">{{ item.message }}</p>
         <div class="card-actions">
           <!-- Botão de emoji quando não há reação -->
-          <button *ngIf="!hasReaction(item.id)" 
+          <button *ngIf="!hasAnyReactions(item.id)" 
                   class="btn-icon emoji-btn-icon" 
                   (click)="handleEmojiClick(item, $event)"
                   (mouseenter)="handleMouseEnter(item)"
@@ -38,8 +38,8 @@
             </svg>
           </button>
           
-          <!-- Mostrar o emoji curtir quando selecionado -->
-          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'curtir'" class="reaction-tooltip" 
+          <!-- Mostrar o emoji curtir quando é a última reação -->
+          <div *ngIf="hasAnyReactions(item.id) && getLastReaction(item.id) === 'curtir'" class="reaction-tooltip" 
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn" 
@@ -51,11 +51,13 @@
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(item.id) > 0" class="reaction-count">{{ getTotalReactions(item.id) }}</span>
             </button>
           </div>
           
-          <!-- Mostrar o emoji coração quando selecionado -->
-          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'gostei'" class="reaction-tooltip"
+          <!-- Mostrar o emoji coração quando é a última reação -->
+          <div *ngIf="hasAnyReactions(item.id) && getLastReaction(item.id) === 'gostei'" class="reaction-tooltip"
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn" 
@@ -67,11 +69,13 @@
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(item.id) > 0" class="reaction-count">{{ getTotalReactions(item.id) }}</span>
             </button>
           </div>
           
-          <!-- Mostrar o emoji festa quando selecionado -->
-          <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'festejar'" class="reaction-tooltip"
+          <!-- Mostrar o emoji festa quando é a última reação -->
+          <div *ngIf="hasAnyReactions(item.id) && getLastReaction(item.id) === 'festejar'" class="reaction-tooltip"
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn" 
@@ -88,6 +92,8 @@
                 <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
                 <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(item.id) > 0" class="reaction-count">{{ getTotalReactions(item.id) }}</span>
             </button>
           </div>
           <button class="btn-icon" (click)="$event.stopPropagation(); share(item)" title="Compartilhar">
@@ -172,7 +178,7 @@
         <p class="modal-message">{{ selectedItem.message }}</p>
         <div class="modal-actions">
           <!-- Botão de emoji quando não há reação -->
-          <button *ngIf="!selectedItem || !hasReaction(selectedItem.id)" 
+          <button *ngIf="!selectedItem || !hasAnyReactions(selectedItem.id)" 
                   class="btn-icon emoji-btn-icon share-btn-modal" 
                   (click)="handleModalEmojiClick(selectedItem, $event)" 
                   (mouseenter)="handleModalMouseEnter(selectedItem)"
@@ -188,8 +194,8 @@
             </svg>
           </button>
           
-          <!-- Mostrar o emoji curtir quando selecionado -->
-          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'curtir'" class="reaction-tooltip"
+          <!-- Mostrar o emoji curtir quando é a última reação -->
+          <div *ngIf="selectedItem && hasAnyReactions(selectedItem.id) && getLastReaction(selectedItem.id) === 'curtir'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn share-btn-modal" 
@@ -201,11 +207,13 @@
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(selectedItem.id) > 0" class="reaction-count reaction-count-modal">{{ getTotalReactions(selectedItem.id) }}</span>
             </button>
           </div>
           
-          <!-- Mostrar o emoji coração quando selecionado -->
-          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'gostei'" class="reaction-tooltip"
+          <!-- Mostrar o emoji coração quando é a última reação -->
+          <div *ngIf="selectedItem && hasAnyReactions(selectedItem.id) && getLastReaction(selectedItem.id) === 'gostei'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn share-btn-modal" 
@@ -217,11 +225,13 @@
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(selectedItem.id) > 0" class="reaction-count reaction-count-modal">{{ getTotalReactions(selectedItem.id) }}</span>
             </button>
           </div>
           
-          <!-- Mostrar o emoji festa quando selecionado -->
-          <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'festejar'" class="reaction-tooltip"
+          <!-- Mostrar o emoji festa quando é a última reação -->
+          <div *ngIf="selectedItem && hasAnyReactions(selectedItem.id) && getLastReaction(selectedItem.id) === 'festejar'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
             <button class="btn-icon reaction-btn share-btn-modal" 
@@ -238,6 +248,8 @@
                 <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
                 <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
               </svg>
+              <!-- Contador de reações -->
+              <span *ngIf="getTotalReactions(selectedItem.id) > 0" class="reaction-count reaction-count-modal">{{ getTotalReactions(selectedItem.id) }}</span>
             </button>
           </div>
           <button class="btn-icon share-btn-modal" (click)="share(selectedItem)" title="Compartilhar">

@@ -37,6 +37,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   showModalEmojiSelector: boolean = false;
   currentEmojiItem: GalleryItem | null = null;
   userReactions: Map<number, string> = new Map(); // Armazenar reações por ID do item
+  reactionCounts: Map<number, {curtir: number, gostei: number, festejar: number}> = new Map(); // Contagens de reações por item
+  lastReactions: Map<number, string> = new Map(); // Última reação recebida por item (para exibição do ícone)
   
   // Variáveis para controle de interação
   private pressTimer: any = null;
@@ -143,7 +145,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
    * Converte posts do backend para o formato usado na galeria
    */
   private mapBackendPostsToGalleryItems(posts: GaleriaPost[]): GalleryItem[] {
-    return posts.map(post => ({
+    const items = posts.map(post => ({
       id: post.id || Date.now(),
       userName: post.usuario?.nome || 'Usuário',
       userPhoto: post.usuario?.fotoPerfil || 'assets/avatar-1.jpg',
@@ -153,6 +155,42 @@ export class GalleryComponent implements OnInit, OnDestroy {
       date: post.dataCriacao || new Date().toISOString(),
       userEmail: post.usuario?.email // Adicionar o email do usuário para verificar propriedade
     }));
+
+    // Inicializar contagens de reações para cada item
+    items.forEach(item => {
+      this.initializeReactionCounts(item.id);
+    });
+
+    // Simular algumas reações automáticas após um tempo (apenas para demonstração)
+    this.simulateAutomaticReactions(items);
+
+    return items;
+  }
+
+  /**
+   * Inicializa as contagens de reações para um item
+   */
+  private initializeReactionCounts(itemId: number) {
+    // Por enquanto, vamos simular algumas contagens aleatórias
+    // Em uma aplicação real, esses dados viriam do backend
+    const randomCounts = {
+      curtir: Math.floor(Math.random() * 10), 
+      gostei: Math.floor(Math.random() * 8),
+      festejar: Math.floor(Math.random() * 5)
+    };
+    
+    this.reactionCounts.set(itemId, randomCounts);
+    
+    // Definir uma última reação aleatória se houver alguma contagem > 0
+    const totalCount = randomCounts.curtir + randomCounts.gostei + randomCounts.festejar;
+    if (totalCount > 0) {
+      const reactionTypes = ['curtir', 'gostei', 'festejar'];
+      const availableReactions = reactionTypes.filter(type => randomCounts[type as keyof typeof randomCounts] > 0);
+      if (availableReactions.length > 0) {
+        const lastReaction = availableReactions[Math.floor(Math.random() * availableReactions.length)];
+        this.lastReactions.set(itemId, lastReaction);
+      }
+    }
   }
 
   openModal(item: GalleryItem) {
@@ -192,8 +230,20 @@ export class GalleryComponent implements OnInit, OnDestroy {
   selectEmoji(item: GalleryItem, emojiType: string) {
     if (!item) return;
     
-    // Armazenar a reação do usuário
+    // Verificar se já havia uma reação anterior para remover da contagem
+    const previousReaction = this.userReactions.get(item.id);
+    if (previousReaction) {
+      this.decrementReactionCount(item.id, previousReaction);
+    }
+    
+    // Armazenar a nova reação do usuário
     this.userReactions.set(item.id, emojiType);
+    
+    // Incrementar a contagem da nova reação
+    this.incrementReactionCount(item.id, emojiType);
+    
+    // Atualizar a última reação (sempre que alguém reage, essa vira a última)
+    this.lastReactions.set(item.id, emojiType);
     
     // Esta função seria conectada ao backend em uma implementação real
     // Por enquanto, apenas simule a ação e mostre feedback ao usuário
@@ -214,7 +264,18 @@ export class GalleryComponent implements OnInit, OnDestroy {
     
     const reactionType = this.userReactions.get(item.id);
     if (reactionType) {
+      // Decrementar a contagem da reação removida
+      this.decrementReactionCount(item.id, reactionType);
+      
+      // Remover a reação do usuário
       this.userReactions.delete(item.id);
+      
+      // Se não há mais reações, limpar a última reação
+      const totalReactions = this.getTotalReactions(item.id);
+      if (totalReactions === 0) {
+        this.lastReactions.delete(item.id);
+      }
+      
       this.toastService.info(`Reação removida do post de ${item.userName}`);
     }
     
@@ -475,6 +536,93 @@ export class GalleryComponent implements OnInit, OnDestroy {
       'festejar': '🥳'
     };
     return emojis[reactionType as keyof typeof emojis] || '👍';
+  }
+
+  // Método para obter o total de reações de um item
+  getTotalReactions(itemId: number): number {
+    const counts = this.reactionCounts.get(itemId);
+    if (!counts) return 0;
+    
+    return counts.curtir + counts.gostei + counts.festejar;
+  }
+
+  // Método para verificar se o item tem reações (baseado no total)
+  hasAnyReactions(itemId: number): boolean {
+    return this.getTotalReactions(itemId) > 0;
+  }
+
+  // Método para obter a última reação de um item (para exibição do ícone)
+  getLastReaction(itemId: number): string | null {
+    return this.lastReactions.get(itemId) || null;
+  }
+
+  // Método para simular reação de outro usuário (para demonstração)
+  simulateOtherUserReaction(itemId: number, reactionType: string, userName: string = 'Usuário') {
+    // Incrementar a contagem da reação
+    this.incrementReactionCount(itemId, reactionType);
+    
+    // Atualizar a última reação (sempre que alguém reage, essa vira a última)
+    this.lastReactions.set(itemId, reactionType);
+    
+    // Feedback visual
+    this.toastService.info(`${userName} reagiu com ${reactionType}`);
+    
+    console.log(`Reação simulada: ${userName} reagiu com ${reactionType} no item ${itemId}`);
+  }
+
+  // Método para simular reações automáticas (apenas para demonstração)
+  private simulateAutomaticReactions(items: GalleryItem[]) {
+    const reactionTypes = ['curtir', 'gostei', 'festejar'];
+    const userNames = ['Maria', 'João', 'Ana', 'Pedro', 'Sofia'];
+    
+    // Simular algumas reações após intervalos aleatórios
+    items.forEach((item, index) => {
+      // Simular 1-3 reações automáticas por item após alguns segundos
+      const numReactions = Math.floor(Math.random() * 3) + 1;
+      
+      for (let i = 0; i < numReactions; i++) {
+        const delay = (index * 2000) + (i * 3000) + Math.random() * 2000; // Espalhar ao longo do tempo
+        const reactionType = reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
+        const userName = userNames[Math.floor(Math.random() * userNames.length)];
+        
+        setTimeout(() => {
+          // Verificar se o componente ainda existe antes de simular a reação
+          if (this.galleryItems.find(gi => gi.id === item.id)) {
+            this.simulateOtherUserReaction(item.id, reactionType, userName);
+          }
+        }, delay);
+      }
+    });
+  }
+
+  // Método para atualizar as contagens de reações quando uma reação é adicionada
+  private incrementReactionCount(itemId: number, reactionType: string) {
+    const counts = this.reactionCounts.get(itemId) || { curtir: 0, gostei: 0, festejar: 0 };
+    
+    if (reactionType === 'curtir') {
+      counts.curtir++;
+    } else if (reactionType === 'gostei') {
+      counts.gostei++;
+    } else if (reactionType === 'festejar') {
+      counts.festejar++;
+    }
+    
+    this.reactionCounts.set(itemId, counts);
+  }
+
+  // Método para atualizar as contagens de reações quando uma reação é removida
+  private decrementReactionCount(itemId: number, reactionType: string) {
+    const counts = this.reactionCounts.get(itemId) || { curtir: 0, gostei: 0, festejar: 0 };
+    
+    if (reactionType === 'curtir' && counts.curtir > 0) {
+      counts.curtir--;
+    } else if (reactionType === 'gostei' && counts.gostei > 0) {
+      counts.gostei--;
+    } else if (reactionType === 'festejar' && counts.festejar > 0) {
+      counts.festejar--;
+    }
+    
+    this.reactionCounts.set(itemId, counts);
   }
 
   goToInteraction() {

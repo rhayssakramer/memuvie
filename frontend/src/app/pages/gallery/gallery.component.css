@@ -257,6 +257,7 @@
 
 .btn-icon.reaction-btn {
     background-color: rgba(58, 123, 255, 0.08);
+    position: relative;
 }
 
 .btn-icon:hover {
@@ -277,6 +278,7 @@
 .modal-actions .reaction-btn.share-btn-modal {
     background-color: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .modal-actions .reaction-btn.share-btn-modal:hover {
@@ -537,7 +539,50 @@
   background-color: rgba(58, 123, 255, 0.15) !important;
 }
 
+/* Estilos para o contador de reações */
+.reaction-count {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #3a7bff;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 8px;
+    min-width: 16px;
+    text-align: center;
+    line-height: 1.2;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* Contador para o modal (um pouco maior) */
+.reaction-count-modal {
+    bottom: -3px;
+    right: -3px;
+    font-size: 11px;
+    padding: 3px 6px;
+    min-width: 18px;
+    border-radius: 9px;
+}
+
 /* Adaptações para dispositivos móveis */
 @media (max-width: 768px) {
     /* Removido tooltip de reações */
+    
+    .reaction-count {
+        font-size: 9px;
+        padding: 2px 4px;
+        min-width: 14px;
+        border-radius: 7px;
+    }
+    
+    .reaction-count-modal {
+        font-size: 10px;
+        padding: 2px 5px;
+        min-width: 16px;
+        border-radius: 8px;
+    }
 }
