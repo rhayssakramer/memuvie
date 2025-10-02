@@ -103,7 +103,7 @@ export class InteractionComponent implements OnInit {
   }
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private fileUploadService: FileUploadService,
     private galeriaService: GaleriaService,
     private toastService: ToastService
@@ -163,25 +163,25 @@ export class InteractionComponent implements OnInit {
     // Verifica se foi chamado a partir do botão "Envie Fotos/Vídeos da Festa"
     // Identifica o botão pelo ID do input, verificando se é photoInput ou algum outro ID específico
     const isDirectUpload = (input.id === 'photoInput');
-    
+
     if (input.files && input.files[0]) {
       this.selectedPhoto = input.files[0];
-      
+
       if (isDirectUpload) {
         // Se for upload direto para o Cloudinary sem exibir na galeria
         this.isUploading = true;
         console.log('Enviando foto diretamente para o Cloudinary...');
-        
+
         this.fileUploadService.uploadImage(this.selectedPhoto).subscribe(
           (url) => {
             console.log('Foto enviada com sucesso para o Cloudinary:', url);
             this.isUploading = false;
             // Limpar após o upload bem-sucedido
             this.selectedPhoto = null;
-            
+
             // Mostrar mensagem de sucesso temporária
             this.toastService.success('Foto enviada com sucesso!');
-            
+
             // Limpar o input
             if (input) {
               input.value = '';
@@ -193,10 +193,10 @@ export class InteractionComponent implements OnInit {
             this.toastService.error('Erro ao enviar a foto. Tente novamente.');
           }
         );
-        
+
         return; // Sai do método após iniciar o upload direto
       }
-      
+
       // Comportamento normal para fotos que serão mostradas na galeria
       const reader = new FileReader();
       this.isReadingPhoto = true;
@@ -231,6 +231,8 @@ export class InteractionComponent implements OnInit {
   }
 
   openVideoCapture() {
+    // Em dispositivos móveis, o atributo capture="environment" prioriza a câmera
+    // para gravação direta de vídeo
     (document.getElementById('videoInput') as HTMLInputElement)?.click();
   }
 
@@ -239,25 +241,25 @@ export class InteractionComponent implements OnInit {
     // Verifica se foi chamado a partir do botão "Deixe seu depoimento em vídeo"
     // Identifica pelo ID do input
     const isDirectUpload = (input.id === 'videoInput');
-    
+
     if (input.files && input.files[0]) {
       this.selectedVideo = input.files[0];
-      
+
       if (isDirectUpload) {
         // Se for upload direto para o Cloudinary sem exibir na galeria
         this.isUploading = true;
         console.log('Enviando vídeo diretamente para o Cloudinary...');
-        
+
         this.fileUploadService.uploadVideo(this.selectedVideo).subscribe(
           (url) => {
             console.log('Vídeo enviado com sucesso para o Cloudinary:', url);
             this.isUploading = false;
             // Limpar após o upload bem-sucedido
             this.selectedVideo = null;
-            
+
             // Mostrar mensagem de sucesso temporária
             this.toastService.success('Depoimento em vídeo enviado com sucesso!');
-            
+
             // Limpar o input
             if (input) {
               input.value = '';
@@ -269,10 +271,10 @@ export class InteractionComponent implements OnInit {
             this.toastService.error('Erro ao enviar o vídeo. Tente novamente.');
           }
         );
-        
+
         return; // Sai do método após iniciar o upload direto
       }
-      
+
       // Comportamento normal para vídeos que serão mostrados na galeria
       const url = URL.createObjectURL(this.selectedVideo);
       this.videoPreviewUrl = url;
@@ -298,17 +300,15 @@ export class InteractionComponent implements OnInit {
   openPhotoCapture() {
     const input = document.getElementById('photoInput') as HTMLInputElement;
     if (input) {
-      // Em dispositivos móveis, o atributo capture="environment" já prioriza a câmera
-      // mas ainda permite acesso à galeria através do seletor nativo
+      // Abre diretamente a galeria para seleção de imagens
       input.click();
     }
   }
-  
+
   openGalleryPhotoCapture() {
     const input = document.getElementById('galleryPhotoInput') as HTMLInputElement;
     if (input) {
-      // Em dispositivos móveis, o atributo capture="environment" já prioriza a câmera
-      // mas ainda permite acesso à galeria através do seletor nativo
+      // Abre diretamente a galeria para seleção de imagens
       input.click();
     }
   }
@@ -435,7 +435,7 @@ export class InteractionComponent implements OnInit {
             message: this.message || '',
             date: new Date().toISOString()
           };
-          
+
           // Log das URLs antes de salvar
           console.log('Salvando post com URLs:', {
             photo: photoUrl,
@@ -446,7 +446,7 @@ export class InteractionComponent implements OnInit {
           try {
             // Limpar posts antigos se necessário
             this.cleanupOldPosts();
-            
+
             const raw = localStorage.getItem('posts');
             const posts = raw ? JSON.parse(raw) : [];
             posts.unshift(postData);
@@ -455,7 +455,7 @@ export class InteractionComponent implements OnInit {
           } catch (e) {
             console.error('Erro ao salvar no localStorage:', e);
           }
-          
+
           // Salvar no backend (apenas se for mensagem com foto para a galeria)
           // Não enviar para o backend se for upload direto de foto ou vídeo (botões principais)
           if (this.isGalleryContent()) {
@@ -466,7 +466,7 @@ export class InteractionComponent implements OnInit {
               videoUrl: videoUrl || undefined
               // O backend irá associar ao usuário logado e ao evento atual
             };
-            
+
             this.galeriaService.createPost(backendPost).subscribe({
               next: (response) => {
                 console.log('Post salvo com sucesso no backend:', response);
@@ -568,7 +568,7 @@ export class InteractionComponent implements OnInit {
   get remainingCharacters() {
     return this.maxLength - this.message.length;
   }
-  
+
   /**
    * Verifica se o conteúdo atual deve ir para a galeria
    * Os botões principais (foto/vídeo da festa e depoimento) não vão para a galeria
@@ -580,7 +580,7 @@ export class InteractionComponent implements OnInit {
     const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
     const hasGalleryPhoto = this.photoPreviewUrl && galleryPhotoInput?.files && galleryPhotoInput.files.length > 0;
     const hasMessage = this.message && this.message.trim().length > 0;
-    
+
     // Se tem mensagem ou foto da galeria, é conteúdo para a galeria
     return !!hasGalleryPhoto || !!hasMessage;
   }
