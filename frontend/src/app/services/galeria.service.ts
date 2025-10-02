@@ -24,7 +24,7 @@ export interface GaleriaPost {
   providedIn: 'root'
 })
 export class GaleriaService {
-  private apiUrl = `${environment.apiUrl}/galeria`;
+  private apiUrl = `${environment.apiUrl}/api/galeria`;
 
   constructor(private http: HttpClient) { }
 
