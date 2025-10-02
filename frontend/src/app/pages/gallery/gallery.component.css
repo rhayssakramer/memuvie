@@ -528,6 +528,42 @@
     justify-content: flex-start;
 }
 
+/* Mostrador de reações individuais */
+.reactions-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+
+.reaction-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.reaction-item svg {
+    flex-shrink: 0;
+}
+
+.reaction-count-display {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    line-height: 1;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* Sem tooltip para reações */
 .reaction-tooltip {
     position: relative;

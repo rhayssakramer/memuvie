@@ -546,6 +546,23 @@ export class GalleryComponent implements OnInit, OnDestroy {
     return counts.curtir + counts.gostei + counts.festejar;
   }
 
+  // Método para obter a contagem de uma reação específica
+  getReactionCount(itemId: number, reactionType: string): number {
+    const counts = this.reactionCounts.get(itemId);
+    if (!counts) return 0;
+    
+    switch (reactionType) {
+      case 'curtir':
+        return counts.curtir;
+      case 'gostei':
+        return counts.gostei;
+      case 'festejar':
+        return counts.festejar;
+      default:
+        return 0;
+    }
+  }
+
   // Método para verificar se o item tem reações (baseado no total)
   hasAnyReactions(itemId: number): boolean {
     return this.getTotalReactions(itemId) > 0;

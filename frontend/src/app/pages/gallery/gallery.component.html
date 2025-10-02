@@ -176,6 +176,39 @@
           </div>
         </div>
         <p class="modal-message">{{ selectedItem.message }}</p>
+        
+        <!-- Mostrador de reações individuais -->
+        <div class="reactions-display" *ngIf="selectedItem && hasAnyReactions(selectedItem.id)">
+          <!-- Reação Curtir -->
+          <div class="reaction-item" *ngIf="getReactionCount(selectedItem.id, 'curtir') > 0">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
+            </svg>
+            <span class="reaction-count-display">{{ getReactionCount(selectedItem.id, 'curtir') }}</span>
+          </div>
+          
+          <!-- Reação Gostei -->
+          <div class="reaction-item" *ngIf="getReactionCount(selectedItem.id, 'gostei') > 0">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
+            </svg>
+            <span class="reaction-count-display">{{ getReactionCount(selectedItem.id, 'gostei') }}</span>
+          </div>
+          
+          <!-- Reação Festejar -->
+          <div class="reaction-item" *ngIf="getReactionCount(selectedItem.id, 'festejar') > 0">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
+              <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
+              <circle cx="8.5" cy="9.5" r="1.5" fill="#263238"></circle>
+              <circle cx="15.5" cy="9.5" r="1.5" fill="#263238"></circle>
+              <path d="M12 5V1M9 6L7 3M15 6l2-3" stroke="#FF4081" stroke-width="1.5" stroke-linecap="round"></path>
+              <path d="M17 9c0-2-2-5-5-5S7 7 7 9" fill="#FF4081"></path>
+            </svg>
+            <span class="reaction-count-display">{{ getReactionCount(selectedItem.id, 'festejar') }}</span>
+          </div>
+        </div>
+        
         <div class="modal-actions">
           <!-- Botão de compartilhar -->
           <button class="btn-icon share-btn-modal" (click)="share(selectedItem)" title="Compartilhar">
