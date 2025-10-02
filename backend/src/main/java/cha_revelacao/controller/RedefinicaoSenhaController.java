@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping({"/auth", "/api/auth"})  // Adicionado /api/auth para compatibilidade com o frontend
 public class RedefinicaoSenhaController {
 
     @Autowired
@@ -27,15 +27,21 @@ public class RedefinicaoSenhaController {
     public ResponseEntity<Map<String, String>> solicitarRedefinicaoSenha(
             @Valid @RequestBody EsqueciSenhaRequest request) {
         try {
+            // Log detalhado do request recebido
+            System.out.println("Recebido solicitação de redefinição para email: " + request.getEmail());
+            
             redefinicaoSenhaService.solicitarRedefinicaoSenha(request.getEmail());
             
             Map<String, String> response = new HashMap<>();
             response.put("mensagem", "Se o email estiver cadastrado em nosso sistema, " +
                     "você receberá um link para redefinir sua senha em instantes.");
             
+            System.out.println("Solicitação de redefinição processada com sucesso para: " + request.getEmail());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             // Logs para depuração
+            System.err.println("Erro ao solicitar redefinição de senha para: " + request.getEmail());
+            System.err.println("Detalhes do erro: " + e.getMessage());
             e.printStackTrace();
             
             // Resposta para o frontend
