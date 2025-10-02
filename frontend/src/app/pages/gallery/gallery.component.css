@@ -265,10 +265,12 @@
 
 .btn-icon.emoji-btn-icon:hover {
     background-color: rgba(58, 123, 255, 0.15);
+    transform: scale(1.1);
 }
 
 .btn-icon.reaction-btn:hover {
     background-color: rgba(58, 123, 255, 0.18);
+    transform: scale(1.1);
 }
 
 /* Estilos especiais para botões de reação no modal */
@@ -359,7 +361,7 @@
 /* Estilos para o seletor de emoji */
 .emoji-selector {
     position: absolute;
-    bottom: 60px;
+    bottom: 59px;
     right: 10px;
     background: white;
     border-radius: 40px;
@@ -368,11 +370,14 @@
     animation: slideUp 0.3s ease-out;
     box-shadow: 0 10px 25px rgba(128, 128, 128, 0.2);
     width: 180px;
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .modal-emoji-selector {
     position: absolute;
-    bottom: 80px;
+    bottom: 76px;
     left: 80%;
     transform: translateX(-50%);
     border-radius: 40px;
@@ -431,11 +436,17 @@
     align-items: center;
     justify-content: center;
     padding: 8px;
+    border-radius: 50%;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .emoji-btn:hover {
     transform: scale(1.15);
+}
+
+.emoji-btn:active {
+    transform: scale(1.05);
 }
 
 .emoji-btn svg {
@@ -458,6 +469,45 @@
 
 .emoji-btn.selected {
     background-color: rgba(var(--accent-rgb), 0.2);
+}
+
+/* Feedback visual para toque longo */
+.btn-icon.long-press-active {
+    background-color: rgba(58, 123, 255, 0.25) !important;
+    transform: scale(0.95);
+}
+
+/* Melhorar resposta ao toque em dispositivos móveis */
+@media (hover: none) and (pointer: coarse) {
+    .btn-icon:active {
+        background-color: rgba(58, 123, 255, 0.2);
+        transform: scale(0.95);
+    }
+    
+    .emoji-btn:active {
+        background-color: rgba(0, 0, 0, 0.1);
+        transform: scale(0.95);
+    }
+}
+
+/* Animações suaves para transições */
+.emoji-selector.fade-in {
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-emoji-selector.fade-in {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Card e Modal action bars */

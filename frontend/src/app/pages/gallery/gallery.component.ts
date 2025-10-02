@@ -37,6 +37,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
   showModalEmojiSelector: boolean = false;
   currentEmojiItem: GalleryItem | null = null;
   userReactions: Map<number, string> = new Map(); // Armazenar reações por ID do item
+  
+  // Variáveis para controle de interação
+  private pressTimer: any = null;
+  private isLongPress: boolean = false;
+  private readonly LONG_PRESS_DELAY = 500; // 500ms para detectar pressionar longo
+  private readonly DEFAULT_REACTION = 'curtir';
 
   constructor(
     private router: Router, 
@@ -70,6 +76,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
     // Remover o event listener quando o componente for destruído
     if (this.documentClickListener) {
       document.removeEventListener('click', this.documentClickListener);
+    }
+    
+    // Limpar timers pendentes
+    if (this.pressTimer) {
+      clearTimeout(this.pressTimer);
+      this.pressTimer = null;
     }
   }
 
@@ -155,6 +167,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
   
   toggleEmojiSelector(item: GalleryItem) {
+    // Método mantido para compatibilidade com seletores de emoji
     // Se o seletor já está aberto para este item, feche-o
     if (this.showEmojiSelector && this.currentEmojiItem?.id === item.id) {
       this.showEmojiSelector = false;
@@ -169,6 +182,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
   
   toggleModalEmojiSelector() {
+    // Método mantido para compatibilidade com seletores de emoji
     this.showModalEmojiSelector = !this.showModalEmojiSelector;
     // Feche o seletor do card se estiver aberto
     this.showEmojiSelector = false;
@@ -192,6 +206,236 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.showEmojiSelector = false;
     this.showModalEmojiSelector = false;
     this.currentEmojiItem = null;
+  }
+
+  // Método para remover reação
+  removeReaction(item: GalleryItem) {
+    if (!item) return;
+    
+    const reactionType = this.userReactions.get(item.id);
+    if (reactionType) {
+      this.userReactions.delete(item.id);
+      this.toastService.info(`Reação removida do post de ${item.userName}`);
+    }
+    
+    // Feche os seletores
+    this.showEmojiSelector = false;
+    this.showModalEmojiSelector = false;
+    this.currentEmojiItem = null;
+  }
+
+  // Método para detectar se é dispositivo móvel
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           ('ontouchstart' in window) ||
+           (navigator.maxTouchPoints > 0);
+  }
+
+  // Método para lidar com clique rápido no ícone emoji
+  handleEmojiClick(item: GalleryItem, event: Event) {
+    event.stopPropagation();
+    
+    const currentReaction = this.getReaction(item.id);
+    
+    if (currentReaction) {
+      // Se já tem reação, remove
+      this.removeReaction(item);
+    } else {
+      // Se não tem reação, adiciona a reação padrão
+      this.selectEmoji(item, this.DEFAULT_REACTION);
+    }
+  }
+
+  // Método para lidar com clique no emoji quando já selecionado
+  handleSelectedEmojiClick(item: GalleryItem, event: Event) {
+    event.stopPropagation();
+    
+    if (this.isLongPress) {
+      // Se foi um clique longo, não remove a reação, apenas mostra o seletor
+      this.isLongPress = false;
+      return;
+    }
+    
+    // Se foi um clique rápido, remove a reação
+    this.removeReaction(item);
+  }
+
+  // Método para mouse hover (Web)
+  handleMouseEnter(item: GalleryItem) {
+    if (!this.isMobileDevice()) {
+      // Delay pequeno para evitar abertura acidental
+      setTimeout(() => {
+        if (!this.showEmojiSelector) {
+          this.showEmojiSelector = true;
+          this.currentEmojiItem = item;
+          this.showModalEmojiSelector = false;
+          
+          // Adicionar classe de animação
+          setTimeout(() => {
+            const selector = document.querySelector('.emoji-selector');
+            if (selector) {
+              selector.classList.add('fade-in');
+            }
+          }, 10);
+        }
+      }, 300);
+    }
+  }
+
+  // Método para mouse leave (Web)
+  handleMouseLeave() {
+    if (!this.isMobileDevice()) {
+      // Delay para permitir movimento para o seletor
+      setTimeout(() => {
+        if (!this.isHoveringEmojiSelector()) {
+          this.showEmojiSelector = false;
+          this.currentEmojiItem = null;
+        }
+      }, 200);
+    }
+  }
+
+  // Verificar se está com mouse sobre o seletor
+  private isHoveringEmojiSelector(): boolean {
+    const selector = document.querySelector('.emoji-selector');
+    return selector && selector.matches(':hover') || false;
+  }
+
+  // Touch start para mobile - detectar pressionar longo
+  handleTouchStartEmoji(event: TouchEvent, item: GalleryItem) {
+    event.preventDefault();
+    this.isLongPress = false;
+    
+    // Adicionar feedback visual imediato
+    const button = event.currentTarget as HTMLElement;
+    if (button) {
+      button.classList.add('long-press-active');
+    }
+    
+    this.pressTimer = setTimeout(() => {
+      this.isLongPress = true;
+      // Pressionar longo - mostrar seletor
+      this.showEmojiSelector = true;
+      this.currentEmojiItem = item;
+      this.showModalEmojiSelector = false;
+      
+      // Vibração no dispositivo se disponível
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }, this.LONG_PRESS_DELAY);
+  }
+
+  // Touch end para mobile
+  handleTouchEndEmoji(event: TouchEvent, item: GalleryItem) {
+    // Remover feedback visual
+    const button = event.currentTarget as HTMLElement;
+    if (button) {
+      button.classList.remove('long-press-active');
+    }
+    
+    if (this.pressTimer) {
+      clearTimeout(this.pressTimer);
+      this.pressTimer = null;
+    }
+    
+    if (!this.isLongPress) {
+      // Se não foi pressionar longo, trata como clique rápido
+      this.handleEmojiClick(item, event);
+    }
+    
+    // Reset flag após um pequeno delay
+    setTimeout(() => {
+      this.isLongPress = false;
+    }, 100);
+  }
+
+  // Métodos similares para modal
+  handleModalEmojiClick(item: GalleryItem, event: Event) {
+    if (!item) return;
+    this.handleEmojiClick(item, event);
+  }
+
+  handleModalSelectedEmojiClick(item: GalleryItem, event: Event) {
+    if (!item) return;
+    this.handleSelectedEmojiClick(item, event);
+  }
+
+  handleModalMouseEnter(item: GalleryItem) {
+    if (!item || this.isMobileDevice()) return;
+    
+    setTimeout(() => {
+      if (!this.showModalEmojiSelector) {
+        this.showModalEmojiSelector = true;
+        this.showEmojiSelector = false;
+        this.currentEmojiItem = null;
+        
+        // Adicionar classe de animação
+        setTimeout(() => {
+          const selector = document.querySelector('.modal-emoji-selector');
+          if (selector) {
+            selector.classList.add('fade-in');
+          }
+        }, 10);
+      }
+    }, 300);
+  }
+
+  handleModalMouseLeave() {
+    if (!this.isMobileDevice()) {
+      setTimeout(() => {
+        const selector = document.querySelector('.modal-emoji-selector');
+        if (!selector || !selector.matches(':hover')) {
+          this.showModalEmojiSelector = false;
+        }
+      }, 200);
+    }
+  }
+
+  handleModalTouchStartEmoji(event: TouchEvent) {
+    if (!this.selectedItem) return;
+    event.preventDefault();
+    this.isLongPress = false;
+    
+    // Adicionar feedback visual imediato
+    const button = event.currentTarget as HTMLElement;
+    if (button) {
+      button.classList.add('long-press-active');
+    }
+    
+    this.pressTimer = setTimeout(() => {
+      this.isLongPress = true;
+      this.showModalEmojiSelector = true;
+      this.showEmojiSelector = false;
+      this.currentEmojiItem = null;
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }, this.LONG_PRESS_DELAY);
+  }
+
+  handleModalTouchEndEmoji(event: TouchEvent) {
+    if (!this.selectedItem) return;
+    
+    // Remover feedback visual
+    const button = event.currentTarget as HTMLElement;
+    if (button) {
+      button.classList.remove('long-press-active');
+    }
+    
+    if (this.pressTimer) {
+      clearTimeout(this.pressTimer);
+      this.pressTimer = null;
+    }
+    
+    if (!this.isLongPress) {
+      this.handleModalEmojiClick(this.selectedItem, event);
+    }
+    
+    setTimeout(() => {
+      this.isLongPress = false;
+    }, 100);
   }
   
   // Método para verificar se um item tem reação

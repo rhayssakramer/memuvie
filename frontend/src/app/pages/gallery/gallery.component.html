@@ -22,7 +22,14 @@
         <p class="card-message">{{ item.message }}</p>
         <div class="card-actions">
           <!-- Botão de emoji quando não há reação -->
-          <button *ngIf="!hasReaction(item.id)" class="btn-icon emoji-btn-icon" (click)="$event.stopPropagation(); toggleEmojiSelector(item)" title="Reagir com emoji">
+          <button *ngIf="!hasReaction(item.id)" 
+                  class="btn-icon emoji-btn-icon" 
+                  (click)="handleEmojiClick(item, $event)"
+                  (mouseenter)="handleMouseEnter(item)"
+                  (mouseleave)="handleMouseLeave()"
+                  (touchstart)="handleTouchStartEmoji($event, item)"
+                  (touchend)="handleTouchEndEmoji($event, item)"
+                  title="Reagir com emoji">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="#3a7bff" stroke-width="2"></circle>
               <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="#3a7bff" stroke-width="2" stroke-linecap="round"></path>
@@ -35,7 +42,12 @@
           <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'curtir'" class="reaction-tooltip" 
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+            <button class="btn-icon reaction-btn" 
+                    (click)="handleSelectedEmojiClick(item, $event)"
+                    (mouseenter)="handleMouseEnter(item)"
+                    (mouseleave)="handleMouseLeave()"
+                    (touchstart)="handleTouchStartEmoji($event, item)"
+                    (touchend)="handleTouchEndEmoji($event, item)">
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
               </svg>
@@ -46,7 +58,12 @@
           <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'gostei'" class="reaction-tooltip"
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+            <button class="btn-icon reaction-btn" 
+                    (click)="handleSelectedEmojiClick(item, $event)"
+                    (mouseenter)="handleMouseEnter(item)"
+                    (mouseleave)="handleMouseLeave()"
+                    (touchstart)="handleTouchStartEmoji($event, item)"
+                    (touchend)="handleTouchEndEmoji($event, item)">
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
               </svg>
@@ -57,7 +74,12 @@
           <div *ngIf="hasReaction(item.id) && getReaction(item.id) === 'festejar'" class="reaction-tooltip"
                (touchstart)="handleTouchStart($event, item.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn" (click)="$event.stopPropagation(); toggleEmojiSelector(item)">
+            <button class="btn-icon reaction-btn" 
+                    (click)="handleSelectedEmojiClick(item, $event)"
+                    (mouseenter)="handleMouseEnter(item)"
+                    (mouseleave)="handleMouseLeave()"
+                    (touchstart)="handleTouchStartEmoji($event, item)"
+                    (touchend)="handleTouchEndEmoji($event, item)">
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
                 <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
@@ -80,7 +102,11 @@
         </div>
         
         <!-- Seletor de Emoji Card -->
-        <div class="emoji-selector" *ngIf="showEmojiSelector && currentEmojiItem?.id === item.id" (click)="$event.stopPropagation()">
+        <div class="emoji-selector" 
+             *ngIf="showEmojiSelector && currentEmojiItem?.id === item.id" 
+             (click)="$event.stopPropagation()"
+             (mouseenter)="$event.stopPropagation()"
+             (mouseleave)="handleMouseLeave()">
           <div class="emoji-grid">
             <!-- Curtir (Like) -->
             <button class="emoji-btn" (click)="$event.stopPropagation(); selectEmoji(item, 'curtir')" title="Curtir">
@@ -146,7 +172,14 @@
         <p class="modal-message">{{ selectedItem.message }}</p>
         <div class="modal-actions">
           <!-- Botão de emoji quando não há reação -->
-          <button *ngIf="!selectedItem || !hasReaction(selectedItem.id)" class="btn-icon emoji-btn-icon share-btn-modal" (click)="toggleModalEmojiSelector()" title="Reagir com emoji">
+          <button *ngIf="!selectedItem || !hasReaction(selectedItem.id)" 
+                  class="btn-icon emoji-btn-icon share-btn-modal" 
+                  (click)="handleModalEmojiClick(selectedItem, $event)" 
+                  (mouseenter)="handleModalMouseEnter(selectedItem)"
+                  (mouseleave)="handleModalMouseLeave()"
+                  (touchstart)="handleModalTouchStartEmoji($event)"
+                  (touchend)="handleModalTouchEndEmoji($event)"
+                  title="Reagir com emoji">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="#3a7bff" stroke-width="2"></circle>
               <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="#3a7bff" stroke-width="2" stroke-linecap="round"></path>
@@ -159,7 +192,12 @@
           <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'curtir'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+            <button class="btn-icon reaction-btn share-btn-modal" 
+                    (click)="handleModalSelectedEmojiClick(selectedItem, $event)"
+                    (mouseenter)="handleModalMouseEnter(selectedItem)"
+                    (mouseleave)="handleModalMouseLeave()"
+                    (touchstart)="handleModalTouchStartEmoji($event)"
+                    (touchend)="handleModalTouchEndEmoji($event)">
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#5A8DFF"></path>
               </svg>
@@ -170,7 +208,12 @@
           <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'gostei'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+            <button class="btn-icon reaction-btn share-btn-modal" 
+                    (click)="handleModalSelectedEmojiClick(selectedItem, $event)"
+                    (mouseenter)="handleModalMouseEnter(selectedItem)"
+                    (mouseleave)="handleModalMouseLeave()"
+                    (touchstart)="handleModalTouchStartEmoji($event)"
+                    (touchend)="handleModalTouchEndEmoji($event)">
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FF0000"></path>
               </svg>
@@ -181,7 +224,12 @@
           <div *ngIf="selectedItem && hasReaction(selectedItem.id) && getReaction(selectedItem.id) === 'festejar'" class="reaction-tooltip"
                (touchstart)="selectedItem && handleTouchStart($event, selectedItem.id)" 
                (touchend)="handleTouchEnd($event)">
-            <button class="btn-icon reaction-btn share-btn-modal" (click)="toggleModalEmojiSelector()">
+            <button class="btn-icon reaction-btn share-btn-modal" 
+                    (click)="handleModalSelectedEmojiClick(selectedItem, $event)"
+                    (mouseenter)="handleModalMouseEnter(selectedItem)"
+                    (mouseleave)="handleModalMouseLeave()"
+                    (touchstart)="handleModalTouchStartEmoji($event)"
+                    (touchend)="handleModalTouchEndEmoji($event)">
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" fill="#FFCA28"></circle>
                 <path d="M7 14a5 5 0 0 0 10 0" fill="none" stroke="#263238" stroke-width="1.5" stroke-linecap="round"></path>
@@ -204,7 +252,11 @@
         </div>
         
         <!-- Seletor de Emoji Modal -->
-        <div class="emoji-selector modal-emoji-selector" *ngIf="showModalEmojiSelector" (click)="$event.stopPropagation()">
+        <div class="emoji-selector modal-emoji-selector" 
+             *ngIf="showModalEmojiSelector" 
+             (click)="$event.stopPropagation()"
+             (mouseenter)="$event.stopPropagation()"
+             (mouseleave)="handleModalMouseLeave()">
           <div class="emoji-grid">
             <!-- Curtir (Like) -->
             <button class="emoji-btn" (click)="selectEmoji(selectedItem, 'curtir')" title="Curtir">
