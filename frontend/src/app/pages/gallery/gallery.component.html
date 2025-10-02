@@ -177,6 +177,17 @@
         </div>
         <p class="modal-message">{{ selectedItem.message }}</p>
         <div class="modal-actions">
+          <!-- Botão de compartilhar -->
+          <button class="btn-icon share-btn-modal" (click)="share(selectedItem)" title="Compartilhar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+          
           <!-- Botão de emoji quando não há reação -->
           <button *ngIf="!selectedItem || !hasAnyReactions(selectedItem.id)" 
                   class="btn-icon emoji-btn-icon share-btn-modal" 
@@ -252,15 +263,6 @@
               <span *ngIf="getTotalReactions(selectedItem.id) > 0" class="reaction-count reaction-count-modal">{{ getTotalReactions(selectedItem.id) }}</span>
             </button>
           </div>
-          <button class="btn-icon share-btn-modal" (click)="share(selectedItem)" title="Compartilhar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="18" cy="5" r="3"></circle>
-              <circle cx="6" cy="12" r="3"></circle>
-              <circle cx="18" cy="19" r="3"></circle>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg>
-          </button>
         </div>
         
         <!-- Seletor de Emoji Modal -->
