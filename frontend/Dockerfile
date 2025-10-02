@@ -8,14 +8,14 @@ WORKDIR /app
 # Copiar package.json e package-lock.json (se existir)
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm ci --only=production
+# Instalar TODAS as dependências (incluindo devDependencies para o build)
+RUN npm ci
 
 # Copiar código fonte
 COPY . .
 
 # Build da aplicação para produção
-RUN npm run build
+RUN npm run build:prod
 
 # Stage 2: Servir a aplicação com nginx
 FROM nginx:alpine
