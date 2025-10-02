@@ -250,15 +250,9 @@
     background-color: #fde8ed;
 }
 
-
-
 .btn-icon:hover {
     background-color: #ffe0e7;
 }
-
-
-
-
 
 /* Estilo para o botão de compartilhar */
 .modal-actions .btn-icon.share-btn-modal {
@@ -280,8 +274,6 @@
     background-color: #ffe0e7;
     transform: scale(1.1);
 }
-
-
 
 .btn-icon:active {
     transform: scale(0.95);
@@ -305,8 +297,6 @@
 .btn-secondary:hover {
     transform: translateY(-2px);
 }
-
-
 
 @media (max-width: 480px) {
     .emoji-selector {
@@ -372,4 +362,3 @@
 .modal-details .modal-actions {
     justify-content: flex-start;
 }
-
