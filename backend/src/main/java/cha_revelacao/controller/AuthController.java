@@ -22,8 +22,20 @@ public class AuthController {
 
     @PostMapping("/registrar")
     public ResponseEntity<UsuarioResponse> registrar(@Valid @RequestBody UsuarioRequest request) {
-        UsuarioResponse response = usuarioService.criarUsuario(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            // Normalizar email antes da verificação
+            String emailNormalizado = request.getEmail().toLowerCase().trim();
+            request.setEmail(emailNormalizado);
+            
+            UsuarioResponse response = usuarioService.criarUsuario(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            // Tratar especificamente email duplicado
+            if (e.getMessage().contains("já está em uso")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("/login")
