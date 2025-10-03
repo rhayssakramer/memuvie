@@ -7,7 +7,7 @@ services:
     dockerContext: ./backend
     envVars:
       - key: DATABASE_URL
-        value: postgresql://memuvie_user:U94rCAXl4R4VYKgJABd9Mu50oQPaE7rY@dpg-d3g0f5mr433s738qm1mg-a.virginia-postgres.render.com/memuvie
+        value: jdbc:postgresql://dpg-d3g0f5mr433s738qm1mg-a.virginia-postgres.render.com:5432/memuvie
       - key: DB_USERNAME
         value: memuvie_user
       - key: DB_PASSWORD
