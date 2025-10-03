@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "build:prod": "ng build --configuration production --optimization --aot --build-optimizer",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:cha-revelacao": "node dist/cha-revelacao/server/server.mjs"

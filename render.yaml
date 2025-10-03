@@ -1,0 +1,54 @@
+services:
+  # Backend Service
+  - type: web
+    name: memuvie-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://memuvie_user:U94rCAXl4R4VYKgJABd9Mu50oQPaE7rY@dpg-d3g0f5mr433s738qm1mg-a.virginia-postgres.render.com/memuvie
+      - key: DB_USERNAME
+        value: memuvie_user
+      - key: DB_PASSWORD
+        value: U94rCAXl4R4VYKgJABd9Mu50oQPaE7rY
+      - key: FRONTEND_URL
+        value: https://memuvie-frontend.onrender.com
+      - key: JWT_SECRET
+        value: memuvie_super_secret_key_2025_production_render_nao_compartilhar_123456789
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dvauwroyx
+      - key: CLOUDINARY_API_KEY
+        value: 414834393456219
+      - key: CLOUDINARY_API_SECRET
+        value: u9aQX-vUJeiv6xXRdErvybNCHm8
+      - key: UPLOAD_PATH
+        value: /uploads/memuvie/
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: memuvie.app@gmail.com
+      - key: MAIL_PASSWORD
+        sync: false # Adicionar manualmente por segurança
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+    healthCheckPath: /api/actuator/health
+
+  # Frontend Service
+  - type: web
+    name: memuvie-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /health
+
+# Database - Remover essa seção já que você criou manualmente
+# databases:
+#   - name: memuvie-db
+#     databaseName: memuvie
+#     user: memuvie_user
