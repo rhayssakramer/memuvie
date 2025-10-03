@@ -43,7 +43,8 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 2rem;
-    margin-top: -15px;
+    margin-top: -25px;
+
 }
 
 .modal-title {
@@ -193,14 +194,14 @@
 
 .save-button {
     width: 125px;
-    height: 40px;
+    height: 50px;
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;
     background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
     margin-top: -20px;
@@ -211,6 +212,8 @@
 }
 
 .cancel-button {
+  width: 125px;
+  height: 50px;
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;
@@ -225,17 +228,4 @@
 
 .cancel-button:hover {
     transform: translateY(-2px);
-}
-
-.error-message {
-    color: #e91e63;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
-.success-message {
-    color: #4caf50;
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
 }
