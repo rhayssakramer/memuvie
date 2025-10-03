@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-esqueci-senha',
@@ -20,38 +21,41 @@ export class EsqueciSenhaComponent {
   enviado: boolean = false;
   loading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private toast: ToastService) {}
 
   onSubmit() {
     // Limpa mensagens anteriores
     this.erro = '';
     this.mensagem = '';
-    
+
     // Valida o email
     if (!this.email.trim()) {
       this.erro = 'Por favor, informe seu email';
+      this.toast.error('Por favor, informe seu email');
       return;
     }
-    
+
     // Exibe indicador de carregamento
     this.loading = true;
 
     // Chama o serviço de authentication para solicitar reset
     this.authService.solicitarRedefinicaoSenha(this.email).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.loading = false;
         this.enviado = true;
         this.mensagem = response.mensagem || 'Email enviado com sucesso! Verifique sua caixa de entrada.';
+        this.toast.success('Se o email estiver cadastrado, enviaremos as instruções. Verifique sua caixa de entrada.');
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erro ao solicitar redefinição de senha:', err);
         this.loading = false;
-        
+
         // Mesmo em caso de error, mostramos uma message genérica para do not revelar
         // quais emails estão cadastrados no sistema
         this.enviado = true;
         this.mensagem = 'Se o email estiver cadastrado em nosso sistema, você receberá um link para redefinir sua senha em instantes.';
-        
+        this.toast.info('Se o email estiver cadastrado, enviaremos as instruções em instantes.');
+
         // Para debug only
         // this.error = err.message || 'Ocorreu um error ao processar sua solicitação.';
       }

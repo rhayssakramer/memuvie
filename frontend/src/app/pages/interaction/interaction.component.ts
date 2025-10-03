@@ -7,6 +7,7 @@ import { DotsBackgroundComponent } from '../../shared/dots-background/dots-backg
 import { logoutAll } from '../../utils/auth';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-interaction',
@@ -104,7 +105,8 @@ export class InteractionComponent implements OnInit {
   constructor(
     private router: Router,
     private fileUploadService: FileUploadService,
-    private galeriaService: GaleriaService
+    private galeriaService: GaleriaService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -187,8 +189,8 @@ export class InteractionComponent implements OnInit {
             // Limpar após o upload bem-sucedido
             this.selectedPhoto = null;
 
-            // Mostrar mensagem de sucesso temporária
-            alert('Foto enviada com sucesso!');
+            // Toast de sucesso
+            this.toast.success('Foto enviada com sucesso!');
 
             // Limpar o input
             if (input) {
@@ -198,7 +200,7 @@ export class InteractionComponent implements OnInit {
           (error) => {
             console.error('Erro no upload da foto:', error);
             this.isUploading = false;
-            alert('Erro ao enviar a foto. Tente novamente.');
+            this.toast.error('Erro ao enviar a foto. Tente novamente.');
           }
         );
 
@@ -263,8 +265,7 @@ export class InteractionComponent implements OnInit {
             // Limpar após o upload bem-sucedido
             this.selectedVideo = null;
 
-            // Mostrar mensagem de sucesso temporária
-            alert('Depoimento em vídeo enviado com sucesso!');
+            this.toast.success('Depoimento em vídeo enviado com sucesso!');
 
             // Limpar o input
             if (input) {
@@ -274,7 +275,7 @@ export class InteractionComponent implements OnInit {
           (error) => {
             console.error('Erro no upload do vídeo:', error);
             this.isUploading = false;
-            alert('Erro ao enviar o vídeo. Tente novamente.');
+            this.toast.error('Erro ao enviar o vídeo. Tente novamente.');
           }
         );
 
@@ -398,7 +399,7 @@ export class InteractionComponent implements OnInit {
           );
         } catch (error) {
           console.error('Erro no upload da foto após todas as tentativas:', error);
-          alert('Não foi possível fazer o upload da foto. Tente novamente.');
+          this.toast.error('Não foi possível fazer o upload da foto. Tente novamente.');
           this.isUploading = false;
           return;
         }
@@ -418,7 +419,7 @@ export class InteractionComponent implements OnInit {
           );
         } catch (error) {
           console.error('Erro no upload da foto base64 após todas as tentativas:', error);
-          alert('Não foi possível fazer o upload da foto. Tente novamente.');
+          this.toast.error('Não foi possível fazer o upload da foto. Tente novamente.');
           this.isUploading = false;
           return;
         }

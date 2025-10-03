@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { getProfile, updateProfile } from '../../utils/auth';
+import { ToastService } from '../../services/toast.service';
 
 interface ProfileForm {
   name: string;
@@ -36,6 +37,8 @@ export class EditProfileComponent implements OnInit {
   mostrarNovaSenha: boolean = false;
   mostrarConfirmarSenha: boolean = false;
 
+  constructor(private toast: ToastService) {}
+
   ngOnInit() {
     this.profile = getProfile();
     if (this.profile) {
@@ -68,12 +71,14 @@ export class EditProfileComponent implements OnInit {
       // Verifica o size do file (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.errorMessage = 'A foto deve ter no máximo 5MB';
+        this.toast.error('A foto deve ter no máximo 5MB');
         return;
       }
 
       // Verifica o tipo do file
       if (!file.type.startsWith('image/')) {
         this.errorMessage = 'Por favor, selecione uma imagem válida';
+        this.toast.error('Por favor, selecione uma imagem válida');
         return;
       }
 
@@ -95,6 +100,7 @@ export class EditProfileComponent implements OnInit {
     // Validações
     if (this.form.newPassword && this.form.newPassword !== this.form.confirmPassword) {
       this.errorMessage = 'As senhas não coincidem';
+      this.toast.error('As senhas não coincidem');
       return;
     }
 
@@ -145,14 +151,17 @@ export class EditProfileComponent implements OnInit {
           }
 
           this.successMessage = 'Senha alterada com sucesso!';
+          this.toast.success('Senha alterada com sucesso!');
         } catch (error: any) {
           this.errorMessage = error.message || 'Erro ao alterar senha';
+          this.toast.error(this.errorMessage);
           return;
         }
       }
 
       updateProfile(updatedProfile);
       this.successMessage = 'Perfil atualizado com sucesso!';
+      this.toast.success('Perfil atualizado com sucesso!');
 
       // Atualiza o profile local
       this.profile = updatedProfile;
@@ -162,6 +171,7 @@ export class EditProfileComponent implements OnInit {
 
     } catch (error) {
       this.errorMessage = 'Erro ao atualizar o perfil. Tente novamente.';
+      this.toast.error(this.errorMessage);
     }
   }
 

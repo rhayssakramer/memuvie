@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-redefinir-senha',
@@ -27,7 +28,8 @@ export class RedefinirSenhaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class RedefinirSenhaComponent implements OnInit {
 
       if (!this.token) {
         this.erro = 'Token de redefinição não encontrado';
+        this.toast.error(this.erro);
         this.verificandoToken = false;
         return;
       }
@@ -61,6 +64,7 @@ export class RedefinirSenhaComponent implements OnInit {
         }
         this.tokenValido = false;
         this.verificandoToken = false;
+        this.toast.error(this.erro);
       }
     });
   }
@@ -70,16 +74,19 @@ export class RedefinirSenhaComponent implements OnInit {
 
     if (!this.novaSenha) {
       this.erro = 'Por favor, informe a nova senha';
+      this.toast.error(this.erro);
       return;
     }
 
     if (this.novaSenha.length < 6) {
       this.erro = 'A senha deve ter pelo menos 6 caracteres';
+      this.toast.error(this.erro);
       return;
     }
 
     if (this.novaSenha !== this.confirmarSenha) {
       this.erro = 'As senhas não coincidem';
+      this.toast.error(this.erro);
       return;
     }
 
@@ -88,6 +95,7 @@ export class RedefinirSenhaComponent implements OnInit {
       next: () => {
         this.sucesso = true;
         this.loading = false;
+        this.toast.success('Senha redefinida com sucesso!');
       },
       error: (error) => {
         if (error.status === 400) {
@@ -96,6 +104,7 @@ export class RedefinirSenhaComponent implements OnInit {
           this.erro = 'Erro ao redefinir senha. Tente novamente mais tarde.';
         }
         this.loading = false;
+        this.toast.error(this.erro);
       }
     });
   }
