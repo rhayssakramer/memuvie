@@ -47,12 +47,11 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:8080/api/actuator/health || exit 1
 
-# Comando de execução com otimizações JVM
+# Comando de execução com otimizações JVM compatíveis
 ENTRYPOINT ["java", \
     "-XX:+UseContainerSupport", \
     "-XX:MaxRAMPercentage=75.0", \
     "-XX:+UseG1GC", \
-    "-XX:+UnlockExperimentalVMOptions", \
-    "-XX:+UseJVMCICompiler", \
+    "-Dspring.profiles.active=prod", \
     "-jar", "app.jar"]
 
