@@ -13,7 +13,7 @@ services:
       - key: DB_PASSWORD
         value: U94rCAXl4R4VYKgJABd9Mu50oQPaE7rY
       - key: FRONTEND_URL
-        value: https://memuvie-frontend.onrender.com
+        value: https://memuvie.vercel.app
       - key: JWT_SECRET
         value: memuvie_super_secret_key_2025_production_render_nao_compartilhar_123456789
       - key: CLOUDINARY_CLOUD_NAME
