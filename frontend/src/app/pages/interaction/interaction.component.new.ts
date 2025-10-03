@@ -72,6 +72,13 @@ export class InteractionComponent implements OnInit {
     }
   }
 
+  openGalleryPhotoCapture() {
+    const input = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
+    if (input) {
+      input.click();
+    }
+  }
+
   onPhotoSelected(event: Event) {
     console.log('Foto selecionada');
     const input = event.target as HTMLInputElement;
@@ -79,27 +86,27 @@ export class InteractionComponent implements OnInit {
       this.selectedPhoto = input.files[0];
       const reader = new FileReader();
       this.isReadingPhoto = true;
-      
+
       reader.onload = () => {
         console.log('Foto carregada com sucesso');
         this.photoPreviewUrl = reader.result as string;
         this.isReadingPhoto = false;
       };
-      
+
       reader.onerror = () => {
         console.error('Erro ao ler foto');
         this.isReadingPhoto = false;
         this.selectedPhoto = null;
         this.photoPreviewUrl = null;
       };
-      
+
       reader.readAsDataURL(this.selectedPhoto);
     }
   }
 
   async submitMessage() {
     console.log('Iniciando envio');
-    
+
     if (!(this.message.trim() || this.photoPreviewUrl)) {
       console.log('Sem conteúdo para enviar');
       return;
@@ -108,7 +115,7 @@ export class InteractionComponent implements OnInit {
     try {
       const userName = localStorage.getItem('userName') || 'Convidado';
       const posts = JSON.parse(localStorage.getItem('posts') || '[]');
-      
+
       const newPost = {
         id: Date.now(),
         userName,
@@ -122,9 +129,9 @@ export class InteractionComponent implements OnInit {
       console.log('Salvando novo post:', newPost);
       posts.unshift(newPost);
       localStorage.setItem('posts', JSON.stringify(posts));
-      
+
       this.resetForm();
-      
+
       console.log('Post salvo, navegando para galeria');
       await this.router.navigate(['/gallery']);
     } catch (error) {
