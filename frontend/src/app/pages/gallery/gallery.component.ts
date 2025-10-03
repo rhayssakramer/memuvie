@@ -59,48 +59,23 @@ export class GalleryComponent implements OnInit {
 
     // Primeiro testar a conectividade
     this.galeriaService.testConnection().subscribe({
-      next: (connected) => {
+      next: (connected: boolean) => {
         if (connected) {
-          // Garantir que exista pelo menos um evento válido no sistema
-          this.galeriaService.garantirEventoValido().subscribe(
-            (eventoId) => {
-              console.log('Evento válido encontrado:', eventoId);
-
-              // Primeiro tentamos obter os posts por evento (mais confiável)
-              this.galeriaService.getPostsByEvento(eventoId).subscribe({
-                next: (postsByEvent) => {
-                  console.log('Posts do evento carregados com sucesso:', postsByEvent);
-                  this.galleryItems = this.mapBackendPostsToGalleryItems(postsByEvent);
-                  this.isLoading = false;
-                },
-                error: (eventErr) => {
-                  console.error('Falhou ao buscar posts por evento:', eventErr);
-
-                  // Se falhar, tentamos usar o endpoint geral
-                  console.log('Tentando buscar todos os posts');
-                  this.galeriaService.getPosts().subscribe({
-                    next: (posts) => {
-                      console.log('Posts carregados do backend:', posts);
-                      this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
-                      this.isLoading = false;
-                    },
-                    error: (err) => {
-                      console.error('Também falhou ao buscar todos os posts:', err);
-                      this.error = 'Não foi possível carregar as publicações do servidor. Usando dados locais.';
-                      this.isLoading = false;
-                      this.loadFromLocalStorage();
-                    }
-                  });
-                }
-              });
+          // Buscar TODOS os posts de TODOS os usuários
+          console.log('Buscando todos os posts da galeria');
+          this.galeriaService.getPosts().subscribe({
+            next: (posts: GaleriaPost[]) => {
+              console.log('Posts carregados do backend:', posts);
+              this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
+              this.isLoading = false;
             },
-            (err) => {
-              console.error('Erro ao garantir evento válido:', err);
-              this.error = 'Não foi possível conectar ao servidor. Usando dados locais.';
+            error: (err: any) => {
+              console.error('Erro ao buscar posts:', err);
+              this.error = 'Não foi possível carregar as publicações do servidor. Usando dados locais.';
               this.isLoading = false;
               this.loadFromLocalStorage();
             }
-          );
+          });
         } else {
           // Se não conectado, usar apenas localStorage
           console.log('Backend não disponível, usando apenas localStorage');
@@ -108,7 +83,7 @@ export class GalleryComponent implements OnInit {
           this.loadFromLocalStorage();
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erro ao testar conectividade:', err);
         this.isLoading = false;
         this.loadFromLocalStorage();
@@ -314,7 +289,7 @@ export class GalleryComponent implements OnInit {
             console.log(`Post ${item.id} removido com sucesso do backend`);
             this.toastService.success('Post removido com sucesso');
           },
-          error: (err) => {
+          error: (err: any) => {
             console.error(`Erro ao remover post ${item.id} do backend:`, err);
             this.toastService.warning('O post foi removido da galeria, mas houve um problema ao remover do servidor');
             // Se não conseguir remover do backend, poderia recarregar a lista

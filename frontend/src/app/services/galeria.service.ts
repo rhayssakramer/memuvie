@@ -97,49 +97,39 @@ export class GaleriaService {
     );
   }
 
-  // Obter todos os posts da galeria
+  // Obter todos os posts da galeria - TODOS os usuários
   getPosts(): Observable<GaleriaPost[]> {
-    console.log('Buscando posts da galeria');
+    console.log('Buscando TODOS os posts da galeria');
     console.log('URL:', `${this.apiUrl}`);
     console.log('Token disponível:', !!this.getToken());
 
-    // 1) Tentar por evento canônico, que é consistente com a criação
-    return this.getOrCreateCanonicalEventoId().pipe(
-      switchMap((eventoId) =>
-        this.getPostsByEvento(eventoId).pipe(
-          catchError(() => of([] as GaleriaPost[]))
-        )
-      ),
-      // 2) Fallback: endpoint geral
-      switchMap((postsPorEvento) => {
-        if (Array.isArray(postsPorEvento) && postsPorEvento.length > 0) {
-          return of(postsPorEvento);
-        }
-        return this.http.get<any>(this.apiUrl, this.getHttpOptions())
-          .pipe(
-            retry(1),
-            map(response => Array.isArray(response) ? response.map(post => ({
-              id: post.id,
-              mensagem: post.mensagem || '',
-              urlFoto: post.urlFoto || '',
-              urlVideo: post.urlVideo || '',
-              dataCriacao: post.dataCriacao,
-              eventoId: post.evento?.id || 0,
-              usuario: post.usuario ? {
-                id: post.usuario.id,
-                nome: post.usuario.nome,
-                email: post.usuario.email,
-                fotoPerfil: post.usuario.fotoPerfil
-              } : undefined
-            })) : []),
-            catchError(error => {
-              console.error('Erro ao buscar posts (endpoint geral):', error);
-              // Se 500, manter vazio para tela usar fallback local
-              return of([] as GaleriaPost[]);
-            })
-          );
-      })
-    );
+    // Usar diretamente o endpoint geral que retorna TODOS os posts
+    return this.http.get<any>(this.apiUrl, this.getHttpOptions())
+      .pipe(
+        retry(1),
+        map(response => {
+          console.log('Resposta do backend (todos os posts):', response);
+          return Array.isArray(response) ? response.map(post => ({
+            id: post.id,
+            mensagem: post.mensagem || '',
+            urlFoto: post.urlFoto || '',
+            urlVideo: post.urlVideo || '',
+            dataCriacao: post.dataCriacao,
+            eventoId: post.evento?.id || 0,
+            usuario: post.usuario ? {
+              id: post.usuario.id,
+              nome: post.usuario.nome,
+              email: post.usuario.email,
+              fotoPerfil: post.usuario.fotoPerfil
+            } : undefined
+          })) : [];
+        }),
+        catchError(error => {
+          console.error('Erro ao buscar todos os posts:', error);
+          // Se 500, manter vazio para tela usar fallback local
+          return of([] as GaleriaPost[]);
+        })
+      );
   }
 
   // Obter posts por evento
