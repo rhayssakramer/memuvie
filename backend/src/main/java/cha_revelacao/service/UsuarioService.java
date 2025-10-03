@@ -46,13 +46,23 @@ public class UsuarioService {
     }
 
     public UsuarioResponse criarUsuario(UsuarioRequest request) {
-        if (usuarioRepository.existsByEmail(request.getEmail())) {
+        // Normalizar email para verificação
+        String emailNormalizado = request.getEmail().toLowerCase().trim();
+        
+        // Verificar se email já existe (case-insensitive)
+        if (usuarioRepository.existsByEmail(emailNormalizado)) {
+            throw new BusinessException("Email já está em uso");
+        }
+        
+        // Verificar também com busca case-insensitive
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmailAndAtivo(emailNormalizado);
+        if (usuarioExistente.isPresent()) {
             throw new BusinessException("Email já está em uso");
         }
 
         Usuario usuario = new Usuario();
         usuario.setNome(request.getNome());
-        usuario.setEmail(request.getEmail());
+        usuario.setEmail(emailNormalizado); // Usar email normalizado
         usuario.setSenha(passwordEncoder.encode(request.getSenha()));
         usuario.setFotoPerfil(request.getFotoPerfil()); // Adiciona a foto de perfil
         usuario.setTipo(Usuario.TipoUsuario.CONVIDADO);

@@ -62,9 +62,15 @@ export function updateProfile(profile: UserProfile) {
 export function logoutAll() {
   clearSession();
   clearProfile();
-  // Backward-compat cleanup
+
+  // Limpar todas as chaves relacionadas ao usuário
   localStorage.removeItem('userName');
+  localStorage.removeItem('userEmail');
   localStorage.removeItem('userPhoto');
+  localStorage.removeItem('token');
+  localStorage.removeItem('userId');
+
+  console.log('Todos os dados de usuário foram limpos');
 }
 
 // Função para manter compatibilidade entre formato antigo e novo de usuário

@@ -246,6 +246,22 @@ export class LoginComponent {
       return;
     }
 
+    // Verificar se já existe perfil com este email
+    const existingProfile = getProfile();
+    if (existingProfile && existingProfile.email.toLowerCase() === this.newEmail.trim().toLowerCase()) {
+      this.error = 'Este email já está sendo usado. Faça login ao invés de criar um novo perfil.';
+      this.toast.error(this.error);
+      return;
+    }
+
+    // Verificar dados legados também
+    const storedUserEmail = localStorage.getItem('userEmail');
+    if (storedUserEmail && storedUserEmail.toLowerCase() === this.newEmail.trim().toLowerCase()) {
+      this.error = 'Este email já está cadastrado. Faça login para continuar.';
+      this.toast.error(this.error);
+      return;
+    }
+
     // Criar o objeto de registro
     const registerRequest = {
       nome: this.newUserName.trim(),
@@ -254,7 +270,7 @@ export class LoginComponent {
       fotoPerfil: this.previewUrl || undefined
     };
 
-    // Registrar no backend
+    // Registrar APENAS no backend - SEM FALLBACK LOCAL
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
         console.log('Registro bem-sucedido com resposta:', response);
@@ -295,41 +311,16 @@ export class LoginComponent {
       error: (err) => {
         console.error('Registration failed:', err);
 
-        // Fallback para o modo local (temporário até backend completo)
-        try {
-          // Save o novo profile localmente
-          saveProfile({
-            name: this.newUserName.trim(),
-            email: this.newEmail.trim(),
-            photo: this.previewUrl || null
-          });
-
-          // Save os dados de compatibilidade
-          localStorage.setItem('userName', this.newUserName.trim());
-          if (this.previewUrl) {
-            localStorage.setItem('userPhoto', this.previewUrl);
-          }
-
-          // Preenche o formulário de login
-          this.email = this.newEmail.trim();
-          this.password = this.newPassword.trim();
-
-          // Limpa os campos do formulário de criação
-          this.newUserName = '';
-          this.newEmail = '';
-          this.newPassword = '';
-          this.newConfirmPassword = '';
-          this.selectedFile = null;
-          this.previewUrl = null;
-
-          // Fecha o modal
-          this.showCreateProfile = false;
-
-      this.toast.info('Perfil criado com sucesso! Faça login para continuar.');
-        } catch (e) {
-          this.error = 'Erro ao criar perfil. Tente novamente.';
+        // Tratar especificamente email duplicado
+        if (err.status === 409 || (err.error && err.error.message && err.error.message.includes('já está em uso'))) {
+          this.error = 'Este email já está cadastrado. Tente fazer login ou use outro email.';
           this.toast.error(this.error);
+          return;
         }
+
+        // Para qualquer outro erro, NÃO criar localmente - apenas mostrar erro
+        this.error = err.message || 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+        this.toast.error(this.error);
       }
     });
   }

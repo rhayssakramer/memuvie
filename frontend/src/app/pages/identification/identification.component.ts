@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { saveProfile, startSession, logoutAll } from '../../utils/auth';
+import { saveProfile, startSession, logoutAll, getProfile } from '../../utils/auth';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
@@ -55,6 +55,24 @@ export class IdentificationComponent implements OnInit {
   onSubmit() {
     if (!this.userName.trim() || !this.email.trim() || !this.password.trim()) {
       this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
+      this.toastService.error(this.errorMessage);
+      return;
+    }
+
+    // Verificar se já existe um perfil local com este email
+    const existingProfile = getProfile();
+    if (existingProfile && existingProfile.email.toLowerCase() === this.email.trim().toLowerCase()) {
+      this.errorMessage = 'Este email já está sendo usado. Faça login ao invés de criar um novo perfil.';
+      this.toastService.error(this.errorMessage);
+      return;
+    }
+
+    // Verificar todos os dados no localStorage para emails duplicados
+    const storedUserName = localStorage.getItem('userName');
+    const storedUserEmail = localStorage.getItem('userEmail');
+    if (storedUserEmail && storedUserEmail.toLowerCase() === this.email.trim().toLowerCase()) {
+      this.errorMessage = 'Este email já está cadastrado localmente. Faça login para continuar.';
+      this.toastService.error(this.errorMessage);
       return;
     }
 
@@ -68,26 +86,26 @@ export class IdentificationComponent implements OnInit {
       fotoPerfil: this.previewUrl || undefined
     };
 
-    // Registrar no backend
+    // Registrar APENAS no backend - SEM FALLBACK LOCAL
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
         console.log('Registro bem-sucedido:', response);
-        
+
         // Salvar os dados da sessão
         if (response.token) {
           localStorage.setItem('token', response.token);
         }
-        
+
         // Salvar o perfil
         saveProfile({
           name: this.userName.trim(),
           email: this.email.trim(),
           photo: this.previewUrl || null
         });
-        
+
         // Inicia a sessão de 4h
         startSession(4);
-        
+
         // Backward-compat keys
         localStorage.setItem('userName', this.userName.trim());
         localStorage.setItem('userEmail', this.email.trim());
@@ -100,9 +118,18 @@ export class IdentificationComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao criar perfil:', error);
-        this.errorMessage = error.message || 'Erro ao criar perfil. Tente novamente.';
-        this.toastService.error(this.errorMessage);
         this.isSubmitting = false;
+
+        // Tratar especificamente email duplicado
+        if (error.status === 409 || (error.error && error.error.message && error.error.message.includes('já está em uso'))) {
+          this.errorMessage = 'Este email já está cadastrado. Tente fazer login ou use outro email.';
+          this.toastService.error(this.errorMessage);
+          return;
+        }
+
+        // Para qualquer outro erro, NÃO criar localmente
+        this.errorMessage = error.message || 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+        this.toastService.error(this.errorMessage);
       }
     });
   }
