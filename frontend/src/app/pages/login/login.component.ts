@@ -47,6 +47,7 @@ export class LoginComponent {
     this.error = '';
     if (!this.email.trim() || !this.password.trim()) {
       this.error = 'Preencha e-mail e senha';
+      this.toast.error(this.error);
       return;
     }
 
@@ -95,6 +96,7 @@ export class LoginComponent {
           this.router.navigate(['/interaction']);
         } else {
           this.error = 'Email ou senha inválidos. Crie seu perfil primeiro.';
+          this.toast.error(this.error);
         }
       }
     });
@@ -159,6 +161,7 @@ export class LoginComponent {
       // Verificar o size do file (limitar a 1MB)
       if (file.size > 1024 * 1024) {
         this.error = 'A imagem é muito grande. Por favor, selecione uma imagem com menos de 1MB.';
+        this.toast.error(this.error);
         return;
       }
 
@@ -204,6 +207,7 @@ export class LoginComponent {
             this.error = 'A imagem ainda está muito grande após compressão. Por favor, selecione uma imagem menor.';
             this.selectedFile = null;
             this.previewUrl = null;
+            this.toast.error(this.error);
           } else {
             this.error = ''; // Limpa qualquer error anterior
           }
@@ -226,16 +230,19 @@ export class LoginComponent {
     // Validation dos campos
     if (!this.newUserName.trim() || !this.newEmail.trim() || !this.newPassword.trim() || !this.newConfirmPassword.trim()) {
       this.error = 'Preencha todos os campos obrigatórios';
+      this.toast.error(this.error);
       return;
     }
 
     if (this.newPassword.length < 6) {
       this.error = 'A senha deve ter no mínimo 6 caracteres';
+      this.toast.error(this.error);
       return;
     }
 
     if (this.newPassword !== this.newConfirmPassword) {
       this.error = 'As senhas não conferem';
+      this.toast.error(this.error);
       return;
     }
 
@@ -318,12 +325,10 @@ export class LoginComponent {
           // Fecha o modal
           this.showCreateProfile = false;
 
-      // Mensagem de sucesso (modo local) + aviso
-      const msgLocal = 'Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.';
-      this.error = msgLocal; // mantém feedback inline existente
       this.toast.info('Perfil criado com sucesso! Faça login para continuar.');
         } catch (e) {
           this.error = 'Erro ao criar perfil. Tente novamente.';
+          this.toast.error(this.error);
         }
       }
     });
