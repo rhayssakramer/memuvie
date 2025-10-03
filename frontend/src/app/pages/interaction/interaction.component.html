@@ -67,6 +67,7 @@
         </div>
 
       <div class="textarea-wrap">
+        <textarea [(ngModel)]="message" [maxlength]="maxLength" placeholder="Escreva sua mensagem aqui... (até 5000 caracteres)"></textarea>
         <div class="char-count">{{ remainingCharacters }} caracteres restantes</div>
       </div>
 
