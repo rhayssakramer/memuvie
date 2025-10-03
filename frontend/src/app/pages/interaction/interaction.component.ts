@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { logoutAll } from '../../utils/auth';
 import { FileUploadService } from '../../services/file-upload.service';
+import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
 
 @Component({
   selector: 'app-interaction',
@@ -100,7 +101,11 @@ export class InteractionComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private fileUploadService: FileUploadService) {}
+  constructor(
+    private router: Router,
+    private fileUploadService: FileUploadService,
+    private galeriaService: GaleriaService
+  ) {}
 
   ngOnInit() {
     // Limpar todo o estado quando o componente é inicializado
@@ -117,13 +122,25 @@ export class InteractionComponent implements OnInit {
       // Garantir que os dados do usuário estejam sincronizados
       auth.syncUserData();
     });
+    
+    // Garantir que exista pelo menos um evento válido no sistema
+    this.galeriaService.garantirEventoValido().subscribe({
+      next: (eventoId) => {
+        console.log('Evento válido garantido com ID:', eventoId);
+      },
+      error: (error) => {
+        console.error('Não foi possível garantir evento válido:', error);
+      }
+    });
 
     // Limpar os inputs de file
     setTimeout(() => {
       const photoInput = document.getElementById('photoInput') as HTMLInputElement | null;
       const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
+      const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
       if (photoInput) photoInput.value = '';
       if (videoInput) videoInput.value = '';
+      if (galleryPhotoInput) galleryPhotoInput.value = '';
     }, 0);
 
     // Garantir que a rolagem do body esteja habilitada ao entrar na página.
@@ -151,8 +168,44 @@ export class InteractionComponent implements OnInit {
   onPhotoSelected(event: Event) {
     console.log('Foto selecionada');
     const input = event.target as HTMLInputElement;
+    // Verifica se foi chamado a partir do botão "Envie Fotos/Vídeos da Festa"
+    // Identifica o botão pelo ID do input, verificando se é photoInput ou algum outro ID específico
+    const isDirectUpload = (input.id === 'photoInput');
+
     if (input.files && input.files[0]) {
       this.selectedPhoto = input.files[0];
+
+      if (isDirectUpload) {
+        // Se for upload direto para o Cloudinary sem exibir na galeria
+        this.isUploading = true;
+        console.log('Enviando foto diretamente para o Cloudinary...');
+
+        this.fileUploadService.uploadImage(this.selectedPhoto).subscribe(
+          (url) => {
+            console.log('Foto enviada com sucesso para o Cloudinary:', url);
+            this.isUploading = false;
+            // Limpar após o upload bem-sucedido
+            this.selectedPhoto = null;
+
+            // Mostrar mensagem de sucesso temporária
+            alert('Foto enviada com sucesso!');
+
+            // Limpar o input
+            if (input) {
+              input.value = '';
+            }
+          },
+          (error) => {
+            console.error('Erro no upload da foto:', error);
+            this.isUploading = false;
+            alert('Erro ao enviar a foto. Tente novamente.');
+          }
+        );
+
+        return; // Sai do método após iniciar o upload direto
+      }
+
+      // Comportamento normal para fotos que serão mostradas na galeria
       const reader = new FileReader();
       this.isReadingPhoto = true;
 
@@ -191,8 +244,44 @@ export class InteractionComponent implements OnInit {
 
   onVideoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+    // Verifica se foi chamado a partir do botão "Deixe seu depoimento em vídeo"
+    // Identifica pelo ID do input
+    const isDirectUpload = (input.id === 'videoInput');
+
     if (input.files && input.files[0]) {
       this.selectedVideo = input.files[0];
+
+      if (isDirectUpload) {
+        // Se for upload direto para o Cloudinary sem exibir na galeria
+        this.isUploading = true;
+        console.log('Enviando vídeo diretamente para o Cloudinary...');
+
+        this.fileUploadService.uploadVideo(this.selectedVideo).subscribe(
+          (url) => {
+            console.log('Vídeo enviado com sucesso para o Cloudinary:', url);
+            this.isUploading = false;
+            // Limpar após o upload bem-sucedido
+            this.selectedVideo = null;
+
+            // Mostrar mensagem de sucesso temporária
+            alert('Depoimento em vídeo enviado com sucesso!');
+
+            // Limpar o input
+            if (input) {
+              input.value = '';
+            }
+          },
+          (error) => {
+            console.error('Erro no upload do vídeo:', error);
+            this.isUploading = false;
+            alert('Erro ao enviar o vídeo. Tente novamente.');
+          }
+        );
+
+        return; // Sai do método após iniciar o upload direto
+      }
+
+      // Comportamento normal para vídeos que serão mostrados na galeria
       const url = URL.createObjectURL(this.selectedVideo);
       this.videoPreviewUrl = url;
 
@@ -212,6 +301,10 @@ export class InteractionComponent implements OnInit {
 
   openPhotoCapture() {
     (document.getElementById('photoInput') as HTMLInputElement)?.click();
+  }
+
+  openGalleryPhotoCapture() {
+    (document.getElementById('galleryPhotoInput') as HTMLInputElement)?.click();
   }
 
   async submitMessage() {
@@ -271,19 +364,43 @@ export class InteractionComponent implements OnInit {
       // Upload para Cloudinary em vez de armazenar no localStorage
       let photoUrl: string | null = null;
       let videoUrl: string | null = null;
+      const maxRetries = 3;
+      const retryDelay = 1000; // 1 segundo
+
+      // Função auxiliar para retry
+      const retryUpload = async (uploadFn: () => Promise<string>): Promise<string> => {
+        let lastError;
+        for (let i = 0; i < maxRetries; i++) {
+          try {
+            return await uploadFn();
+          } catch (error) {
+            console.error(`Tentativa ${i + 1} falhou:`, error);
+            lastError = error;
+            if (i < maxRetries - 1) {
+              await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
+          }
+        }
+        throw lastError;
+      };
 
       // Upload da foto para o Cloudinary, se existir
       if (this.selectedPhoto) {
         console.log('Fazendo upload da foto para o Cloudinary');
         try {
-          photoUrl = await new Promise<string>((resolve, reject) => {
-            this.fileUploadService.uploadImage(this.selectedPhoto as File).subscribe(
-              url => resolve(url),
-              error => reject(error)
-            );
-          });
+          photoUrl = await retryUpload(() =>
+            new Promise<string>((resolve, reject) => {
+              this.fileUploadService.uploadImage(this.selectedPhoto as File).subscribe(
+                url => resolve(url),
+                error => reject(error)
+              );
+            })
+          );
         } catch (error) {
-          console.error('Erro no upload da foto:', error);
+          console.error('Erro no upload da foto após todas as tentativas:', error);
+          alert('Não foi possível fazer o upload da foto. Tente novamente.');
+          this.isUploading = false;
+          return;
         }
       } else if (this.photoPreviewUrl) {
         // Se temos apenas um preview base64, podemos convertê-lo em um Blob e fazer upload
@@ -291,14 +408,19 @@ export class InteractionComponent implements OnInit {
         const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
         console.log('Fazendo upload da foto base64 para o Cloudinary');
         try {
-          photoUrl = await new Promise<string>((resolve, reject) => {
-            this.fileUploadService.uploadImage(file).subscribe(
-              url => resolve(url),
-              error => reject(error)
-            );
-          });
+          photoUrl = await retryUpload(() =>
+            new Promise<string>((resolve, reject) => {
+              this.fileUploadService.uploadImage(file).subscribe(
+                url => resolve(url),
+                error => reject(error)
+              );
+            })
+          );
         } catch (error) {
-          console.error('Erro no upload da foto base64:', error);
+          console.error('Erro no upload da foto base64 após todas as tentativas:', error);
+          alert('Não foi possível fazer o upload da foto. Tente novamente.');
+          this.isUploading = false;
+          return;
         }
       }
 
@@ -323,23 +445,11 @@ export class InteractionComponent implements OnInit {
         }
       }
 
-      // Salvar apenas as URLs no localStorage (muito mais eficiente)
-      const savePost = () => {
+      // Salvar o post no backend e no localStorage como fallback
+      const savePost = async () => {
         try {
-          // Limpar posts antigos se necessário
-          this.cleanupOldPosts();
-
-          // Salva o post apenas com URLs (não os arquivos completos)
-          const raw = localStorage.getItem('posts');
-          const posts = raw ? JSON.parse(raw) : [];
-
-          // Log das URLs antes de salvar
-          console.log('Salvando post com URLs:', {
-            photo: photoUrl,
-            video: videoUrl
-          });
-
-          posts.unshift({
+          // Preparar o objeto para salvar
+          const postData = {
             id: Date.now(),
             userName: userName,
             userPhoto: userPhoto,
@@ -347,8 +457,85 @@ export class InteractionComponent implements OnInit {
             video: videoUrl,  // URL da Cloudinary, não o arquivo completo
             message: this.message || '',
             date: new Date().toISOString()
+          };
+
+          // Log das URLs antes de salvar
+          console.log('Salvando post com URLs:', {
+            photo: photoUrl,
+            video: videoUrl
           });
-          localStorage.setItem('posts', JSON.stringify(posts));
+
+          // Salvar no localStorage como fallback
+          try {
+            // Limpar posts antigos se necessário
+            await this.cleanupOldPosts();
+
+            // Tentar salvar com diferentes estratégias de redução de dados
+            const saveToLocalStorage = async (posts: any[]) => {
+              try {
+                localStorage.setItem('posts', JSON.stringify(posts));
+                return true;
+              } catch (e) {
+                return false;
+              }
+            };
+
+            const raw = localStorage.getItem('posts');
+            const existingPosts = raw ? JSON.parse(raw) : [];
+            const newPosts = [postData, ...existingPosts];
+
+            // Primeira tentativa: salvar todos os posts
+            let saved = await saveToLocalStorage(newPosts);
+
+            if (!saved) {
+              // Segunda tentativa: manter apenas os últimos 10 posts
+              console.log('Tentando salvar apenas os últimos 10 posts...');
+              saved = await saveToLocalStorage(newPosts.slice(0, 10));
+            }
+
+            if (!saved) {
+              // Terceira tentativa: manter apenas os últimos 5 posts
+              console.log('Tentando salvar apenas os últimos 5 posts...');
+              saved = await saveToLocalStorage(newPosts.slice(0, 5));
+            }
+
+            if (!saved) {
+              // Última tentativa: salvar apenas o post atual
+              console.log('Tentando salvar apenas o post atual...');
+              saved = await saveToLocalStorage([postData]);
+            }
+
+            if (saved) {
+              console.log('Post salvo no localStorage como fallback');
+            } else {
+              console.error('Não foi possível salvar no localStorage mesmo após todas as tentativas');
+            }
+          } catch (e) {
+            console.error('Erro ao salvar no localStorage:', e);
+          }
+
+          // Salvar no backend (apenas se for mensagem com foto para a galeria)
+          // Não enviar para o backend se for upload direto de foto ou vídeo (botões principais)
+          if (this.isGalleryContent()) {
+            // Criar objeto no formato esperado pelo backend
+            const backendPost: GaleriaPost = {
+              mensagem: this.message || '',
+              urlFoto: photoUrl || undefined,
+              urlVideo: videoUrl || undefined
+              // O backend irá associar ao usuário logado e ao evento atual
+            };
+
+            // Tentar salvar no backend (o retry está no service)
+            this.galeriaService.createPost(backendPost).subscribe({
+              next: (response) => {
+                console.log('Post salvo com sucesso no backend:', response);
+              },
+              error: (error) => {
+                console.error('Erro ao salvar post no backend:', error);
+                console.warn('Post foi salvo apenas no localStorage');
+              }
+            });
+          }
 
           // Limpar o estado
           this.message = '';
@@ -364,7 +551,7 @@ export class InteractionComponent implements OnInit {
           this.videoPreviewUrl = null;
 
           // Limpar inputs de file
-          ['photoInput', 'videoInput'].forEach(inputId => {
+          ['photoInput', 'videoInput', 'galleryPhotoInput'].forEach(inputId => {
             const input = document.getElementById(inputId) as HTMLInputElement | null;
             if (input) {
               input.value = '';
@@ -384,7 +571,7 @@ export class InteractionComponent implements OnInit {
       };
 
       // Salvar o post com as URLs do Cloudinary
-      savePost();
+      await savePost();
 
     } catch (e) {
       console.error('Erro ao enviar conteúdo:', e);
@@ -431,10 +618,28 @@ export class InteractionComponent implements OnInit {
     if (photoInput) photoInput.value = '';
     const videoInput = document.getElementById('videoInput') as HTMLInputElement | null;
     if (videoInput) videoInput.value = '';
+    const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
+    if (galleryPhotoInput) galleryPhotoInput.value = '';
   }
 
   get remainingCharacters() {
     return this.maxLength - this.message.length;
+  }
+
+  /**
+   * Verifica se o conteúdo atual deve ir para a galeria
+   * Os botões principais (foto/vídeo da festa e depoimento) não vão para a galeria
+   * Apenas o conteúdo de "Deixe uma mensagem especial" vai para a galeria
+   */
+  isGalleryContent(): boolean {
+    // Se for uma mensagem com foto da área "Deixe uma mensagem especial"
+    // O identificador é o uso do input galleryPhotoInput
+    const galleryPhotoInput = document.getElementById('galleryPhotoInput') as HTMLInputElement | null;
+    const hasGalleryPhoto = this.photoPreviewUrl && galleryPhotoInput?.files && galleryPhotoInput.files.length > 0;
+    const hasMessage = this.message && this.message.trim().length > 0;
+
+    // Se tem mensagem ou foto da galeria, é conteúdo para a galeria
+    return !!hasGalleryPhoto || !!hasMessage;
   }
 
 }
