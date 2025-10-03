@@ -5,10 +5,13 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --configuration production",
-    "build:prod": "ng build --configuration production --optimization --aot --build-optimizer",
+    "build:prod": "ng build --configuration production",
+    "build:vercel": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:cha-revelacao": "node dist/cha-revelacao/server/server.mjs"
+    "serve:ssr:cha-revelacao": "node dist/cha-revelacao/server/server.mjs",
+    "preview": "ng build --configuration production && npx http-server dist/cha-revelacao/browser -p 4200",
+    "analyze": "ng build --configuration production --stats-json && npx webpack-bundle-analyzer dist/cha-revelacao/browser/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +41,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.7.2"
+    "typescript": "~5.7.2",
+    "webpack-bundle-analyzer": "^4.10.1"
   }
 }

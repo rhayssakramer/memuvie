@@ -1,52 +1,126 @@
-# Frontend
+# Frontend - Memuvie
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.2.
+Frontend Angular da aplicação Memuvie, otimizado para deploy no Vercel.
 
-## Development server
+## 🚀 Deploy no Vercel
 
-To start a local development server, run:
+Este projeto está configurado para deploy automático no Vercel. Consulte [`VERCEL_DEPLOY.md`](./VERCEL_DEPLOY.md) para instruções detalhadas.
+
+## 📋 Pré-requisitos
+
+- Node.js 18+
+- NPM ou Yarn
+- Angular CLI
+
+## 🛠️ Desenvolvimento
+
+### Instalação
 
 ```bash
+npm install
+```
+
+### Servidor de desenvolvimento
+
+```bash
+npm start
+# ou
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Acesse `http://localhost:4200/`. A aplicação recarregará automaticamente quando você modificar os arquivos.
 
-## Code scaffolding
+### Scripts disponíveis
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `npm start` - Servidor de desenvolvimento com proxy
+- `npm run build` - Build de produção
+- `npm run build:vercel` - Build otimizado para Vercel
+- `npm run preview` - Preview local da build de produção
+- `npm run test` - Testes unitários
+- `npm run analyze` - Análise do bundle size
 
-```bash
-ng generate component component-name
-```
+## 🏗️ Build
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Desenvolvimento
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Produção (Vercel)
 
 ```bash
-ng test
+npm run build:vercel
 ```
 
-## Running end-to-end tests
+Os artefatos serão armazenados no diretório `dist/cha-revelacao/browser/`.
 
-For end-to-end (e2e) testing, run:
+## 🧪 Testes
+
+### Testes unitários
+
+```bash
+npm test
+```
+
+### Coverage
+
+```bash
+npm run test -- --coverage
+```
+
+## 📁 Estrutura do projeto
+
+```text
+src/
+├── app/
+│   ├── pages/           # Páginas da aplicação
+│   ├── services/        # Serviços
+│   ├── shared/          # Componentes compartilhados
+│   └── utils/           # Utilitários
+├── assets/              # Assets estáticos
+└── environments/        # Configurações de ambiente
+```
+
+## 🌍 Ambientes
+
+- **Development**: `environment.ts` - API local (localhost:8080)
+- **Production**: `environment.prod.ts` - API no Vercel
+
+## 🔧 Configuração
+
+### Variáveis de ambiente
+
+Copie `.env.example` para `.env.local` e configure:
+
+```bash
+API_URL=https://your-backend-url.vercel.app/api
+CLOUDINARY_CLOUD_NAME=your-cloudinary-name
+```
+
+### Proxy para desenvolvimento
+
+O arquivo `proxy.conf.json` configura o proxy para a API local durante o desenvolvimento.
+
+## 📊 Performance
+
+- Bundle otimizado com tree-shaking
+- Lazy loading de rotas
+- Compressão automática no Vercel
+- Cache otimizado para assets estáticos
+
+## 🔒 Segurança
+
+- Headers de segurança configurados
+- Sanitização de inputs
+- Proteção XSS
+- HTTPS forçado em produção
+
+## 📈 Monitoramento
+
+- Vercel Analytics habilitado
+- Core Web Vitals tracking
+- Error tracking integrado
 
 ```bash
 ng e2e
