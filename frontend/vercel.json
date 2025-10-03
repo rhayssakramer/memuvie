@@ -6,10 +6,10 @@
       "NODE_ENV": "production"
     }
   },
-  "buildCommand": "npm run build:vercel",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist/cha-revelacao/browser",
   "installCommand": "npm ci",
-  "framework": "angular",
+  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",
