@@ -144,6 +144,9 @@ export class AuthService {
 
       if (error.status === 401) {
         errorMessage = 'Email ou senha inválidos';
+      } else if (error.status === 400) {
+        // Bad Request - inclui violações de validação como email duplicado
+        errorMessage = error.error?.message || 'Dados inválidos';
       } else if (error.status === 409) {
         errorMessage = 'Este email já está em uso';
       } else if (error.status === 500) {
