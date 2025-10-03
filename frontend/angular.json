@@ -36,11 +36,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/cha-revelacao",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -56,8 +56,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
-            "outputMode": "static"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -69,8 +68,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "12kB",
+                  "maximumError": "15kB"
                 }
               ],
               "outputHashing": "all",
@@ -85,7 +84,6 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "ssr": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.prod.ts",

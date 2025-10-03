@@ -30,6 +30,7 @@ export class EsqueciSenhaComponent {
 
     // Valida o email
     if (!this.email.trim()) {
+      this.toastService.error('Por favor, informe seu email');
       this.erro = 'Por favor, informe seu email';
       this.toast.error('Por favor, informe seu email');
       return;
@@ -55,7 +56,6 @@ export class EsqueciSenhaComponent {
         this.enviado = true;
         this.mensagem = 'Se o email estiver cadastrado em nosso sistema, você receberá um link para redefinir sua senha em instantes.';
         this.toast.info('Se o email estiver cadastrado, enviaremos as instruções em instantes.');
-
         // Para debug only
         // this.error = err.message || 'Ocorreu um error ao processar sua solicitação.';
       }

@@ -70,11 +70,26 @@ public class RedefinicaoSenhaService {
                     emailService.enviarEmailRedefinicaoSenha(usuario, token);
                     log.info("Email de redefinição enviado para: {}", usuario.getEmail());
                     log.info("Token de redefinição criado para o usuário: {}", usuario.getEmail());
+                    
+                    // Log do token para ambientes de desenvolvimento (remover em produção)
+                    String prodEnv = System.getenv("PROD_ENV");
+                    if (prodEnv == null || !prodEnv.equals("true")) {
+                        log.info("Token gerado (para testes): {}", token);
+                        log.info("URL de redefinição: {}/redefinir-senha?token={}", 
+                            System.getProperty("app.frontend.url", "http://localhost:4200"), token);
+                    }
                 } catch (Exception emailError) {
                     // Se houver erro no envio do email, apenas registra o log
                     // mas não interrompe o processo
                     log.error("Erro ao enviar email de redefinição: {}", emailError.getMessage());
-                    log.error("Token gerado (para testes): {}", emailError.getMessage());
+                    log.error("Detalhes do erro de email:", emailError);
+                    
+                    // Log do token para debug
+                    String token = tokenRepository.findByUsuario_Email(usuario.getEmail())
+                        .map(TokenRedefinicaoSenha::getToken)
+                        .orElse("Token não encontrado");
+                    
+                    log.info("Token gerado (para testes): {}", token);
                 }
             } catch (Exception dbError) {
                 log.error("Erro ao processar token de redefinição no banco de dados: {}", dbError.getMessage());

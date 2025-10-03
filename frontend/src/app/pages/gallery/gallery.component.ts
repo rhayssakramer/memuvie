@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -26,8 +26,9 @@ interface GalleryItem {
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderComponent, DotsBackgroundComponent] // Remove ProfileMenuComponent das importações
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, OnDestroy {
   selectedItem: GalleryItem | null = null;
+  itemToDelete: GalleryItem | null = null;
   galleryItems: GalleryItem[] = [];
   isLoading: boolean = false;
   error: string | null = null;
@@ -46,7 +47,6 @@ export class GalleryComponent implements OnInit {
       // Garantir que os dados do usuário estejam sincronizados
       auth.syncUserData();
     });
-
     this.loadGalleryPosts();
   }
 
@@ -116,9 +116,7 @@ export class GalleryComponent implements OnInit {
     });
   }
 
-  /**
-   * Carrega posts do localStorage como fallback caso o backend falhe
-   */
+  /* Carrega posts do localStorage como fallback caso o backend falhe */
   private loadFromLocalStorage() {
     console.log('Tentando carregar posts do localStorage como fallback...');
     const raw = localStorage.getItem('posts');
@@ -139,9 +137,7 @@ export class GalleryComponent implements OnInit {
     }
   }
 
-  /**
-   * Converte posts do backend para o formato usado na galeria
-   */
+  /* Converte posts do backend para o formato usado na galeria */
   private mapBackendPostsToGalleryItems(posts: GaleriaPost[]): GalleryItem[] {
     return posts.map(post => ({
       id: post.id || Date.now(),
@@ -157,14 +153,13 @@ export class GalleryComponent implements OnInit {
 
   openModal(item: GalleryItem) {
     this.selectedItem = item;
+    this.showEmojiSelector = false;
+    this.showModalEmojiSelector = false;
   }
 
   closeModal() {
     this.selectedItem = null;
-  }
-
-  goToInteraction() {
-    this.router.navigate(['/interaction']);
+    this.showModalEmojiSelector = false;
   }
 
   goBack() {
@@ -271,7 +266,7 @@ export class GalleryComponent implements OnInit {
 
     return Boolean(isNameMatch || isLocalPost || isEmailMatch);
   }
-
+    
   // Obtém o email do usuário atual
   getCurrentUserEmail(): string | null {
     const profile = getProfile();
@@ -293,7 +288,7 @@ export class GalleryComponent implements OnInit {
     const index = this.galleryItems.findIndex(i => i.id === item.id);
     if (index > -1) {
       this.galleryItems.splice(index, 1);
-
+      
       // Também remove do localStorage (como fallback se estiver usando)
       try {
         const raw = localStorage.getItem('posts');
@@ -306,7 +301,6 @@ export class GalleryComponent implements OnInit {
         console.error('Erro ao atualizar localStorage:', e);
         this.toastService.error('Erro ao atualizar o armazenamento local');
       }
-
       // Tenta remover do backend
       if (typeof item.id === 'number') {
         this.galeriaService.deletePost(item.id).subscribe({

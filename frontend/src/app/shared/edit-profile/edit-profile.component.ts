@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { getProfile, updateProfile } from '../../utils/auth';
 import { ToastService } from '../../services/toast.service';
 
@@ -36,6 +35,8 @@ export class EditProfileComponent implements OnInit {
   mostrarSenhaAtual: boolean = false;
   mostrarNovaSenha: boolean = false;
   mostrarConfirmarSenha: boolean = false;
+  
+  constructor(private toastService: ToastService) {}
 
   constructor(private toast: ToastService) {}
 

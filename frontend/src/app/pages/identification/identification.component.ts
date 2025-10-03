@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { saveProfile, startSession, logoutAll } from '../../utils/auth';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-identification',
@@ -26,7 +27,7 @@ export class IdentificationComponent implements OnInit {
     sessionStorage.clear();
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private toastService: ToastService) {
     // Forçar a limpeza de qualquer sessão existente na criação do componente
     logoutAll();
   }
@@ -45,13 +46,18 @@ export class IdentificationComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.userName.trim() || !this.email.trim() || !this.password.trim()) return;
+    if (!this.userName.trim() || !this.email.trim() || !this.password.trim()) {
+      this.toastService.error('Preencha todos os campos obrigatórios');
+      return;
+    }
+    
     // Salve o novo perfil e inicie a sessão de 4h
     saveProfile({ name: this.userName.trim(), email: this.email.trim(), photo: this.previewUrl || null });
     startSession(4);
     // Backward-compat keys
     localStorage.setItem('userName', this.userName.trim());
     if (this.previewUrl) localStorage.setItem('userPhoto', this.previewUrl);
+    this.toastService.success('Perfil criado com sucesso!');
     this.router.navigate(['/interaction']);
   }
 

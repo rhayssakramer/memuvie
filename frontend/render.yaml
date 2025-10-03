@@ -1,0 +1,15 @@
+version: "1"
+
+services:
+  - type: web
+    name: memuvie-frontend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free
+    region: oregon
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: NODE_ENV
+        value: production

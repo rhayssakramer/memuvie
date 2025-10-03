@@ -59,8 +59,10 @@ export class RedefinirSenhaComponent implements OnInit {
       error: (error) => {
         if (error.status === 400) {
           this.erro = 'Este token de redefinição é inválido ou expirou';
+          this.toastService.error('Este token de redefinição é inválido ou expirou');
         } else {
           this.erro = 'Erro ao verificar o token. Tente novamente mais tarde.';
+          this.toastService.error('Erro ao verificar o token. Tente novamente mais tarde.');
         }
         this.tokenValido = false;
         this.verificandoToken = false;
@@ -100,8 +102,10 @@ export class RedefinirSenhaComponent implements OnInit {
       error: (error) => {
         if (error.status === 400) {
           this.erro = 'Token inválido ou expirado';
+          this.toastService.error('Token inválido ou expirado');
         } else {
           this.erro = 'Erro ao redefinir senha. Tente novamente mais tarde.';
+          this.toastService.error('Erro ao redefinir senha. Tente novamente mais tarde.');
         }
         this.loading = false;
         this.toast.error(this.erro);

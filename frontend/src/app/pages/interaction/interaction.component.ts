@@ -241,7 +241,7 @@ export class InteractionComponent implements OnInit {
   }
 
   openVideoCapture() {
-        // Em dispositivos móveis, o atributo capture="environment" prioriza a câmera
+    // Em dispositivos móveis, o atributo capture="environment" prioriza a câmera
     // para gravação direta de vídeo
     (document.getElementById('videoInput') as HTMLInputElement)?.click();
   }
@@ -266,7 +266,6 @@ export class InteractionComponent implements OnInit {
             this.isUploading = false;
             // Limpar após o upload bem-sucedido
             this.selectedVideo = null;
-
             this.toast.success('Depoimento em vídeo enviado com sucesso!');
 
             // Limpar o input
@@ -300,6 +299,10 @@ export class InteractionComponent implements OnInit {
       this.selectedPhoto = null;
       this.photoPreviewUrl = null;
     }
+  }
+
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
   openPhotoCapture() {

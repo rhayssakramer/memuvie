@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: memuvie-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: memuvie-db
+          property: connectionString
+      - key: PORT
+        value: 8080
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dvauwroyx
+      - key: CLOUDINARY_API_KEY
+        value: "414834393456219"
+      - key: CLOUDINARY_API_SECRET
+        value: u9aQX-vUJeiv6xXRdErvybNCHm8
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: memuviedigital@gmail.com
+      - key: MAIL_PASSWORD
+        value: qntn tvcf hglp xpnl
+
+databases:
+  - name: memuvie-db
+    databaseName: memuvie_db
+    user: memuvie_db_user
+    plan: free

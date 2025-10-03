@@ -18,4 +18,7 @@ public interface TokenRedefinicaoSenhaRepository extends JpaRepository<TokenRede
     
     @Transactional
     long countByUsuario(@Param("usuario") Usuario usuario);
+    
+    // Encontra um token pelo email do usuário
+    Optional<TokenRedefinicaoSenha> findByUsuario_Email(@Param("email") String email);
 }

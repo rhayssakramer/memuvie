@@ -15,7 +15,6 @@
     margin: 0 auto;
     margin-top: 20px;
     position: relative; /* ensure grid content appears above the background */
-    z-index: 2;
 }
 
 .gallery-card {
@@ -126,7 +125,7 @@
 
 .modal-content {
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 15px;
     width: 90%;
     max-width: 800px;
     max-height: 90vh;
