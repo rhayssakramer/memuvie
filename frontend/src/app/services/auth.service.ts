@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { UserProfile } from '../utils/auth';
+import { UserProfile, getProfile } from '../utils/auth';
 
 export interface LoginRequest {
   email: string;
@@ -82,6 +82,22 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
+    // Validação prévia no frontend
+    if (!request.email || !request.nome || !request.senha) {
+      return throwError(() => new Error('Dados obrigatórios não preenchidos'));
+    }
+
+    // Verificar se email já existe localmente antes de enviar
+    const existingProfile = getProfile();
+    if (existingProfile && existingProfile.email.toLowerCase() === request.email.toLowerCase()) {
+      return throwError(() => new Error('Este email já está sendo usado localmente'));
+    }
+
+    const storedUserEmail = localStorage.getItem('userEmail');
+    if (storedUserEmail && storedUserEmail.toLowerCase() === request.email.toLowerCase()) {
+      return throwError(() => new Error('Este email já está cadastrado localmente'));
+    }
+
     return this.http.post<any>(`${this.apiUrl}/registrar`, request, httpOptions).pipe(
       map(response => ({
         token: response.token || '',  // Protegendo contra valores nulos
@@ -92,7 +108,20 @@ export class AuthService {
           photo: response.fotoPerfil || request.fotoPerfil
         }
       })),
-      catchError(this.handleError<AuthResponse>('register'))
+      catchError(error => {
+        console.error('Erro no registro:', error);
+
+        // Tratamento específico de erros
+        if (error.status === 409) {
+          return throwError(() => new Error('Este email já está cadastrado no servidor'));
+        }
+
+        if (error.status === 400 && error.error?.message?.includes('já está em uso')) {
+          return throwError(() => new Error('Este email já está cadastrado'));
+        }
+
+        return this.handleError<AuthResponse>('register')(error);
+      })
     );
   }
 
@@ -144,6 +173,9 @@ export class AuthService {
 
       if (error.status === 401) {
         errorMessage = 'Email ou senha inválidos';
+      } else if (error.status === 400) {
+        // Bad Request - inclui violações de validação como email duplicado
+        errorMessage = error.error?.message || 'Dados inválidos';
       } else if (error.status === 409) {
         errorMessage = 'Este email já está em uso';
       } else if (error.status === 500) {
