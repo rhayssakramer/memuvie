@@ -400,7 +400,7 @@ export class GaleriaService {
       })
     };
   }
-  
+
   // Obter o token do localStorage
   private getToken(): string {
     try {

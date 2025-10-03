@@ -122,7 +122,7 @@ export class InteractionComponent implements OnInit {
       // Garantir que os dados do usuário estejam sincronizados
       auth.syncUserData();
     });
-    
+
     // Garantir que exista pelo menos um evento válido no sistema
     this.galeriaService.garantirEventoValido().subscribe({
       next: (eventoId) => {

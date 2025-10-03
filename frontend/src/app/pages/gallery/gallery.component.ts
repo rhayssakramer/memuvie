@@ -62,7 +62,7 @@ export class GalleryComponent implements OnInit {
           this.galeriaService.garantirEventoValido().subscribe(
             (eventoId) => {
               console.log('Evento válido encontrado:', eventoId);
-              
+
               // Primeiro tentamos obter os posts por evento (mais confiável)
               this.galeriaService.getPostsByEvento(eventoId).subscribe({
                 next: (postsByEvent) => {
@@ -72,7 +72,7 @@ export class GalleryComponent implements OnInit {
                 },
                 error: (eventErr) => {
                   console.error('Falhou ao buscar posts por evento:', eventErr);
-                  
+
                   // Se falhar, tentamos usar o endpoint geral
                   console.log('Tentando buscar todos os posts');
                   this.galeriaService.getPosts().subscribe({
