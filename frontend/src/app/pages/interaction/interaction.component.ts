@@ -241,6 +241,8 @@ export class InteractionComponent implements OnInit {
   }
 
   openVideoCapture() {
+        // Em dispositivos móveis, o atributo capture="environment" prioriza a câmera
+    // para gravação direta de vídeo
     (document.getElementById('videoInput') as HTMLInputElement)?.click();
   }
 
@@ -301,13 +303,20 @@ export class InteractionComponent implements OnInit {
   }
 
   openPhotoCapture() {
-    (document.getElementById('photoInput') as HTMLInputElement)?.click();
+    const input = document.getElementById('photoInput') as HTMLInputElement;
+    if (input) {
+      // Abre diretamente a galeria para seleção de imagens
+      input.click();
+    }
   }
 
-  openGalleryPhotoCapture() {
-    (document.getElementById('galleryPhotoInput') as HTMLInputElement)?.click();
+openGalleryPhotoCapture() {
+    const input = document.getElementById('galleryPhotoInput') as HTMLInputElement;
+    if (input) {
+      // Abre diretamente a galeria para seleção de imagens
+      input.click();
+    }
   }
-
   async submitMessage() {
     console.log('Iniciando submitMessage');
 
