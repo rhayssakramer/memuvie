@@ -23,11 +23,12 @@ public class CorsConfig {
         
         // Permitir requisições do frontend Angular - Desenvolvimento e Produção
         config.addAllowedOrigin("http://localhost:4200"); // Desenvolvimento local
-        config.addAllowedOrigin("https://memuvie-frontend.onrender.com"); // Produção Render
+        config.addAllowedOrigin("https://memuvie-frontend.onrender.com"); // Produção Render (legacy)
         config.addAllowedOrigin(frontendUrl); // URL configurável via properties
         
-        // Permitir patterns para subdomínios do Render
+        // Permitir patterns para subdomínios do Render e Vercel
         config.addAllowedOriginPattern("https://*.onrender.com");
+        config.addAllowedOriginPattern("https://*.vercel.app");
         config.addAllowedOriginPattern("http://localhost:*");
         
         // Permitir todos os métodos HTTP necessários
