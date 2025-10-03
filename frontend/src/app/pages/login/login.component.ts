@@ -6,6 +6,7 @@ import { EsqueciSenhaComponent } from '../esqueci-senha/esqueci-senha.component'
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
 import { getProfile, logoutAll, saveProfile, UserProfile, saveSession } from '../../utils/auth';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,7 @@ export class LoginComponent {
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private toast: ToastService) {}
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -279,8 +280,10 @@ export class LoginComponent {
         // Fechar o modal
         this.showCreateProfile = false;
 
-        // Mostrar message de sucesso
-        this.error = 'Perfil criado com sucesso! Faça login para continuar.';
+  // Mensagem de sucesso
+  const msgSuccess = 'Perfil criado com sucesso! Faça login para continuar.';
+  this.error = msgSuccess; // mantém feedback inline existente
+  this.toast.success(msgSuccess);
       },
       error: (err) => {
         console.error('Registration failed:', err);
@@ -315,8 +318,10 @@ export class LoginComponent {
           // Fecha o modal
           this.showCreateProfile = false;
 
-          // Mostra message de sucesso (com aviso)
-          this.error = 'Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.';
+      // Mensagem de sucesso (modo local) + aviso
+      const msgLocal = 'Perfil criado localmente! Faça login para continuar. Nota: O backend pode não estar disponível.';
+      this.error = msgLocal; // mantém feedback inline existente
+      this.toast.info('Perfil criado com sucesso! Faça login para continuar.');
         } catch (e) {
           this.error = 'Erro ao criar perfil. Tente novamente.';
         }
