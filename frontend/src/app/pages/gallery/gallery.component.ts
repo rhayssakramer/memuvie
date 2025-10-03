@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ProfileMenuComponent } from '../../shared/profile-menu/profile-menu.component';
 import { HeaderComponent } from '../../shared/header/header.component'; // Manter importação do componente de cabeçalho
 import { DotsBackgroundComponent } from '../../shared/dots-background/dots-background.component';
-import { logoutAll } from '../../utils/auth';
+import { logoutAll, getProfile } from '../../utils/auth';
+import { GaleriaService, GaleriaPost } from '../../services/galeria.service';
+import { ToastService } from '../../services/toast.service';
 
 interface GalleryItem {
   id: number;
@@ -15,6 +16,7 @@ interface GalleryItem {
   video?: string | null;
   message: string;
   date: Date | string;
+  userEmail?: string; // Email do usuário que criou o post
 }
 
 @Component({
@@ -27,8 +29,16 @@ interface GalleryItem {
 export class GalleryComponent implements OnInit {
   selectedItem: GalleryItem | null = null;
   galleryItems: GalleryItem[] = [];
+  isLoading: boolean = false;
+  error: string | null = null;
+  itemToDelete: GalleryItem | null = null;
 
-  constructor(private router: Router, private location: Location) {}
+  constructor(
+    private router: Router,
+    private location: Location,
+    private galeriaService: GaleriaService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit() {
     // Importar a função syncUserData
@@ -37,13 +47,112 @@ export class GalleryComponent implements OnInit {
       auth.syncUserData();
     });
 
+    this.loadGalleryPosts();
+  }
+
+  /**
+   * Carrega posts da galeria a partir do backend
+   */
+  loadGalleryPosts() {
+    this.isLoading = true;
+    this.error = null;
+
+    // Primeiro testar a conectividade
+    this.galeriaService.testConnection().subscribe({
+      next: (connected) => {
+        if (connected) {
+          // Garantir que exista pelo menos um evento válido no sistema
+          this.galeriaService.garantirEventoValido().subscribe(
+            (eventoId) => {
+              console.log('Evento válido encontrado:', eventoId);
+
+              // Primeiro tentamos obter os posts por evento (mais confiável)
+              this.galeriaService.getPostsByEvento(eventoId).subscribe({
+                next: (postsByEvent) => {
+                  console.log('Posts do evento carregados com sucesso:', postsByEvent);
+                  this.galleryItems = this.mapBackendPostsToGalleryItems(postsByEvent);
+                  this.isLoading = false;
+                },
+                error: (eventErr) => {
+                  console.error('Falhou ao buscar posts por evento:', eventErr);
+
+                  // Se falhar, tentamos usar o endpoint geral
+                  console.log('Tentando buscar todos os posts');
+                  this.galeriaService.getPosts().subscribe({
+                    next: (posts) => {
+                      console.log('Posts carregados do backend:', posts);
+                      this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
+                      this.isLoading = false;
+                    },
+                    error: (err) => {
+                      console.error('Também falhou ao buscar todos os posts:', err);
+                      this.error = 'Não foi possível carregar as publicações do servidor. Usando dados locais.';
+                      this.isLoading = false;
+                      this.loadFromLocalStorage();
+                    }
+                  });
+                }
+              });
+            },
+            (err) => {
+              console.error('Erro ao garantir evento válido:', err);
+              this.error = 'Não foi possível conectar ao servidor. Usando dados locais.';
+              this.isLoading = false;
+              this.loadFromLocalStorage();
+            }
+          );
+        } else {
+          // Se não conectado, usar apenas localStorage
+          console.log('Backend não disponível, usando apenas localStorage');
+          this.isLoading = false;
+          this.loadFromLocalStorage();
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao testar conectividade:', err);
+        this.isLoading = false;
+        this.loadFromLocalStorage();
+      }
+    });
+  }
+
+  /**
+   * Carrega posts do localStorage como fallback caso o backend falhe
+   */
+  private loadFromLocalStorage() {
+    console.log('Tentando carregar posts do localStorage como fallback...');
     const raw = localStorage.getItem('posts');
     if (raw) {
       try {
         const items = JSON.parse(raw) as GalleryItem[];
-        this.galleryItems = items;
-      } catch {}
+        this.galleryItems = items.filter(item => {
+          // Filtra posts inválidos ou corrompidos
+          return !(item.photo === "[object Object]" ||
+                 (typeof item.photo === 'object' && item.photo !== null) ||
+                 item.video === "[object Object]" ||
+                 (typeof item.video === 'object' && item.video !== null));
+        });
+        console.log('Posts carregados do localStorage:', this.galleryItems.length);
+      } catch (e) {
+        console.error('Erro ao carregar do localStorage:', e);
+      }
     }
+  }
+
+  /**
+   * Converte posts do backend para o formato usado na galeria
+   */
+  private mapBackendPostsToGalleryItems(posts: GaleriaPost[]): GalleryItem[] {
+    return posts.map(post => ({
+      id: post.id || Date.now(),
+      userName: post.usuario?.nome || 'Usuário',
+      userPhoto: post.usuario?.fotoPerfil || 'assets/avatar-1.jpg',
+      photo: post.urlFoto || null,
+      video: post.urlVideo || null,
+      message: post.mensagem || '',
+      date: post.dataCriacao || new Date().toISOString(),
+      userEmail: post.usuario?.email // Adicionar o email do usuário para verificar propriedade
+    }));
   }
 
   openModal(item: GalleryItem) {
@@ -135,10 +244,86 @@ export class GalleryComponent implements OnInit {
   }
 
   removeItem(item: GalleryItem) {
+    // Verificar se o usuário atual é o proprietário do post
+    // Se o item pertence ao usuário atual ou é um post local (sem ID de usuário)
+    if (this.isCurrentUserOwner(item)) {
+      // Mostra o modal de confirmação
+      this.itemToDelete = item;
+    } else {
+      this.toastService.error('Você só pode excluir seus próprios posts');
+    }
+  }
+
+  // Verifica se o usuário atual é o proprietário do post
+  isCurrentUserOwner(item: GalleryItem): boolean {
+    const profile = getProfile();
+
+    // Se não tiver profile, não pode excluir nada
+    if (!profile) {
+      return false;
+    }
+
+    // Verifica se o email do usuário atual corresponde ao email do post
+    // Ou se é um post local sem ID definido (backwards compatibility)
+    const isNameMatch = item.userName === profile.name;
+    const isLocalPost = typeof item.id !== 'number';
+    const isEmailMatch = !!item.userEmail && item.userEmail === profile.email;
+
+    return Boolean(isNameMatch || isLocalPost || isEmailMatch);
+  }
+
+  // Obtém o email do usuário atual
+  getCurrentUserEmail(): string | null {
+    const profile = getProfile();
+    return profile ? profile.email : null;
+  }
+
+  cancelDelete() {
+    this.itemToDelete = null;
+    this.toastService.info('Exclusão cancelada');
+  }
+
+  confirmDelete() {
+    if (!this.itemToDelete) return;
+
+    const item = this.itemToDelete;
+    this.itemToDelete = null; // Fecha o modal
+
+    // Primeiro, remove do array local para feedback imediato ao usuário
     const index = this.galleryItems.findIndex(i => i.id === item.id);
     if (index > -1) {
       this.galleryItems.splice(index, 1);
-      localStorage.setItem('posts', JSON.stringify(this.galleryItems));
+
+      // Também remove do localStorage (como fallback se estiver usando)
+      try {
+        const raw = localStorage.getItem('posts');
+        if (raw) {
+          const localItems = JSON.parse(raw) as GalleryItem[];
+          const newLocalItems = localItems.filter(i => i.id !== item.id);
+          localStorage.setItem('posts', JSON.stringify(newLocalItems));
+        }
+      } catch (e) {
+        console.error('Erro ao atualizar localStorage:', e);
+        this.toastService.error('Erro ao atualizar o armazenamento local');
+      }
+
+      // Tenta remover do backend
+      if (typeof item.id === 'number') {
+        this.galeriaService.deletePost(item.id).subscribe({
+          next: () => {
+            console.log(`Post ${item.id} removido com sucesso do backend`);
+            this.toastService.success('Post removido com sucesso');
+          },
+          error: (err) => {
+            console.error(`Erro ao remover post ${item.id} do backend:`, err);
+            this.toastService.warning('O post foi removido da galeria, mas houve um problema ao remover do servidor');
+            // Se não conseguir remover do backend, poderia recarregar a lista
+            // para garantir consistência, mas isso pode ser frustrante para o usuário
+          }
+        });
+      } else {
+        this.toastService.success('Post removido com sucesso');
+      }
     }
   }
 

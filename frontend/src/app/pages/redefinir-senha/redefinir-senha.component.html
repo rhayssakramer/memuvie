@@ -9,7 +9,7 @@
     </div>
 
     <div *ngIf="!verificandoToken && !tokenValido && !sucesso" class="error-container">
-      <p class="error-message">{{ erro }}</p>
+      <p>Houve falha na solicitação de redefinição de senha, tente novamente.</p>
       <button class="btn btn-primary" style="width: 100%;" (click)="voltar()">Voltar ao Login</button>
     </div>
 

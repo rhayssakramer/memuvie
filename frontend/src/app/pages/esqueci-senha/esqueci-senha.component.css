@@ -156,14 +156,14 @@
 
 .btn-primary {
     width: 125px;
-    height: 40px;
+    height: 50px;
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;
     background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
     margin-top: 10px;
@@ -175,7 +175,7 @@
 
 .btn-secondary {
     width: 125px;
-    height: 40px;
+    height: 50px;
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;

@@ -25,7 +25,7 @@
       <h2>Ou deixe uma mensagem especial</h2>
 
       <!-- Upload dashed área ou preview -->
-        <div class="upload-dashed" (click)="openPhotoCapture()" *ngIf="!photoPreviewUrl && !isReadingPhoto; else photoPreview">
+  <div class="upload-dashed" (click)="openGalleryPhotoCapture()" *ngIf="!photoPreviewUrl && !isReadingPhoto; else photoPreview">
           <div class="upload-icon">📷</div>
           <div class="upload-text">
             <strong>Adicionar foto</strong>
@@ -45,8 +45,8 @@
             <ng-template #showPreview>
               <div class="preview-inner">
                 <div class="upload-preview-container">
-                  <div class="upload-preview" (click)="openPhotoCapture()">
-                    <img [src]="photoPreviewUrl!" alt="Pré-visualização da imagem" />
+                  <div class="upload-preview" (click)="openGalleryPhotoCapture()">
+                    <img *ngIf="photoPreviewUrl as preview" [src]="preview" alt="Pré-visualização da foto" />
                   </div>
                   <button class="cancel-upload" (click)="cancelUpload()">✕</button>
                 </div>
@@ -75,15 +75,22 @@
   <button
     class="send-button"
     (click)="submitMessage()"
-    [class.has-content]="message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl"
-    [disabled]="isUploading || (!message.trim() && !selectedPhoto && !selectedVideo && !photoPreviewUrl)">
-    <span *ngIf="!isUploading">{{ (message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl) ? 'Enviar Mensagem' : 'Envie sua mensagem' }}</span>
-    <span *ngIf="isUploading">Enviando... Por favor aguarde</span>
+    [class.has-content]="!!(message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl)"
+    [disabled]="(!message.trim() && !selectedPhoto && !selectedVideo && !photoPreviewUrl)">
+    <span>{{ !!(message.trim() || selectedPhoto || selectedVideo || photoPreviewUrl) ? 'Enviar Mensagem' : 'Envie sua mensagem' }}</span>
   </button>
     </section>
   </main>
 
   <!-- Entradas ocultas para captura de câmera/arquivo -->
-  <input type="file" id="videoInput" accept="video/*" capture style="display:none" (change)="onVideoSelected($event)">
-  <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)">
+  <!-- Input para upload direto de vídeo para o Cloudinary (botão de depoimento) -->
+  <input type="file" id="videoInput" accept="video/*" capture="environment" style="display:none" (change)="onVideoSelected($event)">
+
+  <!-- Input para upload direto de fotos para o Cloudinary (botão de fotos da festa) -->
+  <!-- Abre diretamente a galeria em vez de priorizar a câmera -->
+  <input type="file" id="photoInput" accept="image/*" style="display:none" (change)="onPhotoSelected($event)">
+
+  <!-- Input para fotos que serão exibidas na galeria (mensagem especial) -->
+  <!-- Abre diretamente a galeria em vez de priorizar a câmera -->
+  <input type="file" id="galleryPhotoInput" accept="image/*" style="display:none" (change)="onPhotoSelected($event)">
 </div>

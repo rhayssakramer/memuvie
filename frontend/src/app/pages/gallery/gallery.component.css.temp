@@ -1,0 +1,28 @@
+/* Modal de confirmação de exclusão */
+.delete-confirm-modal {
+    max-width: 400px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.delete-confirm-modal h3 {
+    color: var(--text-color);
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.delete-confirm-modal p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-actions button {
+    min-width: 100px;
+}
