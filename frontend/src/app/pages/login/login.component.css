@@ -390,6 +390,34 @@
     .login-header .brand { font-size: 1.8rem; margin-top: .8rem; }
     .login-card { max-width: 360px; }
     .modal-card { padding: 1rem; }
+    
+    /* Ajustar largura do botão para mobile para acomodar "Criar Perfil" */
+    .modal .btn-gradient {
+        width: 140px !important; /* Aumenta largura para acomodar o texto */
+        font-size: 0.9rem; /* Reduz ligeiramente o tamanho da fonte */
+        padding: .5rem 1rem; /* Ajusta o padding */
+    }
+    
+    .modal .btn-secondary {
+        width: 140px !important; /* Mantém ambos botões do mesmo tamanho */
+        font-size: 0.9rem;
+        padding: .5rem 1rem;
+    }
+}
+
+/* Para telas muito pequenas (320px ou menos) */
+@media (max-width: 320px) {
+    .modal .btn-gradient,
+    .modal .btn-secondary {
+        width: 130px !important; /* Largura menor para telas muito pequenas */
+        font-size: 0.85rem; /* Fonte ainda menor */
+        padding: .4rem .8rem; /* Padding reduzido */
+        white-space: nowrap; /* Força texto em uma linha */
+    }
+    
+    .form-actions {
+        gap: .5rem; /* Reduz o espaçamento entre botões */
+    }
 }
 
 /* Button de remover (X) posicionado no canto superior direito do box */
