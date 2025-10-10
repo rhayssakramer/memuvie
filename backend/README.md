@@ -1,211 +1,504 @@
-# API Chá Revelação
+# 👦👧 Pedro ou Eduarda? - Chá Revelação
 
-API para gerenciamento de usuários, eventos e votos (palpites de sexo do bebê) com autenticação JWT, documentação Swagger (Springdoc) e acesso administrativo ao banco via Adminer.
+## 📋 Índice
 
-## Sumário
-- [Stack Tecnológica](#stack-tecnológica)
-- [Arquitetura e Principais Componentes](#arquitetura-e-principais-componentes)
-- [Executando o Projeto](#executando-o-projeto)
-- [Variáveis de Ambiente](#variáveis-de-ambiente)
-- [Banco de Dados e Migrations (Flyway)](#banco-de-dados-e-migrations-flyway)
-- [Autenticação e Segurança (JWT)](#autenticação-e-segurança-jwt)
-- [Swagger / OpenAPI](#swagger--openapi)
-- [Acesso ao Banco (Adminer)](#acesso-ao-banco-adminer)
-- [Endpoints Principais](#endpoints-principais)
-- [Fluxo de Uso Rápido](#fluxo-de-uso-rápido)
-- [Exemplos cURL](#exemplos-curl)
-- [Troubleshooting](#troubleshooting)
-- [Próximas Evoluções Sugeridas](#próximas-evoluções-sugeridas)
+- [Introdução](#-introdução)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+  - [x] [Resumo completo das tecnologias]()
+- [Desafio do Projeto](#-desafio-do-projeto)
+- [Objetivos](#-objetivos)
+  - [x] [Pré-requisitos](#-pré-requisitos)
+  - [x] [Estrutura do Projeto](#-estrutura-do-projeto)
+  - [x] [Regras e Validações](#-regras-e-validações)
+  - [x] [Especificações de Conteúdo](#-especificações-de-conteúdo)
+  - [x] [Especificações Técnicas](#-especificações-técnicas)
+- [Diagrama da Aplicação](#-diagrama-da-aplicação)
+- [Execução do Projeto](#-execução-do-projeto)
+- [Deploy](#-deploy)
+- [Créditos](#-créditos-e-autores)
+- [Links Úteis](#-links-úteis)
 
-## Stack Tecnológica
-- **Java** 21
-- **Spring Boot** 3.5.x
-- **Spring Data JPA** (Hibernate)
-- **Spring Security** (JWT stateless)
-- **Flyway** (controle de schema)
-- **PostgreSQL** 15
-- **ModelMapper** (DTO ↔ entidade)
-- **Springdoc OpenAPI** (Swagger UI)
-- **Docker / Docker Compose**
+## 🌟 Introdução
 
-## Arquitetura e Principais Componentes
-| Camada | Descrição |
-|--------|-----------|
-| controller | Exposição dos endpoints REST |
-| service | Regras de negócio (UsuarioService, EventoService, VotoService, JwtService) |
-| repository | Interfaces Spring Data (UsuarioRepository, EventoRepository, VotoRepository) |
-| security | Filtro JWT, UserDetailsService, EntryPoint |
-| dto.request / dto.response | Objetos de transporte |
-| exception | Exceções e handler global |
-| model | Entidades JPA: Usuario, Evento, Voto |
+O projeto **Pedro ou Eduarda** nasceu do carinho e da expectativa em torno do chá revelação de uma família especial. Desenvolvido pela equipe Memuvie, esta aplicação web oferece uma experiência única e interativa para os convidados participarem ativamente da revelação do sexo do bebê.
 
-## Executando o Projeto
-### Via Docker (recomendado)
-```bash
-docker compose up -d --build
-```
-Logs:
-```bash
-docker compose logs -f app
-```
-Reset completo (DERRUBA E APAGA DADOS):
-```bash
-bash scripts/reset_full.sh
-```
-(Usar Git Bash / WSL no Windows)
+A plataforma permite que familiares e amigos:
+- 📸 Compartilhem fotos e vídeos da festa 
+- 🎥 Enviem vídeos de depoimentos para o bebê
+- 💌 Envie postagens com foto e uma mensagem especial
+- 📊 Acompanhem em tempo real as postagens dos convidados
 
-### Sem Docker (necessário Postgres local rodando)
-Ajuste `application.properties` ou use variáveis:
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/revelacao_cha_db
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-spring.jpa.hibernate.ddl-auto=validate
-spring.flyway.enabled=true
-```
-Rodar:
-```bash
-./mvnw spring-boot:run
-```
+## 💻 Tecnologias Utilizadas
 
-## Variáveis de Ambiente
-Principais (definidas no docker-compose):
-| Nome | Função |
-|------|--------|
-| SPRING_DATASOURCE_URL | URL JDBC do Postgres |
-| SPRING_DATASOURCE_USERNAME / PASSWORD | Credenciais banco |
-| SPRING_PROFILES_ACTIVE | Perfil ativo (docker) |
-| SERVER_SERVLET_CONTEXT_PATH | Prefixo global (/api) |
-| SPRING_JPA_HIBERNATE_DDL_AUTO | validate (não recria schema) |
-| JWT_SECRET | Chave de assinatura do token |
-| JWT_EXPIRATION | Expiração em ms |
+| Linguagens de Programação | Ferramentas e Tecnologias |
+| :-----------------: | :-----------------------: |
+| <img height="40" src="https://skillicons.dev/icons?i=java"> <img height="40" src="https://skillicons.dev/icons?i=spring">  <img height="40" src="https://skillicons.dev/icons?i=angular"> <img height="40" src="https://skillicons.dev/icons?i=typescript"> <img height="40" src="https://skillicons.dev/icons?i=html"> <img height="40" src="https://skillicons.dev/icons?i=css">  <img height="40" src="https://skillicons.dev/icons?i=js"> <img height="40" src="https://skillicons.dev/icons?i=nodejs"> | <img height="40" src="https://skillicons.dev/icons?i=vscode"> <img height="40" src="https://skillicons.dev/icons?i=git"> <img height="40" src="https://skillicons.dev/icons?i=github"> <img height="40" src="https://skillicons.dev/icons?i=postgres"> <img height="40" src="https://skillicons.dev/icons?i=docker"> <img height="40" src="https://skillicons.dev/icons?i=vercel">
 
-## Banco de Dados e Migrations (Flyway)
-Migrations em `src/main/resources/db/migration`:
-```
-V1__criar_tabela_usuarios.sql
-V2__criar_tabela_eventos.sql
-V3__criar_tabela_votos.sql
-V4__ajustar_tipos_bigint.sql (se aplicável)
-```
-Se alterar migration já aplicada → usar `flyway repair` (serviço flyway) ou resetar volume.
+### ⚙️ Resumo completo das tecnologias
 
-Executar manualmente (ferramenta flyway opcional):
-```bash
-docker compose run --rm flyway migrate
-# ou
-docker compose run --rm flyway repair
-```
+| Backend | Frontend | DevOps & Deploy | Ferramentas de Desenvolvimento |
+| :---------------: | :-----------------------: | :-----------------------: | :-----------------------: |
+| **Java 21** - Linguagem de programação principal  | **Angular 19.1.0** - Framework frontend | Docker & Docker Compose** - Containerização | **VS Code** - IDE principal
+**Spring Boot 3.5.6** - Framework principal do backend | **TypeScript 5.0+** - Linguagem de programação | **Render** - Plataforma de deploy | **Postman** - Testes de API
+**Spring Security** - Autenticação e autorização | **Angular Material** - Componentes UI | **GitHub Actions** - CI/CD (futuro) | **Git** - Controle de versão
+**Spring Data JPA** - Persistência de dados | **RxJS** - Programação reativa | **Maven** - Gerenciamento de dependências (Backend) | Repositório de código
+**JWT** - Autenticação stateless | **Angular Router** - Roteamento | **npm** - Gerenciamento de dependências (Frontend)
+**PostgreSQL** - Banco de dados principal | **Angular Forms** - Formulários reativos
+**Flyway** - Migração de banco de dados | **HTTP Client** - Comunicação com API
+**ModelMapper** - Mapeamento de objetos | **Angular SSR** - Server-Side Rendering
+**SpringDoc OpenAPI** - Documentação da API
+**Cloudinary** - Armazenamento de imagens e vídeos
+**JavaMail** - Envio de emails
+**Docker** - Containerização
 
-## Autenticação e Segurança (JWT)
-Fluxo:
-1. `POST /auth/registrar` cria usuário (default: CONVIDADO)
-2. `POST /auth/login` retorna `{ token: "<JWT>" }`
-3. Enviar `Authorization: Bearer <token>` nos endpoints protegidos.
 
-Usuários podem ter papéis: `ADMIN`, `ORGANIZADOR`, `CONVIDADO`.
-Lógica de autorização adicional em services/controllers (ex: só dono altera evento).
+## 🎯 Desafio do Projeto
 
-## Swagger / OpenAPI
-Disponível após subir:
-- UI: http://localhost:8080/api/swagger-ui.html
-- Docs JSON: http://localhost:8080/api/v3/api-docs
-Botão **Authorize** → inserir: `Bearer <token>`
+### **Desafios Técnicos**
+1. **Integração Full Stack** - Conectar seamlessly Angular com Spring Boot
+2. **Upload de Mídia** - Implementar upload seguro de imagens e vídeos
+3. **Tempo Real** - Mostrar resultados de postagens com imagem e mensagem em tempo real
+4. **Responsividade** - Garantir experiência perfeita em todos os dispositivos
+5. **Performance** - Otimizar carregamento de mídia e dados
+6. **Segurança** - Proteger dados pessoais e autenticação
 
-## Acesso ao Banco (Adminer)
-Interface web para inspeção do PostgreSQL:
-- URL: http://localhost:8081
-- Sistema: PostgreSQL
-- Servidor: `postgres`
-- Banco: `revelacao_cha_db`
-- Usuário/Senha: `postgres` / `postgres`
+### **Desafios de UX/UI**
+1. **Simplicidade** - Interface intuitiva para usuários de todas as idades
+2. **Emoção** - Criar experiência emocionante e envolvente
+3. **Acessibilidade** - Garantir acesso universal
+4. **Mobile First** - Priorizar experiência mobile
 
-## Endpoints Principais
-| Categoria | Método | Caminho | Auth |
-|-----------|--------|---------|------|
-| Auth | POST | /auth/registrar | Público |
-| Auth | POST | /auth/login | Público |
-| Usuário | GET | /usuarios/me | JWT |
-| Usuário | GET | /usuarios/{id} | JWT |
-| Usuário | GET | /usuarios | ADMIN |
-| Eventos | POST | /eventos | JWT |
-| Eventos | GET | /eventos | Público/JWT |
-| Eventos | GET | /eventos/ativos | Público |
-| Eventos | GET | /eventos/votacao-aberta | Público |
-| Eventos | GET | /eventos/meus-eventos | JWT |
-| Eventos | PUT | /eventos/{id} | Dono |
-| Eventos | PUT | /eventos/{id}/revelar | Dono |
-| Eventos | PUT | /eventos/{id}/encerrar-votacao | Dono |
-| Votos | POST | /votos | JWT |
-| Votos | GET | /votos | JWT |
-| Votos | GET | /votos/evento/{id} | JWT (ou público dependendo de regra futura) |
-| Votos | GET | /votos/evento/{id}/meu-voto | JWT |
-| Votos | PUT | /votos/{id} | Autor do voto |
-| Votos | DELETE | /votos/{id} | Autor do voto |
 
-## Fluxo de Uso Rápido
-1. Registrar usuário
-2. Login (pegar token)
-3. Criar evento
-4. Listar eventos / votar
-5. Revelar resultado (dono) ou encerrar votação
+## 🛠️ Objetivos
 
-## Exemplos cURL
-Registrar:
-```bash
-curl -X POST http://localhost:8080/api/auth/registrar \
- -H "Content-Type: application/json" \
- -d '{"nome":"Alice","email":"alice@example.com","senha":"senha123"}'
-```
-Login:
-```bash
-TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
- -H "Content-Type: application/json" \
- -d '{"email":"alice@example.com","senha":"senha123"}' | jq -r .token)
-```
-Criar evento:
-```bash
-curl -X POST http://localhost:8080/api/eventos \
- -H "Authorization: Bearer $TOKEN" \
- -H "Content-Type: application/json" \
- -d '{
-  "titulo":"Chá João",
-  "descricao":"Família",
-  "dataEvento":"2025-10-10T15:00:00",
-  "local":"Salão",
-  "nomeMae":"Maria",
-  "nomePai":"Carlos",
-  "dataEncerramentoVotacao":"2025-10-05T23:59:00"
- }'
-```
-Votar:
-```bash
-curl -X POST http://localhost:8080/api/votos \
- -H "Authorization: Bearer $TOKEN" \
- -H "Content-Type: application/json" \
- -d '{"eventoId":1,"palpite":"MENINO","justificativa":"Intuição"}'
-```
-Listar votos do evento:
-```bash
-curl http://localhost:8080/api/votos/evento/1 -H "Authorization: Bearer $TOKEN"
-```
+### **Objetivos Principais**
+- [x] Criar uma experiência memorável para o chá revelação
+- [x] Permitir participação interativa dos convidados
+- [x] Preservar momentos especiais em formato digital
+- [x] Facilitar o compartilhamento de memórias
 
-## Troubleshooting
-| Problema | Causa comum | Solução |
-|----------|-------------|---------|
-| 401 Unauthorized | Falta ou formato inválido de token | Verificar `Authorization: Bearer <token>` |
-| 403 Forbidden | Sem permissão (não dono / não ADMIN) | Confirmar papel / dono recurso |
-| Flyway checksum mismatch | Alterou migration aplicada | `docker compose run --rm flyway repair` ou reset volume |
-| Schema inválido (tipo id) | Diferença SERIAL vs BIGINT | Aplicar migration de ajuste (V4) |
-| Repositório não sobe | Falha no EntityManagerFactory | Verificar logs Flyway primeiro |
-
-## Próximas Evoluções Sugeridas
-- Endpoint para promover usuário a ORGANIZADOR / ADMIN
-- Paginação nas listagens de eventos e votos
-- Cache de consultas públicas (ex: eventos ativos)
-- Rate limiting básico em /auth/login
-- Testes de integração (Testcontainers) para pipeline CI
+### **Objetivos Técnicos**
+- [x] Desenvolver arquitetura escalável e maintível
+- [x] Implementar boas práticas de segurança
+- [x] Garantir performance otimizada
+- [x] Criar código limpo e bem documentado
+- [x] Estabelecer pipeline de deploy automatizado
 
 ---
-**Licença:** MIT
 
+### 📌 Pré-requisitos
+
+#### **Para Desenvolvimento**
+- **Java 21+** - [Download aqui](https://adoptium.net/)
+- **Node.js 18+** - [Download aqui](https://nodejs.org/)
+- **npm 10+** ou **yarn** - Gerenciador de pacotes
+- **Maven 3.9+** - Gerenciamento de dependências Java
+- **PostgreSQL 15+** - Banco de dados
+- **Docker** (opcional) - Para containerização
+- **Git** - Controle de versão
+
+#### **Para Execução**
+- **Navegador moderno** (Chrome, Firefox, Safari, Edge)
+- **Conexão com internet** - Para recursos externos
+
+### 📁 Estrutura do Projeto
+
+```
+pedro-ou-eduarda/
+├── 📁 backend/                 # Aplicação Spring Boot
+│   ├── 📁 src/
+│   │   ├── 📁 main/
+│   │   │   ├── 📁 java/cha_revelacao/
+│   │   │   │   ├── 📁 config/          # Configurações
+│   │   │   │   ├── 📁 controller/      # Controllers REST
+│   │   │   │   ├── 📁 dto/             # Data Transfer Objects
+│   │   │   │   ├── 📁 exception/       # Tratamento de exceções
+│   │   │   │   ├── 📁 model/           # Entidades JPA
+│   │   │   │   ├── 📁 repository/      # Repositórios de dados
+│   │   │   │   ├── 📁 security/        # Configurações de segurança
+│   │   │   │   └── 📁 service/         # Lógica de negócio
+│   │   │   └── 📁 resources/
+│   │   │       ├── 📁 db/migration/    # Scripts de migração
+│   │   │       ├── 📁 static/          # Recursos estáticos
+│   │   │       └── 📁 templates/       # Templates de email
+│   │   ├── 📁 docs/                    # Documentação
+│   │   ├── 📁 scripts/                 # Scripts utilitários
+│   │   ├── 🐳 Dockerfile              # Container Docker
+│   │   ├── 🐳 docker-compose.yml      # Orquestração
+│   │   └── 📄 pom.xml                 # Configuração Maven
+│   └
+├── 📁 frontend/                # Aplicação Angular
+│   ├── 📁 src/
+│   │   ├── 📁 app/
+│   │   │   ├── 📁 pages/               # Páginas da aplicação
+│   │   │   ├── 📁 shared/              # Componentes compartilhados
+│   │   │   ├── 📁 services/            # Serviços Angular
+│   │   │   ├── 📁 interceptors/        # Interceptadores HTTP
+│   │   │   └── 📁 utils/               # Utilitários
+│   │   ├── 📁 assets/                  # Recursos estáticos
+│   │   └── 📁 environments/            # Configurações de ambiente
+│   ├── 📄 angular.json                # Configuração Angular
+│   ├── 📄 package.json                # Dependências npm
+│   └── 📄 tsconfig.json               # Configuração TypeScript
+├── 📄 render.yaml                     # Configuração de deploy
+├── 📄 README.md                       # Este arquivo
+└── 📄 .gitignore                      # Arquivos ignorados pelo Git
+```
+
+---
+
+### 📜 Regras e Validações
+
+#### **Autenticação e Autorização:**
+- 🔐 **Login obrigatório** para participar
+- 🎫 **JWT Token** para autenticação
+- ⏰ **Sessão válida** por 24 horas
+- 🛡️ **Proteção CSRF** ativada
+
+#### **Upload de Mídia:**
+- 📸 **Imagens:** JPG, PNG, GIF (máx. 5MB)
+- 🎥 **Vídeos:** MP4, AVI, MOV (máx. 50MB)
+- 🔍 **Validação de conteúdo** automática
+- 🗑️ **Possibilidade de exclusão** pelo autor
+
+#### **Comentários e Mensagens:**
+- ✍️ **Mínimo 10 caracteres**
+- ❌ **Máximo 500 caracteres**
+- 🚫 **Filtro de palavras inadequadas**
+- ✏️ **Edição permitida** em 5 minutos
+
+
+### 📝 Especificações de Conteúdo
+
+#### **Tipos de Conteúdo Permitidos**
+
+#### **📸 Fotos:**
+- Ultrassons do bebê
+- Fotos da família esperando
+- Preparativos para o chá
+- Decoração do evento
+- Momentos especiais
+
+#### **🎥 Vídeos:**
+- Palpites dos convidados
+- Mensagens para o bebê
+- Momentos da revelação
+- Depoimentos da família
+
+#### **💌 Mensagens:**
+- Palpites justificados
+- Desejos para o bebê
+- Mensagens para os pais
+- Histórias e memórias
+
+
+### ⚙️ Especificações Técnicas
+
+#### **Performance:**
+- ⚡ **Tempo de carregamento:** < 3 segundos
+- 📱 **First Contentful Paint:** < 1.5 segundos
+- 🎯 **Lighthouse Score:** > 90
+- 📊 **Bundle size:** < 2MB
+
+#### **Compatibilidade:**
+- 🌐 **Navegadores:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- 📱 **Mobile:** iOS 14+, Android 8+
+- 🖥️ **Desktop:** Windows 10+, macOS 11+, Linux Ubuntu 20.04+
+
+#### **Segurança:**
+- 🔒 **HTTPS obrigatório**
+- 🛡️ **Headers de segurança** configurados
+- 🔐 **Senhas hasheadas** com BCrypt
+- 🚫 **Proteção XSS e CSRF**
+- 🔍 **Validação de entrada** rigorosa
+
+#### **API:**
+- 📡 **RESTful API** com padrões REST
+- 📋 **Documentação OpenAPI 3.0**
+- 📊 **Rate limiting** implementado
+- 🔄 **Versionamento** de API
+- ✅ **Códigos de status** HTTP padronizados
+
+
+## 🏗️ Diagrama da Aplicação
+
+```mermaid
+graph TB
+    subgraph "Frontend (Angular)"
+        A[Login Page] --> B[Home Page]
+        B --> C[Identification Page]
+        C --> D[Interaction Page]
+        D --> E[Gallery Page]
+        
+        F[Auth Service] --> G[HTTP Interceptor]
+        H[Event Service] --> I[Gallery Service]
+        J[Toast Service] --> K[File Upload Service]
+    end
+    
+    subgraph "Backend (Spring Boot)"
+        L[Auth Controller] --> M[User Service]
+        N[Event Controller] --> O[Event Service]
+        P[Gallery Controller] --> Q[Gallery Service]
+        R[Vote Controller] --> S[Vote Service]
+        
+        M --> T[(PostgreSQL)]
+        O --> T
+        Q --> T
+        S --> T
+        
+        U[Cloudinary Service] --> V[Cloudinary API]
+        W[Email Service] --> X[SMTP Server]
+    end
+    
+    subgraph "External Services"
+        Y[Cloudinary Storage]
+        Z[Email Provider]
+        AA[Render Deploy]
+    end
+    
+    A -.->|HTTP/HTTPS| L
+    D -.->|HTTP/HTTPS| N
+    E -.->|HTTP/HTTPS| P
+    D -.->|HTTP/HTTPS| R
+    
+    U -.->|API| Y
+    W -.->|SMTP| Z
+    
+    style A fill:#e1f5fe
+    style B fill:#e1f5fe
+    style C fill:#e1f5fe
+    style D fill:#e1f5fe
+    style E fill:#e1f5fe
+    style T fill:#c8e6c9
+    style Y fill:#fff3e0
+    style Z fill:#fff3e0
+    style AA fill:#f3e5f5
+```
+
+---
+
+## ▶️ Execução do Projeto
+
+### **1. Clone do Repositório**
+```bash
+git clone https://github.com/rhayssakramer/pedro-ou-eduarda.git
+cd pedro-ou-eduarda
+```
+
+### **2. Configuração do Banco de Dados**
+
+#### **Opção A: PostgreSQL Local**
+```bash
+# Instalar PostgreSQL
+# Criar banco de dados
+createdb cha_revelacao
+
+# Configurar variáveis de ambiente
+export DB_URL=jdbc:postgresql://localhost:5432/cha_revelacao
+export DB_USERNAME=seu_usuario
+export DB_PASSWORD=sua_senha
+```
+
+#### **Opção B: Docker Compose**
+```bash
+cd backend
+docker-compose up -d postgres
+```
+
+### **3. Configuração do Backend**
+
+#### **Variáveis de Ambiente**
+Crie um arquivo `.env` no diretório `backend`:
+```env
+# Database
+DB_URL=jdbc:postgresql://localhost:5432/cha_revelacao
+DB_USERNAME=postgres
+DB_PASSWORD=password
+
+# JWT
+JWT_SECRET=seu_jwt_secret_muito_seguro_aqui
+JWT_EXPIRATION=86400000
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=seu_cloud_name
+CLOUDINARY_API_KEY=sua_api_key
+CLOUDINARY_API_SECRET=seu_api_secret
+
+# Email
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=seu_email@gmail.com
+MAIL_PASSWORD=sua_senha_app
+```
+
+#### **Executar Backend**
+```bash
+cd backend
+
+# Usando Maven Wrapper
+./mvnw spring-boot:run
+
+# Ou usando Maven instalado
+mvn spring-boot:run
+
+# Ou usando Docker
+docker-compose up backend
+```
+
+### **4. Configuração do Frontend**
+
+#### **Instalar Dependências**
+```bash
+cd frontend
+npm install
+```
+
+#### **Configurar Ambiente**
+Copie `.env.example` para `.env` e configure:
+```env
+API_URL=http://localhost:8080/api
+CLOUDINARY_CLOUD_NAME=seu_cloud_name
+```
+
+#### **Executar Frontend**
+```bash
+# Desenvolvimento
+npm start
+
+# Build para produção
+npm run build:prod
+
+# Preview da build
+npm run preview
+```
+
+### **5. Acesso à Aplicação**
+
+- **Frontend:** http://localhost:4200
+- **Backend API:** http://localhost:8080
+- **Documentação API:** http://localhost:8080/swagger-ui.html
+- **Banco H2 (dev):** http://localhost:8080/h2-console
+
+### **6. Usuários de Teste**
+
+#### **Administrador**
+- **Email:** admin@memuvie.com
+- **Senha:** admin123
+
+#### **Usuário Teste**
+- **Email:** teste@memuvie.com
+- **Senha:** teste123
+
+
+## 🚢 Deploy
+
+### **Deploy Automático (Render)**
+
+O projeto está configurado para deploy automático no Render:
+
+1. **Push para main** triggers automatic deploy
+2. **Backend e Frontend** são deployados juntos
+3. **Banco PostgreSQL** gerenciado pelo Render
+4. **Variáveis de ambiente** configuradas no painel Render
+
+### **URLs de Produção**
+- **Aplicação:** https://pedro-ou-eduarda.onrender.com
+- **API:** https://pedro-ou-eduarda-api.onrender.com
+
+### **Deploy Manual**
+
+#### **Docker**
+```bash
+# Build das imagens
+docker-compose build
+
+# Deploy
+docker-compose up -d
+
+# Logs
+docker-compose logs -f
+```
+
+#### **Heroku**
+```bash
+# Login no Heroku
+heroku login
+
+# Criar aplicação
+heroku create pedro-ou-eduarda
+
+# Deploy
+git push heroku main
+```
+
+## 👥 Créditos
+
+### **Equipe Memuvie**
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/rhayssakramer">
+        <img src="https://github.com/rhayssakramer.png" width="100px" alt="Rhayssa Kramer"/>
+        <br />
+        <sub><b>Rhayssa Kramer</b></sub>
+      </a>
+      <br />
+      <small>Tech Lead & Full Stack Developer</small>
+    </td>
+    <td align="center">
+    <a href="https://github.com/italorochaj">
+      <img src="https://avatars.githubusercontent.com/u/102812593?v=4" width="100px" alt="Memuvie Team"/>
+      <br />
+      <sub><b>Italo Rocha</b></sub>
+      <br />
+      </a>
+      <small>Product Development Team</small>
+    </td>
+  </tr>
+</table>
+
+### **Agradecimentos Especiais**
+- 👧 **Família da Eduarda** - Por confiar em nós com este momento especial
+- 🎉 **Convidados do Chá** - Por tornarem este evento inesquecível
+- ☕ **Café** - Por manter a equipe acordada durante o desenvolvimento
+
+### **Inspiração**
+Este projeto foi desenvolvido com muito 💜 e dedicação, pensando em cada detalhe para tornar o chá revelação da Eduarda um momento único e especial.
+
+## 🔗 Links Úteis
+
+### **Aplicação**
+- 📖 **Documentação da API:** [API Docs](https://pedro-ou-eduarda-api.onrender.com/swagger-ui.html)
+- 📊 **Status do Sistema:** [Status Page](https://status.render.com)
+
+### **Repositórios**
+- 📂 **Repositório Principal:** [GitHub](https://github.com/rhayssakramer/pedro-ou-eduarda)
+- 🔄 **Releases:** [Releases](https://github.com/rhayssakramer/pedro-ou-eduarda/releases)
+- 🐛 **Issues:** [Bug Reports](https://github.com/rhayssakramer/pedro-ou-eduarda/issues)
+
+### **Tecnologias**
+- ☕ **Spring Boot:** [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- 🅰️ **Angular:** [angular.io](https://angular.io)
+- 🐳 **Docker:** [docker.com](https://docker.com)
+- 🚀 **Render:** [render.com](https://render.com)
+- ☁️ **Cloudinary:** [cloudinary.com](https://cloudinary.com)
+
+### **Memuvie**
+- 🏢 **Site Institucional:** [memuvie.com](https://memuvie.com) (em breve)
+- 📧 **Contato:** contato@memuvie.com (em breve)
+- 💼 **LinkedIn:** [Memuvie Company](https://linkedin.com/company/memuvie) (em breve)
+- 📱 **Instagram:** [@memuvie](https://instagram.com/memuvie_oficial)
+
+---
+
+<div align="center">
+  <h3>Feito com 💜 pela equipe Memuvie para celebrar a chegada da Eduarda!</h3>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Memuvie-Viva%20agora%2C%20reviva%20sempre!-pink?style=for-the-badge" alt="Memuvie Slogan">
+  </p>
+  
+  <p>
+    <sub>© 2024 Memuvie. Todos os direitos reservados.</sub>
+  </p>
+</div>
