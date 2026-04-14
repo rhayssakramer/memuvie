@@ -18,7 +18,7 @@ export class DotsBackgroundComponent implements OnInit {
   }
 
   private generateDots(count: number) {
-    const palette = ['#ffffff', 'rgba(255,95,163,0.95)', 'rgba(58,123,255,0.95)', '#fff7f9', '#f0f5ff'];
+    const palette = ['#FFE5B4', '#B4E7FF', '#E5D4F1'];
     this.dots = Array.from({ length: count }).map((_, i) => {
       const size = Math.round(18 + Math.random() * 110);
       const top = Math.round(Math.random() * 90) + '%';
