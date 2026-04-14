@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
+  background: linear-gradient(180deg, #9D50BB 0%, #6E48AA 100%);
   position: relative; /* stacking context so dots are behind */
   z-index: 1;
 }
@@ -139,10 +139,10 @@ label {
   border: 0;
   border-radius: 999px;
   padding: .5rem 1.6rem;
-  background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+  background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
   color: #fff;
   font-weight: 700;
-  box-shadow: 0 8px 18px rgba(111,96,255,0.12);
+  box-shadow: 0 8px 18px rgba(157, 80, 187, 0.12);
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
   margin-top: 10px;
