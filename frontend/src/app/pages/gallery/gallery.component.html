@@ -13,7 +13,7 @@
       </ng-template>
       <div class="card-content">
         <div class="user-info">
-          <img [src]="item.userPhoto" [alt]="item.userName" class="user-avatar">
+          <img [src]="item.userPhoto || 'assets/avatar-default.svg'" [alt]="item.userName" class="user-avatar">
           <div class="user-details">
             <div class="user-name">{{ item.userName }}</div>
             <div class="post-date">{{ formatDate(item.date) }}</div>
@@ -59,7 +59,7 @@
       </ng-template>
       <div class="modal-details">
         <div class="modal-user-info">
-          <img [src]="selectedItem.userPhoto" [alt]="selectedItem.userName" class="modal-avatar">
+          <img [src]="selectedItem.userPhoto || 'assets/avatar-default.svg'" [alt]="selectedItem.userName" class="modal-avatar">
           <div class="user-details">
             <div class="user-name">{{ selectedItem.userName }}</div>
             <div class="post-date">{{ formatDate(selectedItem.date) }}</div>
