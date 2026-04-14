@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 
 /* Background da sessão hero */
 .hero {
@@ -8,7 +9,7 @@
     display: grid;
     place-items: center;
     padding: 2rem 1rem;
-    background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
+    background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 100%);
     position: relative;
     overflow: hidden;
 }
@@ -26,20 +27,29 @@
 
 .subtitle {
     font-family: 'Nunito', sans-serif;
-    color: #ff5fa3;
+    color: #6E48AA;
     font-weight: 900;
     font-size: 30px;
 }
 
 .subtitle span{
-    color: #3a7bff;
+    color: #ffffff;
 }
 
 .title {
-    font-family: 'Great Vibes', cursive;
+    font-family: 'Fredoka';
     font-size: clamp(2.2rem, 6vw, 4rem);
-    color: #0f2238;
-    text-shadow: 0 6px 18px rgba(15,34,56,.15);
+    color: #9D50BB;
+    text-shadow: 0 6px 6px rgba(110, 72, 170, 0.5);
+}
+
+.title a{
+    text-decoration: none;
+    color: #febb06;
+}
+
+.title a:hover{
+    color: rgb(110, 72, 170);
 }
 
 /* Countdown */
@@ -67,13 +77,13 @@
 }
 
 .value.pink {
-    color: #ff4f9a;
-    background: #fff4f9;
+    color: #7030a0;
+    background: #f3e8ff;
 }
 
 .value.blue {
-    color: #3a7bff;
-    background: #f0f5ff;
+    color: #febb06;
+    background: #fff9f0;
 }
 
 .label {
@@ -88,10 +98,10 @@
     border: 0;
     border-radius: 999px;
     padding: .95rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    box-shadow: 0 14px 30px rgba(157, 80, 187, .35);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
   }
