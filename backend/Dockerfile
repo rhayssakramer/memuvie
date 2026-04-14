@@ -1,57 +1,37 @@
-# Multi-stage build para otimizar o tamanho da imagem
-FROM eclipse-temurin:21-jdk-alpine AS builder
-
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-# Copiar arquivos de configuração do Maven
-COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-COPY mvnw.cmd .
+# Copiar arquivo de projeto
+COPY EventoAPI.csproj .
+RUN dotnet restore
 
-# Dar permissão de execução
-RUN chmod +x ./mvnw
+# Copiar código fonte e outras arquivos
+COPY . .
 
-# Baixar dependências primeiro (para cache do Docker)
-RUN ./mvnw dependency:go-offline -B
+# Build da aplicação
+RUN dotnet publish -c Release -o /app/publish
 
-# Copiar código fonte
-COPY src src
-
-# Compilar aplicação
-RUN ./mvnw clean package -DskipTests
-
-# Segunda stage - runtime
-FROM eclipse-temurin:21-jre-alpine
-
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 
-# Instalar curl para healthcheck
-RUN apk add --no-cache curl
+# Criar diretório de uploads
+RUN mkdir -p /app/uploads
 
-# Copiar JAR da primeira stage
-COPY --from=builder /app/target/revelacao-cha-0.0.1-SNAPSHOT.jar app.jar
+# Copiar aplicação publicada
+COPY --from=build /app/publish .
 
-# Criar usuário não-root para segurança
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -S appuser -u 1001 -G appgroup
+# Expor porta padrão do Render
+EXPOSE 5000
 
-# Mudar ownership do app para o usuário criado
-RUN chown -R appuser:appgroup /app
-USER appuser
+# Variáveis de ambiente padrão
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
 
-# Expor porta
-EXPOSE 8080
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
 
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:8080/api/actuator/health || exit 1
-
-# Comando de execução com otimizações JVM compatíveis
-ENTRYPOINT ["java", \
-    "-XX:+UseContainerSupport", \
-    "-XX:MaxRAMPercentage=75.0", \
-    "-XX:+UseG1GC", \
-    "-Dspring.profiles.active=prod", \
-    "-jar", "app.jar"]
-
+# Executar aplicação
+ENTRYPOINT ["dotnet", "EventoAPI.dll"]
