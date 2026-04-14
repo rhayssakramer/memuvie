@@ -25,6 +25,12 @@ obj/
 *.nupkg
 *.cache
 
+# Configuration files with credentials
+appsettings.Development.json
+appsettings.Staging.json
+create-admin.csx
+.env.example
+
 # IDE
 .idea/
 *.swp
@@ -46,4 +52,3 @@ build/
 # Logs
 logs/
 *.log
-backend/.env.example
