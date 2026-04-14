@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redefinição de Senha</title>
+    <!-- Add Google Fonts import -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
+        body {
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .header {
+            background-color: #7030A0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .logo {
+            font-family: 'Nunito', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 40px;
+            color: #FFD100;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #f9f9f9;
+        }
+
+        .content h2 {
+            color: #7030A0;
+            margin-top: 0;
+        }
+
+        .content h3 {
+            color: #333333;
+            font-size: 16px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content ol {
+            color: #333333;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+
+        .content ol li {
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            color: #333333;
+            margin: 10px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #7030A0;
+            color: white !important;
+            padding: 12px 24px;
+            border-radius: 20px;
+            margin: 20px 0;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background-color: #5A2585;
+        }
+
+        .highlight {
+            color: #7030A0;
+            font-weight: bold;
+        }
+
+        .link-section {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .security-note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .validity {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo">memuvie</div>
+</div>
+
+<div class="content">
+    <h2>Redefinição de Senha</h2>
+
+    <p>Olá <span class="highlight">{{Nome}}</span>,</p>
+
+    <p>Recebemos uma solicitação para redefinir sua senha de acesso ao memuvie. Para criar uma nova senha, clique no botão abaixo:</p>
+
+    <p style="text-align: center;">
+        <a class="btn" href="{{ResetUrl}}" target="_blank">Redefinir minha senha</a>
+    </p>
+
+    <p>Se o botão não funcionar, você também pode copiar e colar o link abaixo em seu navegador:</p>
+
+    <div class="link-section">
+        <a href="{{ResetUrl}}" target="_blank">{{ResetUrl}}</a>
+    </div>
+
+    <p>Este link expirará em <span class="validity">{{Validade}}</span>.</p>
+
+    <h3>Como redefinir sua senha:</h3>
+    <ol>
+        <li><strong>Clique no botão</strong> <strong>"Redefinir minha senha"</strong> acima ou use o link fornecido.</li>
+        <li>Você será redirecionado para uma página segura do memuvie.</li>
+        <li><strong>Crie uma nova senha</strong> que seja forte e segura.</li>
+        <li>Sua senha deve ter pelo menos 8 caracteres e incluir letras, números e caracteres especiais.</li>
+        <li>Após confirmar sua nova senha, você poderá fazer login imediatamente com suas novas credenciais.</li>
+    </ol>
+
+    <div class="security-note">
+        <strong>🔒 Dica de segurança:</strong> Evite usar senhas que você já usa em outros sites. Crie uma senha única para o memuvie.
+    </div>
+
+    <p>Se você não solicitou a redefinição da sua senha, ignore este e-mail ou entre em contato conosco imediatamente, pois alguém pode estar tentando acessar sua conta.</p>
+
+    <p>Atenciosamente,<br/><strong>Equipe memuvie</strong></p>
+</div>
+
+<div class="footer">
+    <p>Esta é uma mensagem automática, por favor não responda este e-mail.</p>
+    <p>&copy; 2025 Memuvie. Todos os direitos reservados.</p>
+</div>
+</body>
+</html>
