@@ -1,1 +1,11 @@
 .env
+.vscode/
+node_modules/
+dist/
+Documentation/
+scripts/
+backend/
+.env.local
+.env.*.local
+*.log
+.DS_Store

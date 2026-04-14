@@ -114,7 +114,7 @@ export class IdentificationComponent implements OnInit {
         }
 
         this.toastService.success('Perfil criado com sucesso!');
-        this.router.navigate(['/interaction']);
+        this.router.navigate(['/app']);
       },
       error: (error) => {
         console.error('Erro ao criar perfil:', error);

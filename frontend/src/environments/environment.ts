@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: 'http://localhost:5000',
   cloudinaryCloudName: 'dvauwroyx',
   enableAnalytics: false,
   cacheTimeout: 300000, // 5 minutos

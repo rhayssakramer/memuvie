@@ -10,5 +10,5 @@ import { ToastContainerComponent } from './shared/toast-container/toast-containe
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'cha-revelacao';
+  title = 'memuvie-evento';
 }

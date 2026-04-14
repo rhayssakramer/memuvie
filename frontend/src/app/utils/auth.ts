@@ -99,7 +99,7 @@ export function syncUserData() {
       const newProfile = {
         name: oldUserName,
         email: oldUserEmail || 'usuario@local.com', // Email padrão para usuários legados
-        photo: oldUserPhoto || 'assets/avatar-1.jpg'
+        photo: oldUserPhoto || 'assets/avatar-default.svg'
       };
       saveProfile(newProfile);
       return true;

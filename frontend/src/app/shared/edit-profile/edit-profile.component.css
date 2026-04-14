@@ -25,10 +25,10 @@
     border-radius: 20px;
     width: 90%;
     max-width: 480px;
-    padding: 2rem 2rem 1.6rem 2rem;
+    padding: 1.5rem 1.5rem 1.2rem 1.5rem;
     box-shadow: 0 12px 30px rgba(15,34,56,0.08);
     position: relative;
-    max-height: calc(100vh - 140px);
+    max-height: 85vh;
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -42,17 +42,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2rem;
-    margin-top: -25px;
+    margin-bottom: 1.5rem;
+    margin-top: -20px;
 
 }
 
 .modal-title {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px;
     color: #252525;
-    margin-top: 40px;
-    margin-bottom: -20px;
+    margin-top: 30px;
+    margin-bottom: -15px;
 }
 
 .close-button {
@@ -94,7 +94,7 @@
     right: 6px;
     width: 32px;
     height: 32px;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    background: #9D50BB;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -117,8 +117,8 @@
 }
 
 .form-group {
-    margin-top: 22px;
-    margin-bottom: 1.2rem;
+    margin-top: 18px;
+    margin-bottom: 1rem;
 }
 
 .form-label {
@@ -130,7 +130,7 @@
 
 .form-input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.65rem 0.8rem;
     border: 1.5px solid #eee;
     border-radius: 12px;
     font-size: 1rem;
@@ -187,24 +187,23 @@
 .button-group {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    margin-top: 3rem;
-    margin-bottom: -40px;
+    gap: 0.8rem;
+    margin-top: 2rem;
 }
 
 .save-button {
-    width: 125px;
-    height: 50px;
+    width: 120px;
+    height: 45px;
     border: 0;
     border-radius: 999px;
-    padding: .5rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    padding: .4rem 1.4rem;
+    background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
+    box-shadow: 0 8px 18px rgba(157, 80, 187, 0.12);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .save-button:hover {
@@ -212,18 +211,18 @@
 }
 
 .cancel-button {
-  width: 125px;
-  height: 50px;
+  width: 120px;
+  height: 45px;
     border: 0;
     border-radius: 999px;
-    padding: .5rem 1.6rem;
+    padding: .4rem 1.4rem;
     background: #f3f4f6;
     color: #0f2238;
     font-weight: 700;
     box-shadow: 0 14px 30px rgba(90,141,255,0.06);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .cancel-button:hover {

@@ -1,16 +1,16 @@
 <header class="header">
-  <div class="brand">Pedro ou <span>Eduarda?</span></div>
+  <div class="brand"><a href="#home">memuvie</a></div>
   <nav class="nav-container">
     <ul class="nav-list">
       <li>
         <button routerLink="/home" routerLinkActive="active" class="nav-button">Home</button>
       </li>
       <li>
-        <ng-container *ngIf="currentUrl === '/interaction'">
+        <ng-container *ngIf="currentUrl === '/app' || currentUrl === '/interaction'">
           <button id="gallery" routerLink="/gallery" routerLinkActive="active" class="nav-button">Galeria</button>
         </ng-container>
         <ng-container *ngIf="currentUrl === '/gallery'">
-          <button routerLink="/interaction" routerLinkActive="active" class="nav-gallery">Compartilhe</button>
+          <button routerLink="/app" routerLinkActive="active" class="nav-gallery">Compartilhe</button>
         </ng-container>
       </li>
     </ul>

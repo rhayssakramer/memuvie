@@ -25,7 +25,7 @@ export class FileUploadService {
       tap(url => {
         console.log('URL da imagem retornada pelo servidor:', url);
         // Verificamos se a URL retornada pelo servidor tem um formato válido
-        if (!url || (typeof url === 'string' && !url.startsWith('http'))) {
+        if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) {
           console.error('URL inválida retornada pelo servidor:', url);
         }
       }),
@@ -65,7 +65,7 @@ export class FileUploadService {
       tap(url => {
         console.log('URL do vídeo retornada pelo servidor:', url);
         // Verificamos se a URL retornada pelo servidor tem um formato válido
-        if (!url || (typeof url === 'string' && !url.startsWith('http'))) {
+        if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) {
           console.error('URL inválida retornada pelo servidor:', url);
         }
       }),

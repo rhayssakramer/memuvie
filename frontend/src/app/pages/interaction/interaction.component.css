@@ -47,7 +47,7 @@
     align-items:center;
     justify-content: center;
     gap:.5rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
@@ -99,7 +99,7 @@
    align-items:center;
    justify-content: center;
    gap:.5rem;
-   background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+   background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 100%);
    color: #fff;
    font-weight: 700;
    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
@@ -112,7 +112,7 @@
 }
 
 .cta-secondary {
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
     box-shadow: 0 8px 18px rgba(111,96,255,0.12);
@@ -157,14 +157,14 @@
 }
 
 .upload-dashed strong {
-    color:#e91e63;
+    color:#6E48AA;
     display:block;
     margin-bottom:.15rem;
 }
 
 .upload-icon {
     font-size: 1.4rem;
-    color:#e91e63;
+    color:#6E48AA;
     margin-bottom:.5rem;
 }
 
@@ -198,7 +198,7 @@
     top: .6rem;
     right: .6rem;
     background: rgba(255,255,255,0.95);
-    color: #e91e63;
+    color: #6E48AA;
     border: 0;
     padding: .4rem .55rem;
     border-radius: 999px;
@@ -245,7 +245,7 @@
     border: 0;
     border-radius: 999px;
     padding: .95rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
     box-shadow: 0 8px 18px rgba(111,96,255,0.12);
@@ -265,7 +265,7 @@
 }
 
 .gallery-full-link a {
-    color:#e91e63;
+    color:#6E48AA;
     text-decoration:none;
     font-weight:600;
 }
