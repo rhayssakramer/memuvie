@@ -25,14 +25,12 @@ export const routes: Routes = [
   { path: 'esqueci-senha', component: EsqueciSenhaComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },
   {
-    path: 'interaction',
-    component: InteractionComponent,
-    canActivate: [requireAuthGuard]
+    path: 'app',
+    component: InteractionComponent
   },
   {
     path: 'gallery',
-    component: GalleryComponent,
-    canActivate: [requireAuthGuard]
+    component: GalleryComponent
   },
   { path: '**', redirectTo: '' }
 ];
