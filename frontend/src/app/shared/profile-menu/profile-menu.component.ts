@@ -15,7 +15,7 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 export class ProfileMenuComponent implements OnInit {
   isMenuOpen = false;
   profile: any = null;
-  defaultAvatar = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0iI2U5MWU2MyIvPjxwYXRoIGQ9Ik0yMCAxMmE0IDQgMCAxIDAgMCA4IDQgNCAwIDAgMCAwLTh6bTAgMTBjLTQuNDIgMC04IDMuNTgtOCA4djJoMTZ2LTJjMC00LjQyLTMuNTgtOC04LTh6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==';
+  defaultAvatar = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0iI2EzN2RjNyIvPjxwYXRoIGQ9Ik0yMCAxMmE0IDQgMCAxIDAgMCA4IDQgNCAwIDAgMCAwLTh6bTAgMTBjLTQuNDIgMC04IDMuNTgtOCA4djJoMTZ2LTJjMC00LjQyLTMuNTgtOC04LTh6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==';
   
   constructor(private router: Router) {}
 
