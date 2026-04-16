@@ -17,17 +17,20 @@ services:
         value: "587"
       - key: UPLOAD_PATH
         value: /uploads/memuvie/
+      # 🔒 Credenciais do PostgreSQL Render (já criado)
+      - key: DB_HOST
+        value: dpg-d7ghtle7r5hc73bage2g-a.virginia-postgres.render.com
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_USER
+        value: memuvie_bd_user
+      - key: DB_PASSWORD
+        value: zDfHz1brgCcheWBKdfvd7WZZH76ZNd8h
       # 🔒 Adicionar no Render Dashboard (não no código):
-      # - DB_HOST
-      # - DB_PORT
-      # - DB_USER
-      # - DB_PASSWORD
-      # - JWT_SECRET
-      # - MAIL_USERNAME
-      # - MAIL_PASSWORD
-      # - CLOUDINARY_CLOUD_NAME
-      # - CLOUDINARY_API_KEY
-      # - CLOUDINARY_API_SECRET
+      # - JWT_SECRET (gerar uma chave aleatória e segura)
+      # - MAIL_USERNAME (seu-email@gmail.com)
+      # - MAIL_PASSWORD (senha de app do Gmail)
+      # - CLOUDINARY_API_SECRET (se usar Cloudinary com autenticação)
     healthCheckPath: /health
 
   # Frontend Service (Angular)
