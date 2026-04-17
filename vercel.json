@@ -1,6 +1,4 @@
 {
-  "buildCommand": "npm install && npm run build",
-  "outputDirectory": "dist/memuvie-frontend/browser",
-  "installCommand": "npm install",
-  "framework": "angular"
+  "buildCommand": "npm run build",
+  "outputDirectory": "frontend/dist/memuvie-frontend/browser"
 }
