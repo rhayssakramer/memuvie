@@ -2,7 +2,7 @@
   "name": "memuvie",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd frontend && npm ci && npm run build -- --optimization --aot",
+    "build": "cd frontend && npm install --legacy-peer-deps && npm run build",
     "start": "cd frontend && npm start"
   },
   "private": true
