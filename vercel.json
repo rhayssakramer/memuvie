@@ -1,4 +1,5 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "frontend/dist/memuvie-frontend/browser"
+  "outputDirectory": "frontend/dist/memuvie-frontend/browser",
+  "rootDirectory": "frontend"
 }
