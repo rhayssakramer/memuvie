@@ -30,7 +30,17 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlite(connectionString);
+    var environment = builder.Environment.EnvironmentName;
+    
+    // Usar PostgreSQL em produção, SQLite em desenvolvimento
+    if (environment == "Production")
+    {
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        options.UseSqlite(connectionString);
+    }
 });
 
 // Adicionar Repositories
