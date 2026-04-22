@@ -9,3 +9,4 @@ backend/
 .env.*.local
 *.log
 .DS_Store
+frontend/.env.example

@@ -1,5 +1,5 @@
 {
-  "name": "cha-revelacao",
+  "name": "memuvie",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,9 +9,9 @@
     "build:vercel": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:cha-revelacao": "node dist/cha-revelacao/server/server.mjs",
-    "preview": "ng build --configuration production && npx http-server dist/cha-revelacao/browser -p 4200",
-    "analyze": "ng build --configuration production --stats-json && npx webpack-bundle-analyzer dist/cha-revelacao/browser/stats.json"
+    "serve:ssr:memuvie": "node dist/memuvie-frontend/server/server.mjs",
+    "preview": "ng build --configuration production && npx http-server dist/memuvie-frontend/browser -p 4200",
+    "analyze": "ng build --configuration production --stats-json && npx webpack-bundle-analyzer dist/memuvie-frontend/browser/stats.json"
   },
   "private": true,
   "dependencies": {
