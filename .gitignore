@@ -1,11 +1,54 @@
+# Environment variables
 .env
-.vscode/
-node_modules/
-dist/
-Documentation/
-scripts/
-backend/
 .env.local
 .env.*.local
-*.log
+
+# Documentation and Scripts
+Documentation/
+frontend/
+scripts/
+*.sh
+*.bat
+*.md
+*.txt
+
+# C# / .NET
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+*.dll
+*.pdb
+*.nupkg
+*.cache
+
+# Configuration files with credentials
+appsettings.Development.json
+appsettings.Staging.json
+create-admin.csx
+.env.example
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
