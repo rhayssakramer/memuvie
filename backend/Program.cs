@@ -177,6 +177,27 @@ using (var scope = app.Services.CreateScope())
     await DatabaseSeeder.SeedAdminUserAsync(dbContext, passwordHashService, configuration);
 }
 
+// Pipeline HTTP
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MemuVie Evento API v1");
+        c.RoutePrefix = string.Empty;
+    });
+}
+else
+{
+    // Em produção, não exponha a Swagger
+    app.UseExceptionHandler("/error");
+}
+
+app.UseHttpsRedirection();
+
+// CORS deve vir antes de Authentication e Authorization
+app.UseCors("AllowSpecificOrigins");
+
 // Middleware de segurança
 app.Use(async (context, next) =>
 {
@@ -202,25 +223,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(uploadsPath),
     RequestPath = "/uploads"
 });
-
-// Pipeline HTTP
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MemuVie Evento API v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
-else
-{
-    // Em produção, não exponha a Swagger
-    app.UseExceptionHandler("/error");
-}
-
-app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigins");
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
