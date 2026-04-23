@@ -1,15 +1,81 @@
 version: '3.8'
 
 services:
-  # PostgreSQL removido para uso local com SQLite
-  # Descomentar abaixo se usar Docker para produção
-
+  # Backend API (.NET)
   app:
     build: .
-    container_name: evento_app
-    environment:
-      ASPNETCORE_ENVIRONMENT: Docker
-      ASPNETCORE_URLS: http://+:8080
+    container_name: memuvie-backend
     ports:
       - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=memuvie_db;Username=postgres;Password=postgres;
+      - JWT_SECRET=dev_jwt_secret_key_change_in_production
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - UPLOAD_PATH=/uploads/memuvie/
+      - FRONTEND_URL=http://localhost:4200
+    volumes:
+      - ./:/app
+      - uploads-data:/uploads/memuvie/
+    networks:
+      - memuvie-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: memuvie-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=memuvie_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - memuvie-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Adminer para gerenciar o banco de dados (opcional)
+  adminer:
+    image: adminer:4.8.1
+    container_name: memuvie-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - memuvie-network
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+
+networks:
+  memuvie-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  uploads-data:
