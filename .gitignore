@@ -4,9 +4,6 @@
 .env.*.local
 
 # Documentation and Scripts
-Documentation/
-frontend/
-scripts/
 *.sh
 *.bat
 *.md
