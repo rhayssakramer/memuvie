@@ -23,6 +23,8 @@ RUN dotnet publish EventoAPI.csproj -c Release -o /app/publish --no-restore
 # Segunda stage - runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
 
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 
 # Instalar curl para healthcheck
@@ -35,12 +37,11 @@ COPY --from=builder /app/publish .
 RUN addgroup -g 1001 -S appgroup && \
     adduser -S appuser -u 1001 -G appgroup
 
-# Mudar ownership do app para o usuário criado
-RUN chown -R appuser:appgroup /app
-USER appuser
+# Copiar aplicação publicada
+COPY --from=build /app/publish .
 
-# Expor porta
-EXPOSE 8080
+# Expor porta padrão do Render
+EXPOSE 5000
 
 # Variáveis de ambiente padrão
 ENV ASPNETCORE_URLS=http://+:8080
@@ -53,3 +54,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 # Comando de execução
 ENTRYPOINT ["dotnet", "EventoAPI.dll"]
 
+# Executar aplicação
+ENTRYPOINT ["dotnet", "EventoAPI.dll"]

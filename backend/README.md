@@ -1,504 +1,342 @@
-# 👦👧 Pedro ou Eduarda? - Chá Revelação
+# 👦👧 Revelação Chá - Backend .NET
+
+Backend da aplicação **Pedro ou Eduarda** desenvolvido em **ASP.NET Core 9.0 com C#**.
+
+Esta é uma versão modernizada e limpa do backend original em Java, com uma arquitetura mais simples e estruturada para .NET.
 
 ## 📋 Índice
 
-- [Introdução](#-introdução)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-  - [x] [Resumo completo das tecnologias]()
-- [Desafio do Projeto](#-desafio-do-projeto)
-- [Objetivos](#-objetivos)
-  - [x] [Pré-requisitos](#-pré-requisitos)
-  - [x] [Estrutura do Projeto](#-estrutura-do-projeto)
-  - [x] [Regras e Validações](#-regras-e-validações)
-  - [x] [Especificações de Conteúdo](#-especificações-de-conteúdo)
-  - [x] [Especificações Técnicas](#-especificações-técnicas)
-- [Diagrama da Aplicação](#-diagrama-da-aplicação)
-- [Execução do Projeto](#-execução-do-projeto)
-- [Deploy](#-deploy)
-- [Créditos](#-créditos-e-autores)
-- [Links Úteis](#-links-úteis)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação e Configuração](#-instalação-e-configuração)
+- [Execução](#-execução)
+- [API Endpoints](#-api-endpoints)
+- [Documentação da API](#-documentação-da-api)
 
-## 🌟 Introdução
+## 🏗️ Estrutura do Projeto
 
-O projeto **Pedro ou Eduarda** nasceu do carinho e da expectativa em torno do chá revelação de uma família especial. Desenvolvido pela equipe Memuvie, esta aplicação web oferece uma experiência única e interativa para os convidados participarem ativamente da revelação do sexo do bebê.
-
-A plataforma permite que familiares e amigos:
-- 📸 Compartilhem fotos e vídeos da festa 
-- 🎥 Enviem vídeos de depoimentos para o bebê
-- 💌 Envie postagens com foto e uma mensagem especial
-- 📊 Acompanhem em tempo real as postagens dos convidados
+```
+backend2/
+├── src/
+│   ├── Controllers/          # Controladores da API
+│   ├── Services/             # Serviços de negócio
+│   ├── Models/               # Modelos de dados
+│   ├── DTOs/                 # Data Transfer Objects
+│   │   ├── Requests/         # DTOs de requisição
+│   │   └── Responses/        # DTOs de resposta
+│   ├── Data/                 # Camada de dados
+│   │   ├── AppDbContext.cs   # Entity Framework DbContext
+│   │   └── Repositories/     # Padrão Repository
+│   ├── Security/             # Autenticação e segurança
+│   ├── Exceptions/           # Exceções customizadas
+│   └── Validators/           # Validações de negócio
+├── Program.cs                # Configuração da aplicação
+├── MappingProfile.cs         # AutoMapper profiles
+├── RevelacaoCha.csproj       # Arquivo de projeto
+├── appsettings.json          # Configurações
+├── Dockerfile                # Docker image
+└── docker-compose.yml        # Orquestração de containers
+```
 
 ## 💻 Tecnologias Utilizadas
 
-| Linguagens de Programação | Ferramentas e Tecnologias |
-| :-----------------: | :-----------------------: |
-| <img height="40" src="https://skillicons.dev/icons?i=java"> <img height="40" src="https://skillicons.dev/icons?i=spring">  <img height="40" src="https://skillicons.dev/icons?i=angular"> <img height="40" src="https://skillicons.dev/icons?i=typescript"> <img height="40" src="https://skillicons.dev/icons?i=html"> <img height="40" src="https://skillicons.dev/icons?i=css">  <img height="40" src="https://skillicons.dev/icons?i=js"> <img height="40" src="https://skillicons.dev/icons?i=nodejs"> | <img height="40" src="https://skillicons.dev/icons?i=vscode"> <img height="40" src="https://skillicons.dev/icons?i=git"> <img height="40" src="https://skillicons.dev/icons?i=github"> <img height="40" src="https://skillicons.dev/icons?i=postgres"> <img height="40" src="https://skillicons.dev/icons?i=docker"> <img height="40" src="https://skillicons.dev/icons?i=vercel">
+| Categoria | Tecnologia | Versão |
+|-----------|-----------|---------|
+| **Framework** | ASP.NET Core | 9.0 |
+| **Linguagem** | C# | - |
+| **Banco de Dados** | PostgreSQL | 15+ |
+| **ORM** | Entity Framework Core | 9.0 |
+| **Autenticação** | JWT (JSON Web Tokens) | - |
+| **Hash de Senha** | BCrypt.Net-Next | 4.0.3 |
+| **Mapeamento** | AutoMapper | 13.0.1 |
+| **Validação** | FluentValidation | 11.9.2 |
+| **Logging** | Serilog | 8.0.1 |
+| **Documentação API** | Swagger/OpenAPI | 6.4.6 |
+| **Containerização** | Docker & Docker Compose | - |
 
-### ⚙️ Resumo completo das tecnologias
+## 📋 Pré-requisitos
 
-| Backend | Frontend | DevOps & Deploy | Ferramentas de Desenvolvimento |
-| :---------------: | :-----------------------: | :-----------------------: | :-----------------------: |
-| **Java 21** - Linguagem de programação principal  | **Angular 19.1.0** - Framework frontend | Docker & Docker Compose** - Containerização | **VS Code** - IDE principal
-**Spring Boot 3.5.6** - Framework principal do backend | **TypeScript 5.0+** - Linguagem de programação | **Render** - Plataforma de deploy | **Postman** - Testes de API
-**Spring Security** - Autenticação e autorização | **Angular Material** - Componentes UI | **GitHub Actions** - CI/CD (futuro) | **Git** - Controle de versão
-**Spring Data JPA** - Persistência de dados | **RxJS** - Programação reativa | **Maven** - Gerenciamento de dependências (Backend) | Repositório de código
-**JWT** - Autenticação stateless | **Angular Router** - Roteamento | **npm** - Gerenciamento de dependências (Frontend)
-**PostgreSQL** - Banco de dados principal | **Angular Forms** - Formulários reativos
-**Flyway** - Migração de banco de dados | **HTTP Client** - Comunicação com API
-**ModelMapper** - Mapeamento de objetos | **Angular SSR** - Server-Side Rendering
-**SpringDoc OpenAPI** - Documentação da API
-**Cloudinary** - Armazenamento de imagens e vídeos
-**JavaMail** - Envio de emails
-**Docker** - Containerização
+- **.NET 9.0 SDK** ou superior
+- **PostgreSQL 15** ou superior
+- **Docker** e **Docker Compose** (opcional, para containerização)
+- **Git** para controle de versão
 
+### Instalação de Dependências
 
-## 🎯 Desafio do Projeto
-
-### **Desafios Técnicos**
-1. **Integração Full Stack** - Conectar seamlessly Angular com Spring Boot
-2. **Upload de Mídia** - Implementar upload seguro de imagens e vídeos
-3. **Tempo Real** - Mostrar resultados de postagens com imagem e mensagem em tempo real
-4. **Responsividade** - Garantir experiência perfeita em todos os dispositivos
-5. **Performance** - Otimizar carregamento de mídia e dados
-6. **Segurança** - Proteger dados pessoais e autenticação
-
-### **Desafios de UX/UI**
-1. **Simplicidade** - Interface intuitiva para usuários de todas as idades
-2. **Emoção** - Criar experiência emocionante e envolvente
-3. **Acessibilidade** - Garantir acesso universal
-4. **Mobile First** - Priorizar experiência mobile
-
-
-## 🛠️ Objetivos
-
-### **Objetivos Principais**
-- [x] Criar uma experiência memorável para o chá revelação
-- [x] Permitir participação interativa dos convidados
-- [x] Preservar momentos especiais em formato digital
-- [x] Facilitar o compartilhamento de memórias
-
-### **Objetivos Técnicos**
-- [x] Desenvolver arquitetura escalável e maintível
-- [x] Implementar boas práticas de segurança
-- [x] Garantir performance otimizada
-- [x] Criar código limpo e bem documentado
-- [x] Estabelecer pipeline de deploy automatizado
-
----
-
-### 📌 Pré-requisitos
-
-#### **Para Desenvolvimento**
-- **Java 21+** - [Download aqui](https://adoptium.net/)
-- **Node.js 18+** - [Download aqui](https://nodejs.org/)
-- **npm 10+** ou **yarn** - Gerenciador de pacotes
-- **Maven 3.9+** - Gerenciamento de dependências Java
-- **PostgreSQL 15+** - Banco de dados
-- **Docker** (opcional) - Para containerização
-- **Git** - Controle de versão
-
-#### **Para Execução**
-- **Navegador moderno** (Chrome, Firefox, Safari, Edge)
-- **Conexão com internet** - Para recursos externos
-
-### 📁 Estrutura do Projeto
-
-```
-pedro-ou-eduarda/
-├── 📁 backend/                 # Aplicação Spring Boot
-│   ├── 📁 src/
-│   │   ├── 📁 main/
-│   │   │   ├── 📁 java/cha_revelacao/
-│   │   │   │   ├── 📁 config/          # Configurações
-│   │   │   │   ├── 📁 controller/      # Controllers REST
-│   │   │   │   ├── 📁 dto/             # Data Transfer Objects
-│   │   │   │   ├── 📁 exception/       # Tratamento de exceções
-│   │   │   │   ├── 📁 model/           # Entidades JPA
-│   │   │   │   ├── 📁 repository/      # Repositórios de dados
-│   │   │   │   ├── 📁 security/        # Configurações de segurança
-│   │   │   │   └── 📁 service/         # Lógica de negócio
-│   │   │   └── 📁 resources/
-│   │   │       ├── 📁 db/migration/    # Scripts de migração
-│   │   │       ├── 📁 static/          # Recursos estáticos
-│   │   │       └── 📁 templates/       # Templates de email
-│   │   ├── 📁 docs/                    # Documentação
-│   │   ├── 📁 scripts/                 # Scripts utilitários
-│   │   ├── 🐳 Dockerfile              # Container Docker
-│   │   ├── 🐳 docker-compose.yml      # Orquestração
-│   │   └── 📄 pom.xml                 # Configuração Maven
-│   └
-├── 📁 frontend/                # Aplicação Angular
-│   ├── 📁 src/
-│   │   ├── 📁 app/
-│   │   │   ├── 📁 pages/               # Páginas da aplicação
-│   │   │   ├── 📁 shared/              # Componentes compartilhados
-│   │   │   ├── 📁 services/            # Serviços Angular
-│   │   │   ├── 📁 interceptors/        # Interceptadores HTTP
-│   │   │   └── 📁 utils/               # Utilitários
-│   │   ├── 📁 assets/                  # Recursos estáticos
-│   │   └── 📁 environments/            # Configurações de ambiente
-│   ├── 📄 angular.json                # Configuração Angular
-│   ├── 📄 package.json                # Dependências npm
-│   └── 📄 tsconfig.json               # Configuração TypeScript
-├── 📄 render.yaml                     # Configuração de deploy
-├── 📄 README.md                       # Este arquivo
-└── 📄 .gitignore                      # Arquivos ignorados pelo Git
-```
-
----
-
-### 📜 Regras e Validações
-
-#### **Autenticação e Autorização:**
-- 🔐 **Login obrigatório** para participar
-- 🎫 **JWT Token** para autenticação
-- ⏰ **Sessão válida** por 24 horas
-- 🛡️ **Proteção CSRF** ativada
-
-#### **Upload de Mídia:**
-- 📸 **Imagens:** JPG, PNG, GIF (máx. 5MB)
-- 🎥 **Vídeos:** MP4, AVI, MOV (máx. 50MB)
-- 🔍 **Validação de conteúdo** automática
-- 🗑️ **Possibilidade de exclusão** pelo autor
-
-#### **Comentários e Mensagens:**
-- ✍️ **Mínimo 10 caracteres**
-- ❌ **Máximo 500 caracteres**
-- 🚫 **Filtro de palavras inadequadas**
-- ✏️ **Edição permitida** em 5 minutos
-
-
-### 📝 Especificações de Conteúdo
-
-#### **Tipos de Conteúdo Permitidos**
-
-#### **📸 Fotos:**
-- Ultrassons do bebê
-- Fotos da família esperando
-- Preparativos para o chá
-- Decoração do evento
-- Momentos especiais
-
-#### **🎥 Vídeos:**
-- Palpites dos convidados
-- Mensagens para o bebê
-- Momentos da revelação
-- Depoimentos da família
-
-#### **💌 Mensagens:**
-- Palpites justificados
-- Desejos para o bebê
-- Mensagens para os pais
-- Histórias e memórias
-
-
-### ⚙️ Especificações Técnicas
-
-#### **Performance:**
-- ⚡ **Tempo de carregamento:** < 3 segundos
-- 📱 **First Contentful Paint:** < 1.5 segundos
-- 🎯 **Lighthouse Score:** > 90
-- 📊 **Bundle size:** < 2MB
-
-#### **Compatibilidade:**
-- 🌐 **Navegadores:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- 📱 **Mobile:** iOS 14+, Android 8+
-- 🖥️ **Desktop:** Windows 10+, macOS 11+, Linux Ubuntu 20.04+
-
-#### **Segurança:**
-- 🔒 **HTTPS obrigatório**
-- 🛡️ **Headers de segurança** configurados
-- 🔐 **Senhas hasheadas** com BCrypt
-- 🚫 **Proteção XSS e CSRF**
-- 🔍 **Validação de entrada** rigorosa
-
-#### **API:**
-- 📡 **RESTful API** com padrões REST
-- 📋 **Documentação OpenAPI 3.0**
-- 📊 **Rate limiting** implementado
-- 🔄 **Versionamento** de API
-- ✅ **Códigos de status** HTTP padronizados
-
-
-## 🏗️ Diagrama da Aplicação
-
-```mermaid
-graph TB
-    subgraph "Frontend (Angular)"
-        A[Login Page] --> B[Home Page]
-        B --> C[Identification Page]
-        C --> D[Interaction Page]
-        D --> E[Gallery Page]
-        
-        F[Auth Service] --> G[HTTP Interceptor]
-        H[Event Service] --> I[Gallery Service]
-        J[Toast Service] --> K[File Upload Service]
-    end
-    
-    subgraph "Backend (Spring Boot)"
-        L[Auth Controller] --> M[User Service]
-        N[Event Controller] --> O[Event Service]
-        P[Gallery Controller] --> Q[Gallery Service]
-        R[Vote Controller] --> S[Vote Service]
-        
-        M --> T[(PostgreSQL)]
-        O --> T
-        Q --> T
-        S --> T
-        
-        U[Cloudinary Service] --> V[Cloudinary API]
-        W[Email Service] --> X[SMTP Server]
-    end
-    
-    subgraph "External Services"
-        Y[Cloudinary Storage]
-        Z[Email Provider]
-        AA[Render Deploy]
-    end
-    
-    A -.->|HTTP/HTTPS| L
-    D -.->|HTTP/HTTPS| N
-    E -.->|HTTP/HTTPS| P
-    D -.->|HTTP/HTTPS| R
-    
-    U -.->|API| Y
-    W -.->|SMTP| Z
-    
-    style A fill:#e1f5fe
-    style B fill:#e1f5fe
-    style C fill:#e1f5fe
-    style D fill:#e1f5fe
-    style E fill:#e1f5fe
-    style T fill:#c8e6c9
-    style Y fill:#fff3e0
-    style Z fill:#fff3e0
-    style AA fill:#f3e5f5
-```
-
----
-
-## ▶️ Execução do Projeto
-
-### **1. Clone do Repositório**
+#### Windows
 ```bash
-git clone https://github.com/rhayssakramer/pedro-ou-eduarda.git
-cd pedro-ou-eduarda
-```
+# Instalar .NET 9.0
+# Visite: https://dotnet.microsoft.com/download/dotnet/9.0
 
-### **2. Configuração do Banco de Dados**
-
-#### **Opção A: PostgreSQL Local**
-```bash
 # Instalar PostgreSQL
-# Criar banco de dados
-createdb cha_revelacao
-
-# Configurar variáveis de ambiente
-export DB_URL=jdbc:postgresql://localhost:5432/cha_revelacao
-export DB_USERNAME=seu_usuario
-export DB_PASSWORD=sua_senha
+# Visite: https://www.postgresql.org/download/windows/
 ```
 
-#### **Opção B: Docker Compose**
+#### Linux (Ubuntu/Debian)
 ```bash
-cd backend
-docker-compose up -d postgres
+# Instalar .NET 9.0
+wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --version 9.0
+
+# Instalar PostgreSQL
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
 ```
 
-### **3. Configuração do Backend**
-
-#### **Variáveis de Ambiente**
-Crie um arquivo `.env` no diretório `backend`:
-```env
-# Database
-DB_URL=jdbc:postgresql://localhost:5432/cha_revelacao
-DB_USERNAME=postgres
-DB_PASSWORD=password
-
-# JWT
-JWT_SECRET=seu_jwt_secret_muito_seguro_aqui
-JWT_EXPIRATION=86400000
-
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=seu_cloud_name
-CLOUDINARY_API_KEY=sua_api_key
-CLOUDINARY_API_SECRET=seu_api_secret
-
-# Email
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=seu_email@gmail.com
-MAIL_PASSWORD=sua_senha_app
-```
-
-#### **Executar Backend**
+#### macOS
 ```bash
-cd backend
-
-# Usando Maven Wrapper
-./mvnw spring-boot:run
-
-# Ou usando Maven instalado
-mvn spring-boot:run
-
-# Ou usando Docker
-docker-compose up backend
+# Instalar com Homebrew
+brew install dotnet postgresql
 ```
 
-### **4. Configuração do Frontend**
+## 🔧 Instalação e Configuração
 
-#### **Instalar Dependências**
+### 1. Clonar o repositório
+
 ```bash
-cd frontend
-npm install
+cd memuvie
 ```
 
-#### **Configurar Ambiente**
-Copie `.env.example` para `.env` e configure:
-```env
-API_URL=http://localhost:8080/api
-CLOUDINARY_CLOUD_NAME=seu_cloud_name
-```
+### 2. Restaurar dependências
 
-#### **Executar Frontend**
 ```bash
-# Desenvolvimento
-npm start
-
-# Build para produção
-npm run build:prod
-
-# Preview da build
-npm run preview
+dotnet restore
 ```
 
-### **5. Acesso à Aplicação**
+### 3. Configurar banco de dados
 
-- **Frontend:** http://localhost:4200
-- **Backend API:** http://localhost:8080
-- **Documentação API:** http://localhost:8080/swagger-ui.html
-- **Banco H2 (dev):** http://localhost:8080/h2-console
+#### Opção A: Com PostgreSQL local
 
-### **6. Usuários de Teste**
+1. Criar banco de dados:
+```sql
+CREATE DATABASE revelacao_cha_db;
+```
 
-#### **Administrador**
-- **Email:** admin@memuvie.com
-- **Senha:** admin123
+2. Atualizar string de conexão em `appsettings.json`:
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Port=5432;Database=revelacao_cha_db;User Id=postgres;Password=postgres;"
+}
+```
 
-#### **Usuário Teste**
-- **Email:** teste@memuvie.com
-- **Senha:** teste123
-
-
-## 🚢 Deploy
-
-### **Deploy Automático (Render)**
-
-O projeto está configurado para deploy automático no Render:
-
-1. **Push para main** triggers automatic deploy
-2. **Backend e Frontend** são deployados juntos
-3. **Banco PostgreSQL** gerenciado pelo Render
-4. **Variáveis de ambiente** configuradas no painel Render
-
-### **URLs de Produção**
-- **Aplicação:** https://pedro-ou-eduarda.onrender.com
-- **API:** https://pedro-ou-eduarda-api.onrender.com
-
-### **Deploy Manual**
-
-#### **Docker**
+3. Aplicar migrations:
 ```bash
-# Build das imagens
-docker-compose build
+dotnet ef database update
+```
 
-# Deploy
+#### Opção B: Com Docker Compose
+
+```bash
 docker-compose up -d
-
-# Logs
-docker-compose logs -f
 ```
 
-#### **Heroku**
+O container PostgreSQL será criado automaticamente.
+
+### 4. Configurar JWT Secret
+
+No arquivo `appsettings.json`, altere a secret JWT:
+```json
+"Jwt": {
+  "Secret": "sua-chave-super-segura-minimo-32-caracteres",
+  "Expiration": 86400000
+}
+```
+
+## 🚀 Execução
+
+### Modo Desenvolvimento
+
 ```bash
-# Login no Heroku
-heroku login
+# Executar com watch (recompila automaticamente)
+dotnet watch run
 
-# Criar aplicação
-heroku create pedro-ou-eduarda
-
-# Deploy
-git push heroku main
+# Ou simplesmente
+dotnet run
 ```
 
-## 👥 Créditos
+A aplicação estará disponível em: `http://localhost:5000`
 
-### **Equipe Memuvie**
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/rhayssakramer">
-        <img src="https://github.com/rhayssakramer.png" width="100px" alt="Rhayssa Kramer"/>
-        <br />
-        <sub><b>Rhayssa Kramer</b></sub>
-      </a>
-      <br />
-      <small>Tech Lead & Full Stack Developer</small>
-    </td>
-    <td align="center">
-    <a href="https://github.com/italorochaj">
-      <img src="https://avatars.githubusercontent.com/u/102812593?v=4" width="100px" alt="Memuvie Team"/>
-      <br />
-      <sub><b>Italo Rocha</b></sub>
-      <br />
-      </a>
-      <small>Product Development Team</small>
-    </td>
-  </tr>
-</table>
+### Swagger/API Documentation
 
-### **Agradecimentos Especiais**
-- 👧 **Família da Eduarda** - Por confiar em nós com este momento especial
-- 🎉 **Convidados do Chá** - Por tornarem este evento inesquecível
-- ☕ **Café** - Por manter a equipe acordada durante o desenvolvimento
+Acesse a documentação da API em: `http://localhost:5000/swagger`
 
-### **Inspiração**
-Este projeto foi desenvolvido com muito 💜 e dedicação, pensando em cada detalhe para tornar o chá revelação da Eduarda um momento único e especial.
+### Com Docker
 
-## 🔗 Links Úteis
+```bash
+# Build e executar
+docker-compose up --build
 
-### **Aplicação**
-- 📖 **Documentação da API:** [API Docs](https://pedro-ou-eduarda-api.onrender.com/swagger-ui.html)
-- 📊 **Status do Sistema:** [Status Page](https://status.render.com)
+# Apenas executar (se já foi feito build)
+docker-compose up
 
-### **Repositórios**
-- 📂 **Repositório Principal:** [GitHub](https://github.com/rhayssakramer/pedro-ou-eduarda)
-- 🔄 **Releases:** [Releases](https://github.com/rhayssakramer/pedro-ou-eduarda/releases)
-- 🐛 **Issues:** [Bug Reports](https://github.com/rhayssakramer/pedro-ou-eduarda/issues)
+# Parar containers
+docker-compose down
+```
 
-### **Tecnologias**
-- ☕ **Spring Boot:** [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
-- 🅰️ **Angular:** [angular.io](https://angular.io)
-- 🐳 **Docker:** [docker.com](https://docker.com)
-- 🚀 **Render:** [render.com](https://render.com)
-- ☁️ **Cloudinary:** [cloudinary.com](https://cloudinary.com)
+## 📡 API Endpoints
 
-### **Memuvie**
-- 🏢 **Site Institucional:** [memuvie.com](https://memuvie.com) (em breve)
-- 📧 **Contato:** contato@memuvie.com (em breve)
-- 💼 **LinkedIn:** [Memuvie Company](https://linkedin.com/company/memuvie) (em breve)
-- 📱 **Instagram:** [@memuvie](https://instagram.com/memuvie_oficial)
+### Autenticação
+- `POST /auth/registrar` - Registrar novo usuário
+- `POST /auth/login` - Fazer login e obter JWT token
+
+### Usuários
+- `GET /usuarios` - Listar todos os usuários (Admin)
+- `GET /usuarios/{id}` - Buscar usuário por ID
+- `GET /usuarios/me` - Buscar usuário autenticado (Requer token)
+- `PUT /usuarios/{id}` - Atualizar usuário
+- `DELETE /usuarios/{id}` - Desativar usuário (Admin)
+- `PUT /usuarios/{id}/alterar-senha` - Alterar senha (Requer token)
+
+### Eventos
+- `POST /api/eventos` - Criar novo evento (Requer token)
+- `GET /api/eventos` - Listar todos os eventos
+- `GET /api/eventos/ativos` - Listar eventos ativos
+- `GET /api/eventos/votacao-aberta` - Listar eventos com votação aberta
+- `GET /api/eventos/meus-eventos` - Listar eventos do usuário (Requer token)
+- `GET /api/eventos/{id}` - Buscar evento por ID
+- `PUT /api/eventos/{id}` - Atualizar evento (Requer token)
+- `DELETE /api/eventos/{id}` - Deletar evento (Requer token)
+- `POST /api/eventos/{id}/encerrar-votacao` - Encerrar votação
+- `POST /api/eventos/{id}/revelar` - Revelar resultado
+
+### Votos
+- `POST /votos` - Votar em um evento (Requer token)
+- `GET /votos` - Listar votos do usuário (Requer token)
+- `GET /votos/evento/{eventoId}` - Listar votos de um evento
+- `GET /votos/{id}` - Buscar voto por ID
+- `GET /votos/evento/{eventoId}/meu-voto` - Buscar voto do usuário em um evento (Requer token)
+- `PUT /votos/{id}` - Atualizar voto (Requer token)
+- `DELETE /votos/{id}` - Deletar voto (Requer token)
+
+### Galeria
+- `POST /api/galeria` - Criar post na galeria (Requer token)
+- `GET /api/galeria` - Listar todos os posts
+- `GET /api/galeria/evento/{eventoId}` - Listar posts de um evento
+- `GET /api/galeria/meus-posts` - Listar posts do usuário (Requer token)
+- `GET /api/galeria/{id}` - Buscar post por ID
+- `PUT /api/galeria/{id}` - Atualizar post (Requer token)
+- `DELETE /api/galeria/{id}` - Deletar post (Requer token)
+
+## 📚 Documentação da API
+
+### Autenticação
+
+Todos os endpoints protegidos requerem um header `Authorization` com o JWT token:
+
+```bash
+Authorization: Bearer <seu_jwt_token>
+```
+
+### Exemplo de Request
+
+```bash
+curl -X POST http://localhost:5000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@exemplo.com",
+    "senha": "senha123"
+  }'
+```
+
+### Exemplo de Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "type": "Bearer",
+  "usuario": {
+    "id": 1,
+    "nome": "João Silva",
+    "email": "joao@exemplo.com",
+    "tipo": "Convidado",
+    "ativo": true,
+    "criadoEm": "2025-04-09T10:00:00Z"
+  }
+}
+```
+
+## 🏗️ Arquitetura Limpa
+
+O projeto segue os princípios de **Clean Architecture** e **Domain-Driven Design**:
+
+- **Controllers**: Camada de apresentação, recebem requisições HTTP
+- **Services**: Lógica de negócio isolada e testável
+- **Repositories**: Abstração da camada de dados com padrão Repository
+- **Models**: Entidades de domínio
+- **DTOs**: Objetos de transferência de dados para requisições/respostas
+- **Exceptions**: Exceções customizadas para tratamento de erros
+
+## 🔐 Segurança
+
+- ✅ Passwords hasheadas com BCrypt
+- ✅ JWT tokens com expiração configurável
+- ✅ Validação de entrada com FluentValidation
+- ✅ CORS configurado
+- ✅ Autorização por roles (Admin/Convidado)
+
+## 📝 Migrations do Banco de Dados
+
+```bash
+# Criar nova migration
+dotnet ef migrations add NomeDaMigration
+
+# Aplicar migrations
+dotnet ef database update
+
+# Reverter última migration
+dotnet ef database update -1
+```
+
+## 🐛 Debugging
+
+### Visual Studio Code
+
+1. Instalar a extensão **C#** da Microsoft
+2. Pressionar `F5` para iniciar o debugger
+3. Definir breakpoints clicando na margem esquerda
+
+### Visual Studio Community
+
+1. Abrir a solução em Visual Studio
+2. Pressionar `F5` para iniciar com debugger
+
+## 📦 Build e Deploy
+
+### Build para Production
+
+```bash
+dotnet publish -c Release -o ./publish
+```
+
+### Docker Build
+
+```bash
+docker build -t revelacao-cha:latest .
+```
+
+## 🤝 Contribuindo
+
+Ao contribuir para este projeto:
+
+1. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+2. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+3. Push para a branch (`git push origin feature/AmazingFeature`)
+4. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto é parte da aplicação Memuvie e segue a mesma licença do projeto principal.
+
+## 👥 Autores
+
+Desenvolvido pela equipe **Memuvie**.
+
+## 📞 Suporte
+
+Para suporte, abra uma issue no repositório do GitHub ou entre em contato com a equipe de desenvolvimento.
 
 ---
 
-<div align="center">
-  <h3>Feito com 💜 pela equipe Memuvie para celebrar a chegada da Eduarda!</h3>
-  
-  <p>
-    <img src="https://img.shields.io/badge/Memuvie-Viva%20agora%2C%20reviva%20sempre!-pink?style=for-the-badge" alt="Memuvie Slogan">
-  </p>
-  
-  <p>
-    <sub>© 2024 Memuvie. Todos os direitos reservados.</sub>
-  </p>
-</div>
+**Última atualização**: Abril de 2025
