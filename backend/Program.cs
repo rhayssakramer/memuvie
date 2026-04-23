@@ -193,10 +193,11 @@ else
     app.UseExceptionHandler("/error");
 }
 
-app.UseHttpsRedirection();
-
-// CORS deve vir antes de Authentication e Authorization
+// CORS deve vir antes de tudo, inclusive do HttpsRedirection,
+// para que requisições preflight OPTIONS não sejam redirecionadas sem headers CORS
 app.UseCors("AllowSpecificOrigins");
+
+app.UseHttpsRedirection();
 
 // Middleware de segurança
 app.Use(async (context, next) =>
