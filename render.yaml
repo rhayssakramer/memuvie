@@ -1,42 +1,39 @@
 services:
-  # Backend Service
+  # Backend Service (.NET)
   - type: web
     name: memuvie-backend
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     envVars:
-      - key: DATABASE_URL
-        value: jdbc:postgresql://dpg-d3g0f5mr433s738qm1mg-a.virginia-postgres.render.com:5432/memuvie
-      - key: DB_USERNAME
-        value: memuvie_user
-      - key: DB_PASSWORD
-        value: U94rCAXl4R4VYKgJABd9Mu50oQPaE7rY
+      # 🔐 Variáveis públicas apenas - Credenciais no Render Dashboard
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
       - key: FRONTEND_URL
         value: https://memuvie.vercel.app
-      - key: JWT_SECRET
-        value: memuvie_super_secret_key_2025_production_render_nao_compartilhar_123456789
-      - key: CLOUDINARY_CLOUD_NAME
-        value: dvauwroyx
-      - key: CLOUDINARY_API_KEY
-        value: 414834393456219
-      - key: CLOUDINARY_API_SECRET
-        value: u9aQX-vUJeiv6xXRdErvybNCHm8
-      - key: UPLOAD_PATH
-        value: /uploads/memuvie/
       - key: MAIL_HOST
         value: smtp.gmail.com
       - key: MAIL_PORT
-        value: 587
-      - key: MAIL_USERNAME
-        value: memuvie.app@gmail.com
-      - key: MAIL_PASSWORD
-        sync: false # Adicionar manualmente por segurança
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod
-    healthCheckPath: /api/actuator/health
+        value: "587"
+      - key: UPLOAD_PATH
+        value: /uploads/memuvie/
+      # 🔒 Credenciais do PostgreSQL Render (já criado)
+      - key: DB_HOST
+        value: dpg-d7ghtle7r5hc73bage2g-a.virginia-postgres.render.com
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_USER
+        value: memuvie_bd_user
+      - key: DB_PASSWORD
+        value: zDfHz1brgCcheWBKdfvd7WZZH76ZNd8h
+      # 🔒 Adicionar no Render Dashboard (não no código):
+      # - JWT_SECRET (gerar uma chave aleatória e segura)
+      # - MAIL_USERNAME (seu-email@gmail.com)
+      # - MAIL_PASSWORD (senha de app do Gmail)
+      # - CLOUDINARY_API_SECRET (se usar Cloudinary com autenticação)
+    healthCheckPath: /health
 
-  # Frontend Service
+  # Frontend Service (Angular)
   - type: web
     name: memuvie-frontend
     env: docker
@@ -45,10 +42,4 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-    healthCheckPath: /health
-
-# Database - Remover essa seção já que você criou manualmente
-# databases:
-#   - name: memuvie-db
-#     databaseName: memuvie
-#     user: memuvie_user
+    healthCheckPath: /
