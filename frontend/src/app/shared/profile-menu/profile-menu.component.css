@@ -106,8 +106,8 @@
 }
 
 .menu-item:hover { background-color: rgba(0,0,0,0.05); }
-.menu-item.danger { color: #e11d48; font-weight:700; }
-.menu-item.danger:hover { background-color: #fde8ed; }
+.menu-item.danger { color: #6E48AA; font-weight:700; }
+.menu-item.danger:hover { background-color: #eee5fc; }
 
 /* Adjustments for small screens */
 @media (max-width: 480px) {

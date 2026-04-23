@@ -67,6 +67,13 @@ export class GalleryComponent implements OnInit {
             next: (posts: GaleriaPost[]) => {
               console.log('Posts carregados do backend:', posts);
               this.galleryItems = this.mapBackendPostsToGalleryItems(posts);
+              
+              // Se o backend retornou vazio, tentar carregar do localStorage também
+              if (!posts || posts.length === 0) {
+                console.log('Backend retornou vazio, verificando localStorage...');
+                this.loadFromLocalStorage();
+              }
+              
               this.isLoading = false;
             },
             error: (err: any) => {
@@ -97,20 +104,31 @@ export class GalleryComponent implements OnInit {
   private loadFromLocalStorage() {
     console.log('Tentando carregar posts do localStorage como fallback...');
     const raw = localStorage.getItem('posts');
+    console.log('Dados brutos do localStorage:', raw);
+    
     if (raw) {
       try {
         const items = JSON.parse(raw) as GalleryItem[];
-        this.galleryItems = items.filter(item => {
+        console.log('Items parseados do localStorage:', items);
+        
+        const filteredItems = items.filter(item => {
           // Filtra posts inválidos ou corrompidos
           return !(item.photo === "[object Object]" ||
                  (typeof item.photo === 'object' && item.photo !== null) ||
                  item.video === "[object Object]" ||
                  (typeof item.video === 'object' && item.video !== null));
         });
-        console.log('Posts carregados do localStorage:', this.galleryItems.length);
+        
+        console.log('Items filtrados do localStorage:', filteredItems.length);
+        
+        // Mesclar com items já carregados do backend (se houver)
+        this.galleryItems = [...this.galleryItems, ...filteredItems];
+        console.log('Total de posts após carregar do localStorage:', this.galleryItems.length);
       } catch (e) {
         console.error('Erro ao carregar do localStorage:', e);
       }
+    } else {
+      console.log('Nenhum post encontrado no localStorage');
     }
   }
 
@@ -121,7 +139,7 @@ export class GalleryComponent implements OnInit {
     return posts.map(post => ({
       id: post.id || Date.now(),
       userName: post.usuario?.nome || 'Usuário',
-      userPhoto: post.usuario?.fotoPerfil || 'assets/avatar-1.jpg',
+      userPhoto: post.usuario?.fotoPerfil || 'assets/avatar-default.svg',
       photo: post.urlFoto || null,
       video: post.urlVideo || null,
       message: post.mensagem || '',
@@ -170,14 +188,14 @@ export class GalleryComponent implements OnInit {
   async share(item: GalleryItem) {
     if (!item) return; // Prevenir error se o item for null
 
-    const text = `${item.userName} compartilhou uma homenagem no Chá Revelação\n\n${item.message || ''}`.trim();
+    const text = `${item.userName} compartilhou uma homenagem no Meu Evento\n\n${item.message || ''}`.trim();
     const url = location.href;
 
     try {
       // Verificar se a API está realmente disponível
       if (typeof navigator.share === 'function') {
         await navigator.share({
-          title: 'Chá Revelação',
+          title: 'Meu Evento',
           text,
           url
         });
@@ -229,13 +247,18 @@ export class GalleryComponent implements OnInit {
     }
   }
 
-  // Verifica se o usuário atual é o proprietário do post
+  // Verifica se o usuário atual é o proprietário do post ou é admin
   isCurrentUserOwner(item: GalleryItem): boolean {
     const profile = getProfile();
 
     // Se não tiver profile, não pode excluir nada
     if (!profile) {
       return false;
+    }
+
+    // Admins podem deletar qualquer post
+    if (profile.name === 'Admin memuvie') {
+      return true;
     }
 
     // Verifica se o email do usuário atual corresponde ao email do post
@@ -303,8 +326,8 @@ export class GalleryComponent implements OnInit {
   }
 
   async sharePage() {
-    const title = 'Galeria - Chá Revelação';
-    const text = 'Veja a nossa Galeria de Memórias do Chá Revelação';
+    const title = 'Galeria - Meu Evento';
+    const text = 'Veja a nossa Galeria de Memórias do Meu Evento';
     const url = location.href;
 
     try {

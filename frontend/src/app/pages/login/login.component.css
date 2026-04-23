@@ -1,5 +1,5 @@
 .login-page {
-    background: linear-gradient(180deg, #fbcade 0%, #c2d3f7 100%);
+    background: linear-gradient(180deg, #9D50BB 0%, #6E48AA 100%);
     min-height: 100vh;
     height: 100vh; /* Garantir que ocupe toda a altura da viewport */
     position: relative; /* establish stacking context so background dots behind it */
@@ -176,8 +176,8 @@
     cursor:pointer;
     color:white;
     font-weight:700;
-    background: linear-gradient(90deg,#ff6fb0 0%, #6b8cff 100%);
-    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
+    background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
+    box-shadow: 0 8px 18px rgba(157, 80, 187, 0.12);
 }
 
 .btn-pill:active {
@@ -196,17 +196,22 @@
 
 .help span{
     font-size: 16px;
-    color:#e11d48;
+    color:#9D50BB;
 }
 
 .help .link-button {
     background:none;
     border:none;
-    color: #e11d48;
+    color: #9D50BB;
     font-weight:700;
     cursor:pointer;
     padding:0;
     margin-left:6px;
+    transition: color 0.2s ease;
+}
+
+.help .link-button:hover {
+    color: #6E48AA;
 }
 
 /* Estilos do Modal (preserved and deduplicated) */
@@ -259,13 +264,13 @@
     /* Mantenha invisível o card background e shadow. */
     background: white;
     border-radius: 18px;
-    padding: 2rem 2rem 1.6rem 2rem;
+    padding: 1.5rem 1.5rem 1.2rem 1.5rem;
     box-shadow: 0 12px 30px rgba(15,34,56,0.08);
     position: relative;
-    /* Responsividade: limitar altura e permitir scroll interno sem criar scroll na página */
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    /* Oculta a scrollbar visualmente, mantendo a capacidade de scroll */
+    /* Responsividade: limitar altura sem permitir scroll */
+    max-height: 85vh;
+    overflow: hidden;
+    /* Oculta a scrollbar visualmente */
     -ms-overflow-style: none; /* IE e Edge */
     scrollbar-width: none; /* Firefox */
 }
@@ -285,9 +290,9 @@
 .modal-title {
     margin: 0;
     line-height: 1;
-    font-size: 20px;
+    font-size: 18px;
     color: #252525;
-    margin-top: 15px;
+    margin-top: 2px;
 }
 
 .modal-card .close-button {
@@ -350,13 +355,13 @@
 .upload-box {
     border: 2px dashed #dcdcdc;
     border-radius: 12px;
-    padding: 1.2rem;
+    padding: 1rem;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:.4rem;
-    min-height: 120px;
+    gap:.3rem;
+    min-height: 100px;
     cursor: pointer;
 }
 
@@ -514,18 +519,18 @@
 .form-actions {
     display:flex;
     justify-content:space-between;
-    gap:.8rem;
-    margin-top: .8rem;
-    margin-bottom: 15px;
+    gap:.6rem;
+    margin-top: .6rem;
+    margin-bottom: 10px;
 }
 
 /* Modal-specific secondary button: mesmo tamanho/formato/interação do modal primário, mas cor diferente */
 .modal .btn-secondary {
-    width: 125px !important;
-    height: 50px !important;
+    width: 120px !important;
+    height: 45px !important;
     border: 0;
     border-radius: 999px;
-    padding: .5rem !important;
+    padding: .4rem !important;
     background: #f3f4f6;
     color: #0f2238;
     font-weight: 700;
@@ -535,8 +540,8 @@
     white-space: nowrap !important; /* Evita quebra de linha */
     overflow: hidden; /* Oculta texto que não cabe */
     text-overflow: ellipsis; /* Adiciona ... se necessário */
-    font-size: 1rem !important; /* Override global mobile styles */
-    min-height: 50px !important; /* Override global min-height */
+    font-size: 0.9rem !important; /* Override global mobile styles */
+    min-height: 45px !important; /* Override global min-height */
 }
 
 .modal .btn-secondary:hover {
@@ -548,35 +553,35 @@
     width:100%;
     border:1.5px solid #eee;
     border-radius:12px;
-    padding:.85rem 1rem;
+    padding:.65rem 0.8rem;
 }
 
 .form-group label {
     color: #252525;
     display: block;
-    margin-bottom: 0.5rem;
-    margin-top: -10px;
+    margin-bottom: 0.3rem;
+    margin-top: -5px;
     font-weight: 500;
 }
 
 /* Estilos do button (modal) - atualizado conforme solicitado */
 .modal .btn-gradient {
-    width: 125px !important;
-    height: 50px !important;
+    width: 120px !important;
+    height: 45px !important;
     border: 0;
     border-radius: 999px;
-    padding: .5rem 1.6rem !important;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
+    padding: .4rem 1.4rem !important;
+    background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
     color: #fff;
     font-weight: 700;
-    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
+    box-shadow: 0 8px 18px rgba(157, 80, 187, 0.12);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
     white-space: nowrap !important; /* Evita quebra de linha */
     overflow: hidden; /* Oculta texto que não cabe */
     text-overflow: ellipsis; /* Adiciona ... se necessário */
-    font-size: 1rem !important; /* Override global mobile styles */
-    min-height: 50px !important; /* Override global min-height */
+    font-size: 0.9rem !important; /* Override global mobile styles */
+    min-height: 45px !important; /* Override global min-height */
 }
 
 .modal .btn-gradient:hover {
@@ -615,7 +620,7 @@
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 0.9rem;
 }
 
 .recovery-link {
@@ -625,13 +630,14 @@
 }
 
 .recovery-link .link-button {
-    color: #6b7280;
+    color: #6b7280;;
     font-size: 0.9em;
+    transition: color 0.2s ease;
 }
 
 .recovery-link .link-button:hover {
     text-decoration: none;
-    color: #e11d48;
+    color: #6E48AA;
 }
 
 /* Password toggle styles */

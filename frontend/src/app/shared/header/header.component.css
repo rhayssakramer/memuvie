@@ -2,29 +2,34 @@
 
 .header {
     max-width: 100%;
-    box-shadow: 0 14px 30px rgba(255,95,163,.25);
+    box-shadow: 0 14px 30px rgba(109, 72, 168,.25);
     margin: 0 auto;
     display: grid;
     grid-template-columns: 200px 1fr 200px;
     align-items: center;
     padding: .4rem 1rem;
     border-bottom: 1px solid rgba(0,0,0,0.08);
-    background: #ffffff;
+    background: #6E48AA;
     border-radius: 0 0 5px 5px;
 }
 
 .brand {
     font-family: 'Nunito', sans-serif;
     width: auto;
-    color: #3a7bff;
+    color: #ffffff;
     font-weight: 900;
-    font-size: 30px;
+    font-size: 33px;
     margin-left: 130px;
     white-space: nowrap;
 }
 
-.brand span {
-    color: #ff69b4;
+.brand a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.brand a:hover{
+    color: #febb06;
 }
 
 .nav-button {
@@ -37,12 +42,17 @@
     border-radius: 999px;
     padding: .95rem 1.6rem;
     gap: .5rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-    color: #fff;
+    background: #a37dc7;
+    color: #ffffff;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
     white-space: nowrap;
+}
+
+.nav-button:hover{
+    transform: translateY(-2px);
+    color: #febb06;
 }
 
 #gallery{
@@ -58,8 +68,8 @@
     border: 0;
     border-radius: 999px;
     padding: .95rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-    color: #fff;
+    background: #a37dc7;
+    color: #ffffff;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
@@ -123,8 +133,8 @@
     border-radius: 999px;
     padding: .95rem 1.6rem;
     gap:.5rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-    color: #fff;
+    background: #a37dc7;
+    color: #ffffff;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease;
@@ -132,4 +142,5 @@
 
 .nav-gallery:hover{
     transform: translateY(-2px);
+    color: #febb06;
 }

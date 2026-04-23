@@ -67,17 +67,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onEnter() {
-    // Se o usuário estiver autenticado, vai para interação
-    // Se do not, vai para a página de login
+    // Se o usuário estiver autenticado, vai para app
+    // Se não, vai para a página de login
     if (isSessionValid() && !!getProfile()) {
-      this.router.navigate(['/interaction']);
+      this.router.navigate(['/app']);
     } else {
       this.router.navigate(['/login']);
     }
   }
 
   private generateDots(count: number) {
-    const palette = ['#ffffff', 'rgba(255,95,163,0.95)', 'rgba(58,123,255,0.95)', '#fff7f9', '#f0f5ff'];
+    const palette = ['#FFE5B4', '#B4E7FF', '#E5D4F1'];
     this.dots = Array.from({ length: count }).map((_, i) => {
       const size = Math.round(18 + Math.random() * 110); // px
       const top = Math.round(Math.random() * 90) + '%';

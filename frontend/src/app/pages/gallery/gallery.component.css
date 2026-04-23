@@ -1,6 +1,7 @@
 .page-bg{
     margin: 0;
     padding: 0;
+    background: linear-gradient(180deg, #f7e9f1 0%, #eef3ff 100%);
     position: relative; /* stacking context so dots stay behind */
     z-index: 1;
 }
@@ -29,6 +30,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 250px;
 }
 
 .gallery-card:hover {
@@ -40,7 +42,7 @@
     top: .6rem;
     right: .6rem;
     background: rgba(255,255,255,0.95);
-    color: #e91e63;
+    color: #6E48AA;
     border: 0;
     padding: .4rem .55rem;
     border-radius: 999px;
@@ -192,13 +194,13 @@
     justify-content: center;
     padding: 8px;
     border-radius: 50%;
-    color: #e91e63;;
+    color: #6E48AA;
     transition: all 0.2s ease;
     background-color: rgba(var(--accent-rgb), 0.1);
 }
 
 .btn-icon:hover {
-    background-color: #fde8ed; ;
+    background-color: hsl(264, 89%, 89%); ;
     transform: scale(1.05);
 }
 
@@ -266,8 +268,8 @@
     border: 0;
     border-radius: 999px;
     padding: .5rem 1.6rem;
-    background: linear-gradient(90deg, #ff5fa3 0%, #5a8dff 100%);
-    box-shadow: 0 8px 18px rgba(111,96,255,0.12);
+    background: linear-gradient(90deg, #9D50BB 0%, #6E48AA 100%);
+    box-shadow: 0 8px 18px rgba(157, 80, 187, 0.12);
     color: #fff;
     font-weight: 700;
     cursor: pointer;

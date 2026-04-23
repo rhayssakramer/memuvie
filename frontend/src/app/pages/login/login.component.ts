@@ -78,7 +78,7 @@ export class LoginComponent {
           console.error('Dados de usuário inválidos na resposta de login');
         }
 
-        this.router.navigate(['/interaction']);
+        this.router.navigate(['/app']);
       },
       error: (err) => {
         // Fallback para o modo local (temporário até backend completo)
@@ -93,7 +93,7 @@ export class LoginComponent {
             expiresAt: Date.now() + 4 * 60 * 60 * 1000
           };
           saveSession(session.token, session.expiresAt);
-          this.router.navigate(['/interaction']);
+          this.router.navigate(['/app']);
         } else {
           this.error = 'Email ou senha inválidos. Crie seu perfil primeiro.';
           this.toast.error(this.error);
