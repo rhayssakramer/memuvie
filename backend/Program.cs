@@ -225,6 +225,12 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Health check endpoint (necessário para Render)
+app.MapGet("/health", () => 
+{
+    return new { status = "healthy", timestamp = DateTime.UtcNow, environment = app.Environment.EnvironmentName };
+});
+
 app.MapControllers();
 
 app.Run();
