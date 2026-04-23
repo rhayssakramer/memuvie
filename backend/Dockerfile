@@ -11,6 +11,7 @@ COPY global.json .
 RUN dotnet restore EventoAPI.csproj
 
 # Copiar código fonte
+COPY Program.cs .
 COPY src src
 COPY Migrations Migrations
 COPY Properties Properties
