@@ -6,29 +6,54 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     envVars:
-      # 🔐 Variáveis públicas apenas - Credenciais no Render Dashboard
+      # 🔐 ASPNETCORE Configuration
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      
+      # 🌐 Frontend Configuration
       - key: FRONTEND_URL
         value: https://memuvie.vercel.app
+      
+      # 📧 Email Configuration (public)
       - key: MAIL_HOST
         value: smtp.gmail.com
       - key: MAIL_PORT
         value: "587"
+      - key: MAIL_FROM
+        value: noreply@memuvie.com
+      
+      # 💾 Storage Configuration
       - key: UPLOAD_PATH
         value: /uploads/memuvie/
-      # 🔒 Adicionar no Render Dashboard (não no código):
-      # - DB_HOST
-      # - DB_PORT
-      # - DB_USER
-      # - DB_PASSWORD
-      # - JWT_SECRET
-      # - MAIL_USERNAME
-      # - MAIL_PASSWORD
-      # - CLOUDINARY_CLOUD_NAME
-      # - CLOUDINARY_API_KEY
-      # - CLOUDINARY_API_SECRET
+      
+      # 🔒 PostgreSQL Credentials (Render)
+      - key: DB_HOST
+        value: dpg-d7ghtle7r5hc73bage2g-a.virginia-postgres.render.com
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: evento_prd_db
+      - key: DB_USER
+        value: memuvie_bd_user
+      - key: DB_PASSWORD
+        value: zDfHz1brgCcheWBKdfvd7WZZH76ZNd8h
+      
+      # 🔒 MUST ADD IN RENDER DASHBOARD (do NOT add here):
+      # - JWT_SECRET (gerar: https://tools.owasp.org/OWASP_Testing_Guide_v4)
+      # - MAIL_USERNAME (seu-email@gmail.com)
+      # - MAIL_PASSWORD (senha de app do Gmail)
+      # - CLOUDINARY_CLOUD_NAME (optional)
+      # - CLOUDINARY_API_KEY (optional)
+      # - CLOUDINARY_API_SECRET (optional)
+    
     healthCheckPath: /health
+    healthCheckInterval: 30
+    
+    # Build command
+    buildCommand: dotnet publish -c Release -o out --no-restore
+    startCommand: dotnet EventoAPI.dll
 
   # Frontend Service (Angular)
   - type: web
