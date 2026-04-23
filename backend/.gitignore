@@ -39,7 +39,6 @@ bld/
 .nuget/
 
 # Entity Framework
-migrations/
 *.db
 *.db-shm
 *.db-wal
