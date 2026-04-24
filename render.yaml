@@ -61,7 +61,7 @@ services:
   # HOMOLOG – Backend Service (.NET)  →  branch: homolog
   # ─────────────────────────────────────────────────────────────
   - type: web
-    name: memuvie-backend-homolog
+    name: memuvie-homolog
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
