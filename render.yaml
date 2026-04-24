@@ -51,10 +51,6 @@ services:
       # - CLOUDINARY_API_SECRET (optional)
     
     healthCheckPath: /health
-    
-    # Build command
-    buildCommand: dotnet publish -c Release -o out --no-restore
-    startCommand: dotnet EventoAPI.dll
 
   # ─────────────────────────────────────────────────────────────
   # HOMOLOG – Backend Service (.NET)  →  branch: homolog
@@ -104,8 +100,6 @@ services:
       # - CLOUDINARY_API_SECRET (opcional)
 
     healthCheckPath: /health
-    buildCommand: dotnet publish -c Release -o out --no-restore
-    startCommand: dotnet EventoAPI.dll
 
   # ─────────────────────────────────────────────────────────────
   # PRD – Frontend Service (Angular)
