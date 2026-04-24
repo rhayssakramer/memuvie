@@ -51,7 +51,6 @@ services:
       # - CLOUDINARY_API_SECRET (optional)
     
     healthCheckPath: /health
-    healthCheckInterval: 30
     
     # Build command
     buildCommand: dotnet publish -c Release -o out --no-restore
@@ -105,7 +104,6 @@ services:
       # - CLOUDINARY_API_SECRET (opcional)
 
     healthCheckPath: /health
-    healthCheckInterval: 30
     buildCommand: dotnet publish -c Release -o out --no-restore
     startCommand: dotnet EventoAPI.dll
 
