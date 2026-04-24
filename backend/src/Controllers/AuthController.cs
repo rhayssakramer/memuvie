@@ -3,6 +3,7 @@ namespace MemuVie.Evento.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using MemuVie.Evento.DTOs.Requests;
 using MemuVie.Evento.DTOs.Responses;
+using MemuVie.Evento.Exceptions;
 using MemuVie.Evento.Services;
 
 [ApiController]
@@ -39,15 +40,20 @@ public class AuthController : ControllerBase
             var response = await _usuarioService.CriarUsuarioAsync(request);
             return StatusCode(StatusCodes.Status201Created, response);
         }
+        catch (BusinessException ex)
+        {
+            _logger.LogWarning("Erro de negócio no registro: {Message}", ex.Message);
+            return Conflict(new ApiResponse(false, ex.Message));
+        }
         catch (ArgumentException ex)
         {
             _logger.LogWarning("Erro de validação no registro: {Message}", ex.Message);
-            return Conflict(new ApiResponse(false, ex.Message));
+            return BadRequest(new ApiResponse(false, ex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao registrar usuário");
-            return BadRequest(new ApiResponse(false, "Erro ao registrar usuário"));
+            return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse(false, "Erro ao processar a requisição"));
         }
     }
 
