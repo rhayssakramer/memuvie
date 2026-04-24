@@ -172,9 +172,49 @@ using (var scope = app.Services.CreateScope())
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
     
     dbContext.Database.Migrate();
-    
+
+    // Força conversão de colunas boolean caso ainda estejam como integer (fix PostgreSQL)
+    try
+    {
+        dbContext.Database.ExecuteSqlRaw(@"
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'Usuarios' AND column_name = 'Ativo' AND udt_name = 'int4'
+                ) THEN
+                    ALTER TABLE ""Usuarios"" ALTER COLUMN ""Ativo"" TYPE boolean USING (""Ativo"" != 0);
+                END IF;
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'Eventos' AND column_name = 'Revelado' AND udt_name = 'int4'
+                ) THEN
+                    ALTER TABLE ""Eventos"" ALTER COLUMN ""Revelado"" TYPE boolean USING (""Revelado"" != 0);
+                END IF;
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'Eventos' AND column_name = 'VotacaoEncerrada' AND udt_name = 'int4'
+                ) THEN
+                    ALTER TABLE ""Eventos"" ALTER COLUMN ""VotacaoEncerrada"" TYPE boolean USING (""VotacaoEncerrada"" != 0);
+                END IF;
+            END $$;
+        ");
+        Console.WriteLine("✅ Verificação de colunas boolean concluída.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Erro ao corrigir colunas boolean: {ex.Message}");
+    }
+
     // Seed admin user
-    await DatabaseSeeder.SeedAdminUserAsync(dbContext, passwordHashService, configuration);
+    try
+    {
+        await DatabaseSeeder.SeedAdminUserAsync(dbContext, passwordHashService, configuration);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Erro ao criar usuário admin: {ex.Message}");
+    }
 }
 
 // Pipeline HTTP
