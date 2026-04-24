@@ -31,17 +31,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var environment = builder.Environment.EnvironmentName;
     
-    // Usar PostgreSQL em produção, SQLite em desenvolvimento
-    if (environment == "Production")
+    // Usar PostgreSQL em produção e homolog, SQLite em desenvolvimento
+    if (environment == "Production" || environment == "Homolog")
     {
-        // Construir connection string manualmente com variáveis de ambiente
         var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "postgres";
         var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
         var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
         var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "postgres";
-        var dbName = "evento_prd_db";
-        
-        var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User Id={dbUser};Password={dbPassword};";
+        var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? (environment == "Homolog" ? "neondb" : "evento_prd_db");
+
+        var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User Id={dbUser};Password={dbPassword};SSL Mode=Require;Trust Server Certificate=true;";
         options.UseNpgsql(connectionString);
     }
     else
