@@ -52,6 +52,19 @@ public class UsuarioService : IUsuarioService
 
     public async Task<UsuarioResponse> CriarUsuarioAsync(UsuarioRequest request)
     {
+        // Validar entrada
+        if (string.IsNullOrWhiteSpace(request.Nome))
+            throw new ArgumentException("Nome é obrigatório");
+
+        if (string.IsNullOrWhiteSpace(request.Email))
+            throw new ArgumentException("Email é obrigatório");
+
+        if (string.IsNullOrWhiteSpace(request.Senha))
+            throw new ArgumentException("Senha é obrigatória");
+
+        if (request.Senha.Length < 8)
+            throw new ArgumentException("Senha deve ter no mínimo 8 caracteres");
+
         var emailNormalizado = request.Email.ToLower().Trim();
 
         // Verificar se email já existe
@@ -63,9 +76,9 @@ public class UsuarioService : IUsuarioService
 
         var usuario = new Usuario
         {
-            Nome = request.Nome,
+            Nome = request.Nome.Trim(),
             Email = emailNormalizado,
-            Senha = _passwordHashService.HashPassword(request.Senha ?? string.Empty),
+            Senha = _passwordHashService.HashPassword(request.Senha),
             FotoPerfil = request.FotoPerfil,
             Tipo = UserType.Convidado,
             Ativo = true,
@@ -73,7 +86,15 @@ public class UsuarioService : IUsuarioService
         };
 
         var usuarioSalvo = await _usuarioRepository.AddAsync(usuario);
-        return _mapper.Map<UsuarioResponse>(usuarioSalvo);
+        try
+        {
+            return _mapper.Map<UsuarioResponse>(usuarioSalvo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao mapear usuário para resposta: {UserId}", usuarioSalvo.Id);
+            throw;
+        }
     }
 
     public async Task<JwtResponse> AutenticarAsync(LoginRequest request)
