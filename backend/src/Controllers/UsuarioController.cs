@@ -8,7 +8,7 @@ using MemuVie.Evento.Services;
 using System.Security.Claims;
 
 [ApiController]
-[Route("/usuarios")]
+[Route("/api/usuarios")]
 [Authorize]
 public class UsuarioController : ControllerBase
 {

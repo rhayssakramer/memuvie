@@ -8,7 +8,7 @@ using MemuVie.Evento.Services;
 using System.Security.Claims;
 
 [ApiController]
-[Route("/votos")]
+[Route("/api/votos")]
 [Authorize]
 public class VotoController : ControllerBase
 {

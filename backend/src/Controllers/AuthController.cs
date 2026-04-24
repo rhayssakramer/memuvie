@@ -7,7 +7,7 @@ using MemuVie.Evento.Exceptions;
 using MemuVie.Evento.Services;
 
 [ApiController]
-[Route("/auth")]
+[Route("/api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
