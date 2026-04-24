@@ -17,6 +17,7 @@ COPY Migrations Migrations
 COPY Properties Properties
 COPY appsettings.json .
 COPY appsettings.Production.json .
+COPY appsettings.Homolog.json .
 
 # Compilar aplicação
 RUN dotnet publish EventoAPI.csproj -c Release -o /app/publish --no-restore

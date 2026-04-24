@@ -6,7 +6,7 @@
       "NODE_ENV": "production"
     }
   },
-  "buildCommand": "npm run build",
+  "buildCommand": "if [ \"$VERCEL_GIT_COMMIT_REF\" = \"homolog\" ]; then npm run build:homolog; else npm run build; fi",
   "outputDirectory": "dist/cha-revelacao/browser",
   "installCommand": "npm ci",
   "framework": null,
