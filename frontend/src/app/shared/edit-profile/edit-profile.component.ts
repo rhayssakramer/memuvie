@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { getProfile, updateProfile } from '../../utils/auth';
@@ -20,10 +20,20 @@ interface ProfileForm {
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class EditProfileComponent implements OnInit {
+export class EditProfileComponent implements OnInit, OnDestroy {
   isOpen = false;
+  isCropOpen = false;
   profile: any = null;
   photoPreview: string | null = null;
+  cropImageSource: string | null = null;
+  cropZoom = 1;
+  cropPositionX = 0;
+  cropPositionY = 0;
+  croppedFile: File | null = null;
+  isDragging = false;
+  dragStartX = 0;
+  dragStartY = 0;
+  
   form: ProfileForm = {
     name: '',
     email: '',
@@ -37,7 +47,11 @@ export class EditProfileComponent implements OnInit {
   mostrarNovaSenha: boolean = false;
   mostrarConfirmarSenha: boolean = false;
 
-  constructor(private toast: ToastService) {}
+  constructor(private toast: ToastService) {
+    // Bind de métodos para manter 'this' correto
+    this.onCropMouseMove = this.onCropMouseMove.bind(this);
+    this.onCropMouseUp = this.onCropMouseUp.bind(this);
+  }
 
   ngOnInit() {
     this.profile = getProfile();
@@ -46,6 +60,12 @@ export class EditProfileComponent implements OnInit {
       this.form.email = this.profile.email || '';
       this.photoPreview = this.profile.photo;
     }
+  }
+
+  ngOnDestroy() {
+    // Remove event listeners quando componente é destruído
+    document.removeEventListener('mousemove', this.onCropMouseMove);
+    document.removeEventListener('mouseup', this.onCropMouseUp);
   }
 
   open() {
@@ -82,12 +102,16 @@ export class EditProfileComponent implements OnInit {
         return;
       }
 
-      this.form.photo = file;
-
-      // Cria preview
+      // Cria preview para crop
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.photoPreview = e.target?.result as string;
+        this.cropImageSource = e.target?.result as string;
+        this.croppedFile = file;
+        this.cropZoom = 1;
+        this.cropPositionX = 0;
+        this.cropPositionY = 0;
+        this.isCropOpen = true;
+        console.log('Crop modal aberto:', { isCropOpen: this.isCropOpen, cropImageSource: this.cropImageSource ? 'tem imagem' : 'sem imagem' });
       };
       reader.readAsDataURL(file);
     }
@@ -202,5 +226,107 @@ export class EditProfileComponent implements OnInit {
 
   toggleMostrarConfirmarSenha(): void {
     this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
+  }
+
+  // Métodos de Crop
+  confirmCrop() {
+    if (!this.croppedFile || !this.cropImageSource) return;
+
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Container visível (igual ao CSS)
+      const containerW = 300;
+      const containerH = 300;
+
+      // Canvas de saída igual ao container
+      canvas.width = containerW;
+      canvas.height = containerH;
+
+      // Centro da imagem exibida no container (após o drag)
+      const imgCenterX = containerW / 2 + this.cropPositionX;
+      const imgCenterY = containerH / 2 + this.cropPositionY;
+
+      // Tamanho da imagem com zoom
+      const scaledW = img.width * this.cropZoom;
+      const scaledH = img.height * this.cropZoom;
+
+      // Topo-esquerda da imagem exibida
+      const displayLeft = imgCenterX - scaledW / 2;
+      const displayTop  = imgCenterY - scaledH / 2;
+
+      // Desenha no canvas exatamente o que está visível
+      ctx.drawImage(img, displayLeft, displayTop, scaledW, scaledH);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const croppedFile = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
+          this.form.photo = croppedFile;
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.photoPreview = e.target?.result as string;
+          };
+          reader.readAsDataURL(croppedFile);
+        }
+      }, 'image/jpeg', 0.95);
+    };
+    img.src = this.cropImageSource;
+
+    this.isCropOpen = false;
+    this.toast.success('Foto enquadrada com sucesso!');
+  }
+
+  cancelCrop() {
+    this.isCropOpen = false;
+    this.cropImageSource = null;
+    this.croppedFile = null;
+    this.isDragging = false;
+  }
+
+  onCropClickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.crop-container')) {
+      this.cancelCrop();
+    }
+  }
+
+  onZoomChange(event: Event) {
+    this.cropZoom = +(event.target as HTMLInputElement).value;
+  }
+
+  onCropMouseDown(event: MouseEvent) {
+    if (event.button !== 0) return; // Apenas mouse esquerdo
+    event.preventDefault();
+    this.isDragging = true;
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+    
+    // Adiciona listeners no document para capturar movimento fora do elemento
+    document.addEventListener('mousemove', this.onCropMouseMove);
+    document.addEventListener('mouseup', this.onCropMouseUp);
+  }
+
+  onCropMouseMove(event: MouseEvent) {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    
+    const deltaX = event.clientX - this.dragStartX;
+    const deltaY = event.clientY - this.dragStartY;
+    
+    this.cropPositionX += deltaX;
+    this.cropPositionY += deltaY;
+    
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+  }
+
+  onCropMouseUp(event: MouseEvent) {
+    this.isDragging = false;
+    document.removeEventListener('mousemove', this.onCropMouseMove);
+    document.removeEventListener('mouseup', this.onCropMouseUp);
   }
 }
