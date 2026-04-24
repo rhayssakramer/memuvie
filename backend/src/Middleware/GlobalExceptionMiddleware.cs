@@ -23,11 +23,11 @@ public class GlobalExceptionMiddleware
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(context, ex);
+            await HandleExceptionAsync(context, ex, _logger);
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<GlobalExceptionMiddleware> logger)
     {
         context.Response.ContentType = "application/json";
 
@@ -39,25 +39,30 @@ public class GlobalExceptionMiddleware
             case BusinessException ex:
                 statusCode = (int)HttpStatusCode.BadRequest;
                 response = new ApiResponse(false, ex.Message);
+                logger.LogWarning("Erro de negócio: {Message}", ex.Message);
                 break;
 
             case ResourceNotFoundException ex:
                 statusCode = (int)HttpStatusCode.NotFound;
                 response = new ApiResponse(false, ex.Message);
+                logger.LogWarning("Recurso não encontrado: {Message}", ex.Message);
                 break;
 
             case UnauthorizedException ex:
                 statusCode = (int)HttpStatusCode.Unauthorized;
                 response = new ApiResponse(false, ex.Message);
+                logger.LogWarning("Não autorizado: {Message}", ex.Message);
                 break;
 
             case ArgumentException ex:
                 statusCode = (int)HttpStatusCode.BadRequest;
                 response = new ApiResponse(false, ex.Message);
+                logger.LogWarning("Erro de validação: {Message}", ex.Message);
                 break;
 
             default:
-                // Não exponha detalhes do erro em produção
+                // Log completo do erro
+                logger.LogError(exception, "Erro não tratado: {Message}", exception.Message);
                 response = new ApiResponse(false, "Erro ao processar a requisição");
                 break;
         }
