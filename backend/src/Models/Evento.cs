@@ -26,7 +26,6 @@ public class Evento
 
     // Navigation properties
     public Usuario Usuario { get; set; } = null!;
-    public ICollection<Voto> Votos { get; set; } = new List<Voto>();
     public ICollection<GaleriaPost> GaleriaPosts { get; set; } = new List<GaleriaPost>();
 }
 

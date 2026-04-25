@@ -53,14 +53,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Adicionar Repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
-builder.Services.AddScoped<IVotoRepository, VotoRepository>();
 builder.Services.AddScoped<IGaleriaPostRepository, GaleriaPostRepository>();
 builder.Services.AddScoped<ITokenRedefinicaoSenhaRepository, TokenRedefinicaoSenhaRepository>();
 
 // Adicionar Services
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
-builder.Services.AddScoped<IVotoService, VotoService>();
 builder.Services.AddScoped<IGaleriaService, GaleriaService>();
 
 // Adicionar serviços de email

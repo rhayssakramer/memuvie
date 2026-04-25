@@ -40,7 +40,6 @@ O **Memuvie** transforma eventos especiais — como chás de revelação, aniver
 A plataforma permite que o organizador de um evento crie um espaço online onde os convidados possam:
 
 - 📸 Publicar fotos e mensagens na galeria do evento
-- 🗳️ Votar em enquetes (ex.: menino ou menina em chás de revelação)
 - 🎉 Acompanhar em tempo real as postagens dos outros convidados
 - 💌 Receber e enviar mensagens especiais para os organizadores
 
@@ -58,7 +57,6 @@ Ideal para **chás de revelação**, **aniversários**, **casamentos**, **format
 
 ### Para Convidados
 - ✅ Registrar-se e fazer login com JWT
-- ✅ Votar em eventos com votação aberta
 - ✅ Publicar posts na galeria com foto e mensagem
 - ✅ Visualizar a galeria completa do evento
 - ✅ Redefinir senha via e-mail
@@ -172,7 +170,7 @@ memuvie/
 │   ├── src/
 │   │   ├── Controllers/               # AuthController, EventoController,
 │   │   │                              #   GaleriaController, MediaController,
-│   │   │                              #   UsuarioController, VotoController
+│   │   │                              #   UsuarioController
 │   │   ├── Services/                  # EventoService, UsuarioService, VotoService,
 │   │   │                              #   GaleriaService, CloudinaryService, EmailService
 │   │   ├── Models/                    # Usuario, Evento, Voto, GaleriaPost,
@@ -371,20 +369,7 @@ curl -X POST http://localhost:5000/auth/login \
 | GET | `/api/eventos/{id}` | Buscar evento por ID | ❌ |
 | PUT | `/api/eventos/{id}` | Atualizar evento | ✅ |
 | DELETE | `/api/eventos/{id}` | Deletar evento | ✅ |
-| POST | `/api/eventos/{id}/encerrar-votacao` | Encerrar votação | ✅ |
 | POST | `/api/eventos/{id}/revelar` | Revelar resultado | ✅ |
-
-### Votos — `/votos`
-
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| POST | `/votos` | Registrar voto | ✅ |
-| GET | `/votos` | Meus votos | ✅ |
-| GET | `/votos/evento/{eventoId}` | Votos de um evento | ❌ |
-| GET | `/votos/evento/{eventoId}/meu-voto` | Meu voto em um evento | ✅ |
-| GET | `/votos/{id}` | Buscar voto por ID | ✅ |
-| PUT | `/votos/{id}` | Atualizar voto | ✅ |
-| DELETE | `/votos/{id}` | Deletar voto | ✅ |
 
 ### Galeria — `/api/galeria`
 
@@ -505,16 +490,6 @@ npm run build:prod
 | `FotoCapa` | string? | URL da foto de capa (Cloudinary) |
 | `VideoDestaque` | string? | URL do vídeo destaque (Cloudinary) |
 | `CorTema` | string? | Cor hexadecimal do tema |
-
-### Voto
-
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `Id` | long | Identificador único |
-| `UsuarioId` | long | FK para Usuario |
-| `EventoId` | long | FK para Evento |
-| `Opcao` | enum | `Menino` ou `Menina` |
-| `CriadoEm` | DateTime | Data do voto |
 
 ### GaleriaPost
 

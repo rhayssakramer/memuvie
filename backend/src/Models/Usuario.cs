@@ -13,7 +13,6 @@ public class Usuario
     public DateTime? AtualizadoEm { get; set; }
 
     // Navigation properties
-    public ICollection<Voto> Votos { get; set; } = new List<Voto>();
     public ICollection<GaleriaPost> GaleriaPosts { get; set; } = new List<GaleriaPost>();
     public ICollection<Evento> Eventos { get; set; } = new List<Evento>();
 }

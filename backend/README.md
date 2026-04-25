@@ -36,7 +36,6 @@ API REST moderna e escalável desenvolvida em **ASP.NET Core 9.0** com **C# 13**
 
 - **Autenticação e Autorização** — Gerenciamento seguro de usuários com JWT
 - **Gestão de Eventos** — CRUD completo de eventos (aniversários, casamentos, reuniões, etc.)
-- **Sistema de Votos** — Enquetes e sondagens para interação do público
 - **Galeria de Mídia** — Armazenamento e gerenciamento de imagens/vídeos (integrado com Cloudinary)
 - **Envio de E-mails** — Sistema de notificações por email com templates HTML
 - **Persistência de Dados** — Armazenamento robusto em PostgreSQL
@@ -84,14 +83,12 @@ backend/
 │   │   ├── AuthController.cs         # Autenticação (login/registro)
 │   │   ├── UsuarioController.cs      # Gerenciamento de usuários
 │   │   ├── EventoController.cs       # Gerenciamento de eventos
-│   │   ├── VotoController.cs         # Sistema de votos/enquetes
 │   │   ├── GaleriaController.cs      # Gerenciamento de galeria
 │   │   └── MediaController.cs        # Upload de mídia
 │   │
 │   ├── 📁 Services/                  # Lógica de negócio
 │   │   ├── UsuarioService.cs         # Usuários (register, login)
 │   │   ├── EventoService.cs          # Eventos (CRUD)
-│   │   ├── VotoService.cs            # Votos e enquetes
 │   │   ├── GaleriaService.cs         # Galeria (CRUD)
 │   │   ├── EmailService.cs           # Envio de emails
 │   │   ├── CloudinaryService.cs      # Integração com Cloudinary
@@ -100,7 +97,6 @@ backend/
 │   ├── 📁 Models/                    # Entidades do domínio
 │   │   ├── Usuario.cs                # Usuário (id, email, senha, perfil)
 │   │   ├── Evento.cs                 # Evento (nome, data, descrição)
-│   │   ├── Voto.cs                   # Voto (resposta, usuário, evento)
 │   │   ├── GaleriaPost.cs            # Post da galeria (imagem/vídeo)
 │   │   └── TokenRedefinicaoSenha.cs  # Token para reset de senha
 │   │
@@ -109,13 +105,11 @@ backend/
 │   │   │   ├── RegistrarDTO.cs
 │   │   │   ├── LoginDTO.cs
 │   │   │   ├── CriarEventoDTO.cs
-│   │   │   ├── CriarVotoDTO.cs
 │   │   │   └── ...
 │   │   │
 │   │   └── 📁 Responses/             # DTOs de saída
 │   │       ├── UsuarioDTO.cs
 │   │       ├── EventoDTO.cs
-│   │       ├── VotoDTO.cs
 │   │       └── ...
 │   │
 │   ├── 📁 Data/                      # Camada de persistência
@@ -482,15 +476,6 @@ curl http://localhost:5000/health
 | `DELETE` | `/api/eventos/{id}` | Deletar evento | ✅ Requerida |
 | `GET` | `/api/eventos/{id}/convidados` | Listar convidados | ✅ Requerida |
 
-### Votos/Enquetes (`/api/votos`)
-
-| Método | Endpoint | Descrição | Autenticação |
-|--------|----------|-----------|--------------|
-| `GET` | `/api/votos/evento/{eventoId}` | Listar votos de um evento | ✅ Requerida |
-| `POST` | `/api/votos` | Criar novo voto | ✅ Requerida |
-| `GET` | `/api/votos/{id}` | Obter detalhes do voto | ✅ Requerida |
-| `DELETE` | `/api/votos/{id}` | Deletar voto | ✅ Requerida |
-
 ### Galeria (`/api/galeria`)
 
 | Método | Endpoint | Descrição | Autenticação |
@@ -586,13 +571,7 @@ CRUD completo de eventos:
 - `AtualizarEventoAsync()` — Atualiza dados do evento
 - `DeletarEventoAsync()` — Deleta evento
 
-### 3. VotoService
-Gerencia enquetes/votos:
-- `CriarVotoAsync()` — Registra novo voto
-- `ListarVotosAsync()` — Lista votos de um evento
-- `ObterResultadosVotosAsync()` — Calcula resultados
-
-### 4. GaleriaService
+### 3. GaleriaService
 Gerencia fotos/vídeos:
 - `CriarPostAsync()` — Adiciona foto à galeria
 - `ListarPostsAsync()` — Lista mídia do evento
@@ -633,7 +612,6 @@ public class Usuario
     
     // Relacionamentos
     public ICollection<Evento> Eventos { get; set; }
-    public ICollection<Voto> Votos { get; set; }
 }
 ```
 
@@ -653,24 +631,7 @@ public class Evento
     
     // Relacionamentos
     public Usuario UsuarioOrganizador { get; set; }
-    public ICollection<Voto> Votos { get; set; }
     public ICollection<GaleriaPost> GaleriaPosts { get; set; }
-}
-```
-
-### Voto
-```csharp
-public class Voto
-{
-    public Guid Id { get; set; }
-    public Guid EventoId { get; set; }
-    public Guid UsuarioId { get; set; }
-    public string Resposta { get; set; }      // Opção selecionada
-    public DateTime DataCriacao { get; set; }
-    
-    // Relacionamentos
-    public Evento Evento { get; set; }
-    public Usuario Usuario { get; set; }
 }
 ```
 

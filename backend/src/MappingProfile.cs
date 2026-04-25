@@ -19,19 +19,6 @@ public class MappingProfile : Profile
         CreateMap<EventoRequest, Evento>().ReverseMap();
         CreateMap<Evento, EventoSummaryResponse>();
 
-        // Voto
-        CreateMap<Voto, VotoResponse>()
-            .ForMember(dest => dest.Evento, opt => opt.MapFrom(src => new EventoSummaryResponse
-            {
-                Id = src.Evento.Id,
-                Titulo = src.Evento.Titulo,
-                DataEvento = src.Evento.DataEvento,
-                ResultadoRevelacao = src.Evento.ResultadoRevelacao,
-                Status = src.Evento.Status
-            }))
-            .ForMember(dest => dest.Convidado, opt => opt.MapFrom(src => src.Convidado));
-        CreateMap<VotoRequest, Voto>().ReverseMap();
-
         // GaleriaPost
         CreateMap<GaleriaPost, GaleriaPostResponse>()
             .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.Usuario))

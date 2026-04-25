@@ -11,7 +11,6 @@ public class AppDbContext : DbContext
 
     public DbSet<Usuario> Usuarios { get; set; } = null!;
     public DbSet<Evento> Eventos { get; set; } = null!;
-    public DbSet<Voto> Votos { get; set; } = null!;
     public DbSet<GaleriaPost> GaleriaPosts { get; set; } = null!;
     public DbSet<TokenRedefinicaoSenha> TokensRedefinicaoSenha { get; set; } = null!;
 
@@ -63,34 +62,9 @@ public class AppDbContext : DbContext
                 .HasForeignKey(e => e.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasMany(e => e.Votos)
-                .WithOne(v => v.Evento)
-                .HasForeignKey(v => v.EventoId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             entity.HasMany(e => e.GaleriaPosts)
                 .WithOne(g => g.Evento)
                 .HasForeignKey(g => g.EventoId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        // Voto Configuration
-        modelBuilder.Entity<Voto>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Palpite).HasConversion<string>();
-            entity.Property(e => e.Justificativa).HasMaxLength(500);
-            entity.Property(e => e.CriadoEm).ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP");
-            entity.HasIndex(e => new { e.EventoId, e.ConvidadoId }).IsUnique();
-
-            entity.HasOne(v => v.Evento)
-                .WithMany(e => e.Votos)
-                .HasForeignKey(v => v.EventoId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(v => v.Convidado)
-                .WithMany(u => u.Votos)
-                .HasForeignKey(v => v.ConvidadoId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

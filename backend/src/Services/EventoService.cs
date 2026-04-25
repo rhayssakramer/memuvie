@@ -25,20 +25,17 @@ public class EventoService : IEventoService
 {
     private readonly IEventoRepository _eventoRepository;
     private readonly IUsuarioRepository _usuarioRepository;
-    private readonly IVotoRepository _votoRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<EventoService> _logger;
 
     public EventoService(
         IEventoRepository eventoRepository,
         IUsuarioRepository usuarioRepository,
-        IVotoRepository votoRepository,
         IMapper mapper,
         ILogger<EventoService> logger)
     {
         _eventoRepository = eventoRepository;
         _usuarioRepository = usuarioRepository;
-        _votoRepository = votoRepository;
         _mapper = mapper;
         _logger = logger;
     }
