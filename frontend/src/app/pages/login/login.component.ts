@@ -81,23 +81,9 @@ export class LoginComponent {
         this.router.navigate(['/app']);
       },
       error: (err) => {
-        // Fallback para o modo local (temporário até backend completo)
-        console.warn('Backend auth failed, trying local mode:', err);
-
-        // Verifica o profile salvo localmente
-        const profile = getProfile();
-        if (profile && profile.email.toLowerCase() === this.email.trim().toLowerCase()) {
-          // Usar startSession importado do auth.ts
-          const session = {
-            token: Math.random().toString(36).substring(2),
-            expiresAt: Date.now() + 4 * 60 * 60 * 1000
-          };
-          saveSession(session.token, session.expiresAt);
-          this.router.navigate(['/app']);
-        } else {
-          this.error = 'Email ou senha inválidos. Crie seu perfil primeiro.';
-          this.toast.error(this.error);
-        }
+        console.error('Falha no login:', err);
+        this.error = 'Email ou senha inválidos.';
+        this.toast.error(this.error);
       }
     });
   }

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://memuvie.onrender.com/api',
+  apiUrl: 'https://memuvie.onrender.com',
   cloudinaryCloudName: 'dvauwroyx',
   enableAnalytics: true,
   cacheTimeout: 300000, // 5 minutos
