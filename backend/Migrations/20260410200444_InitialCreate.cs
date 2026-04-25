@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,16 +16,16 @@ namespace EventoAPI.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nome = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    Senha = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    FotoPerfil = table.Column<string>(type: "TEXT", maxLength: 1000000, nullable: true),
-                    Tipo = table.Column<string>(type: "TEXT", nullable: false),
-                    Ativo = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    AtualizadoEm = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", Npgsql.EntityFrameworkCore.PostgreSQL.Metadata.NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(maxLength: 100, nullable: false),
+                    Email = table.Column<string>(maxLength: 150, nullable: false),
+                    Senha = table.Column<string>(maxLength: 100, nullable: false),
+                    FotoPerfil = table.Column<string>(maxLength: 1000000, nullable: true),
+                    Tipo = table.Column<string>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false),
+                    CriadoEm = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    AtualizadoEm = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,26 +36,26 @@ namespace EventoAPI.Migrations
                 name: "Eventos",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Titulo = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Descricao = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    DataEvento = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Local = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    NomeMae = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    NomePai = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Revelado = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ResultadoRevelacao = table.Column<string>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: false),
-                    VotacaoEncerrada = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DataEncerramentoVotacao = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    FotoCapa = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    VideoDestaque = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    CorTema = table.Column<string>(type: "TEXT", nullable: true),
-                    TipoEvento = table.Column<string>(type: "TEXT", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    AtualizadoEm = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UsuarioId = table.Column<long>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", Npgsql.EntityFrameworkCore.PostgreSQL.Metadata.NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Titulo = table.Column<string>(maxLength: 200, nullable: false),
+                    Descricao = table.Column<string>(maxLength: 1000, nullable: true),
+                    DataEvento = table.Column<DateTime>(nullable: false),
+                    Local = table.Column<string>(maxLength: 500, nullable: true),
+                    NomeMae = table.Column<string>(maxLength: 100, nullable: false),
+                    NomePai = table.Column<string>(maxLength: 100, nullable: false),
+                    Revelado = table.Column<bool>(nullable: false),
+                    ResultadoRevelacao = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: false),
+                    VotacaoEncerrada = table.Column<bool>(nullable: false),
+                    DataEncerramentoVotacao = table.Column<DateTime>(nullable: true),
+                    FotoCapa = table.Column<string>(maxLength: 1000, nullable: true),
+                    VideoDestaque = table.Column<string>(maxLength: 1000, nullable: true),
+                    CorTema = table.Column<string>(nullable: true),
+                    TipoEvento = table.Column<string>(nullable: false),
+                    CriadoEm = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    AtualizadoEm = table.Column<DateTime>(nullable: true),
+                    UsuarioId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,11 +72,11 @@ namespace EventoAPI.Migrations
                 name: "TokensRedefinicaoSenha",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Token = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    DataExpiracao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UsuarioId = table.Column<long>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", Npgsql.EntityFrameworkCore.PostgreSQL.Metadata.NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Token = table.Column<string>(maxLength: 500, nullable: false),
+                    DataExpiracao = table.Column<DateTime>(nullable: false),
+                    UsuarioId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,14 +93,14 @@ namespace EventoAPI.Migrations
                 name: "GaleriaPosts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Mensagem = table.Column<string>(type: "TEXT", maxLength: 5000, nullable: true),
-                    UrlFoto = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    UrlVideo = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    DataCriacao = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UsuarioId = table.Column<long>(type: "INTEGER", nullable: false),
-                    EventoId = table.Column<long>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", Npgsql.EntityFrameworkCore.PostgreSQL.Metadata.NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Mensagem = table.Column<string>(maxLength: 5000, nullable: true),
+                    UrlFoto = table.Column<string>(maxLength: 1000, nullable: true),
+                    UrlVideo = table.Column<string>(maxLength: 1000, nullable: true),
+                    DataCriacao = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UsuarioId = table.Column<long>(nullable: false),
+                    EventoId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,13 +123,13 @@ namespace EventoAPI.Migrations
                 name: "Votos",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Palpite = table.Column<string>(type: "TEXT", nullable: false),
-                    Justificativa = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    CriadoEm = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    EventoId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ConvidadoId = table.Column<long>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", Npgsql.EntityFrameworkCore.PostgreSQL.Metadata.NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Palpite = table.Column<string>(nullable: false),
+                    Justificativa = table.Column<string>(maxLength: 500, nullable: true),
+                    CriadoEm = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    EventoId = table.Column<long>(nullable: false),
+                    ConvidadoId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
