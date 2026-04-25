@@ -18,7 +18,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpPost("upload-image")]
-    [Authorize]
+    [AllowAnonymous]
     [RequestSizeLimit(10_000_000)] // 10MB para imagens
     public async Task<ActionResult<string>> UploadImage(IFormFile file)
     {
@@ -40,7 +40,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpPost("upload-video")]
-    [Authorize]
+    [AllowAnonymous]
     [RequestSizeLimit(100_000_000)] // 100MB para vídeos
     public async Task<ActionResult<string>> UploadVideo(IFormFile file)
     {

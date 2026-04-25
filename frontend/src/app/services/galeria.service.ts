@@ -182,10 +182,10 @@ export class GaleriaService {
             console.log('Evento válido encontrado (mais recente):', eventoMaisRecente);
             return of(eventoMaisRecente.id);
           }
-          console.log('Nenhum evento encontrado. Não criar evento em fluxo de leitura.');
-          return throwError(() => new Error('Nenhum evento disponível'));
+          console.log('Nenhum evento encontrado, criando evento padrão...');
+          return this.criarEventoPadrao();
         }),
-        catchError((e) => throwError(() => e))
+        catchError(() => this.criarEventoPadrao())
       );
   }
 
