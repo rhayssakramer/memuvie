@@ -36,6 +36,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Senha).IsRequired().HasMaxLength(100);
             entity.Property(e => e.FotoPerfil).HasMaxLength(1000000);
             entity.Property(e => e.Tipo).HasConversion<string>();
+            entity.Property(e => e.Ativo).HasColumnType("boolean");
             entity.Property(e => e.CriadoEm).ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
@@ -49,6 +50,8 @@ public class AppDbContext : DbContext
             entity.Property(e => e.NomeMae).IsRequired().HasMaxLength(100);
             entity.Property(e => e.NomePai).IsRequired().HasMaxLength(100);
             entity.Property(e => e.ResultadoRevelacao).HasConversion<string?>();
+            entity.Property(e => e.Revelado).HasColumnType("boolean");
+            entity.Property(e => e.VotacaoEncerrada).HasColumnType("boolean");
             entity.Property(e => e.Status).HasConversion<string>();
             entity.Property(e => e.TipoEvento).HasConversion<string>();
             entity.Property(e => e.FotoCapa).HasMaxLength(1000);
