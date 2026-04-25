@@ -1,148 +1,604 @@
-# 👦👧 Pedro ou Eduarda? - Chá Revelação
+<div align="center">
 
-## 📋 Índice
+# 🎉 Memuvie — Frontend
 
-- [Introdução](#-introdução)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-  - [x] [Resumo completo das tecnologias]()
-- [Desafio do Projeto](#-desafio-do-projeto)
-- [Objetivos](#-objetivos)
-  - [x] [Pré-requisitos](#-pré-requisitos)
-  - [x] [Estrutura do Projeto](#-estrutura-do-projeto)
-  - [x] [Regras e Validações](#-regras-e-validações)
-  - [x] [Especificações de Conteúdo](#-especificações-de-conteúdo)
-  - [x] [Especificações Técnicas](#-especificações-técnicas)
-- [Diagrama da Aplicação](#-diagrama-da-aplicação)
-- [Execução do Projeto](#-execução-do-projeto)
-- [Deploy](#-deploy)
-- [Créditos](#-créditos-e-autores)
-- [Links Úteis](#-links-úteis)
+**Onde a vida vira memória.**
 
-## 🌟 Introdução
+Frontend em Angular 19 com Server-Side Rendering (SSR) para a plataforma **Memuvie** — uma aplicação web que transforma eventos especiais em memórias digitais compartilháveis.
 
-O projeto **Pedro ou Eduarda** nasceu do carinho e da expectativa em torno do chá revelação de uma família especial. Desenvolvido pela equipe Memuvie, esta aplicação web oferece uma experiência única e interativa para os convidados participarem ativamente da revelação do sexo do bebê.
+[![Angular](https://img.shields.io/badge/Angular-19.1.0-DD0031?style=for-the-badge&logo=angular)](https://angular.io)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js)](https://nodejs.org)
+[![Deploy](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com)
 
-A plataforma permite que familiares e amigos:
-- 📸 Compartilhem fotos e vídeos da festa 
-- 🎥 Enviem vídeos de depoimentos para o bebê
-- 💌 Envie postagens com foto e uma mensagem especial
-- 📊 Acompanhem em tempo real as postagens dos convidados
-
-## 💻 Tecnologias Utilizadas
-
-| Linguagens de Programação | Ferramentas e Tecnologias |
-| :-----------------: | :-----------------------: |
-| <img height="40" src="https://skillicons.dev/icons?i=java"> <img height="40" src="https://skillicons.dev/icons?i=spring">  <img height="40" src="https://skillicons.dev/icons?i=angular"> <img height="40" src="https://skillicons.dev/icons?i=typescript"> <img height="40" src="https://skillicons.dev/icons?i=html"> <img height="40" src="https://skillicons.dev/icons?i=css">  <img height="40" src="https://skillicons.dev/icons?i=js"> <img height="40" src="https://skillicons.dev/icons?i=nodejs"> | <img height="40" src="https://skillicons.dev/icons?i=vscode"> <img height="40" src="https://skillicons.dev/icons?i=git"> <img height="40" src="https://skillicons.dev/icons?i=github"> <img height="40" src="https://skillicons.dev/icons?i=postgres"> <img height="40" src="https://skillicons.dev/icons?i=docker"> <img height="40" src="https://skillicons.dev/icons?i=vercel">
-
-### ⚙️ Resumo completo das tecnologias
-
-| Backend | Frontend | DevOps & Deploy | Ferramentas de Desenvolvimento |
-| :---------------: | :-----------------------: | :-----------------------: | :-----------------------: |
-| **Java 21** - Linguagem de programação principal  | **Angular 19.1.0** - Framework frontend | Docker & Docker Compose** - Containerização | **VS Code** - IDE principal
-**Spring Boot 3.5.6** - Framework principal do backend | **TypeScript 5.0+** - Linguagem de programação | **Render** - Plataforma de deploy | **Postman** - Testes de API
-**Spring Security** - Autenticação e autorização | **Angular Material** - Componentes UI | **GitHub Actions** - CI/CD (futuro) | **Git** - Controle de versão
-**Spring Data JPA** - Persistência de dados | **RxJS** - Programação reativa | **Maven** - Gerenciamento de dependências (Backend) | Repositório de código
-**JWT** - Autenticação stateless | **Angular Router** - Roteamento | **npm** - Gerenciamento de dependências (Frontend)
-**PostgreSQL** - Banco de dados principal | **Angular Forms** - Formulários reativos
-**Flyway** - Migração de banco de dados | **HTTP Client** - Comunicação com API
-**ModelMapper** - Mapeamento de objetos | **Angular SSR** - Server-Side Rendering
-**SpringDoc OpenAPI** - Documentação da API
-**Cloudinary** - Armazenamento de imagens e vídeos
-**JavaMail** - Envio de emails
-**Docker** - Containerização
-
-
-## 🎯 Desafio do Projeto
-
-### **Desafios Técnicos**
-1. **Integração Full Stack** - Conectar seamlessly Angular com Spring Boot
-2. **Upload de Mídia** - Implementar upload seguro de imagens e vídeos
-3. **Tempo Real** - Mostrar resultados de postagens com imagem e mensagem em tempo real
-4. **Responsividade** - Garantir experiência perfeita em todos os dispositivos
-5. **Performance** - Otimizar carregamento de mídia e dados
-6. **Segurança** - Proteger dados pessoais e autenticação
-
-### **Desafios de UX/UI**
-1. **Simplicidade** - Interface intuitiva para usuários de todas as idades
-2. **Emoção** - Criar experiência emocionante e envolvente
-3. **Acessibilidade** - Garantir acesso universal
-4. **Mobile First** - Priorizar experiência mobile
-
-
-## 🛠️ Objetivos
-
-### **Objetivos Principais**
-- [x] Criar uma experiência memorável para o chá revelação
-- [x] Permitir participação interativa dos convidados
-- [x] Preservar momentos especiais em formato digital
-- [x] Facilitar o compartilhamento de memórias
-
-### **Objetivos Técnicos**
-- [x] Desenvolver arquitetura escalável e maintível
-- [x] Implementar boas práticas de segurança
-- [x] Garantir performance otimizada
-- [x] Criar código limpo e bem documentado
-- [x] Estabelecer pipeline de deploy automatizado
+</div>
 
 ---
 
-### 📌 Pré-requisitos
+## 📋 Índice
 
-#### **Para Desenvolvimento**
-- **Java 21+** - [Download aqui](https://adoptium.net/)
-- **Node.js 18+** - [Download aqui](https://nodejs.org/)
-- **npm 10+** ou **yarn** - Gerenciador de pacotes
-- **Maven 3.9+** - Gerenciamento de dependências Java
-- **PostgreSQL 15+** - Banco de dados
-- **Docker** (opcional) - Para containerização
-- **Git** - Controle de versão
+- [Sobre](#-sobre)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação](#-instalação)
+- [Desenvolvimento](#-desenvolvimento)
+- [Build e Deploy](#-build-e-deploy)
+- [Arquitetura](#-arquitetura)
+- [Componentes](#-componentes)
+- [Serviços](#-serviços)
+- [Interceptadores](#-interceptadores)
+- [Rotas](#-rotas)
+- [Variáveis de Ambiente](#-variáveis-de-ambiente)
+- [Scripts npm](#-scripts-npm)
+- [Troubleshooting](#-troubleshooting)
+- [Créditos](#-créditos)
 
-#### **Para Execução**
-- **Navegador moderno** (Chrome, Firefox, Safari, Edge)
-- **Conexão com internet** - Para recursos externos
+---
 
-### 📁 Estrutura do Projeto
+## 🌟 Sobre
+
+O **Memuvie Frontend** é uma aplicação **Single Page Application (SPA)** moderna com **Server-Side Rendering (SSR)**, desenvolvida em **Angular 19** com **TypeScript 5.7**.
+
+Oferece uma experiência interativa e responsiva para os usuários da plataforma Memuvie, permitindo:
+
+- 🔐 Autenticação e login seguro com JWT
+- 📸 Upload de fotos e mensagens na galeria de eventos
+- 🗳️ Votação em enquetes e revelação de resultados
+- 👥 Identificação de usuário e perfil
+- 📱 Experiência fully responsive (mobile, tablet, desktop)
+
+### Por que SSR?
+- **SEO melhorado** — Melhor indexação em buscadores
+- **Primeira carga mais rápida** — Conteúdo renderizado no servidor
+- **Melhor compatibilidade** — Funciona melhor com navegadores antigos
+- **Performance mobile** — Reduz carga no cliente
+
+---
+
+## ✨ Funcionalidades
+
+### Autenticação
+- ✅ Registro de novo usuário
+- ✅ Login com e-mail e senha
+- ✅ Recuperação de senha via e-mail
+- ✅ Logout e destruição de sessão
+- ✅ Persistência de token JWT em localStorage
+
+### Galeria de Eventos
+- ✅ Visualizar eventos disponíveis
+- ✅ Publicar posts com foto e mensagem
+- ✅ Visualizar posts de outros usuários em tempo real
+- ✅ Editar e deletar próprios posts
+- ✅ Filtrar posts por evento
+
+### Votação
+- ✅ Votar em eventos com votação aberta
+- ✅ Ver resultados da votação (parciais ou revelados)
+- ✅ Manter registro do voto do usuário
+- ✅ Alterar voto antes da revelação
+
+### Perfil
+- ✅ Visualizar dados do perfil
+- ✅ Editar nome e foto de perfil
+- ✅ Alterar senha
+- ✅ Logout
+
+### Admin (Gerenciador de Evento)
+- ✅ Criar novo evento
+- ✅ Editar evento
+- ✅ Controlar votação (abrir/encerrar)
+- ✅ Revelar resultado
+- ✅ Gerenciar convidados
+
+---
+
+## 💻 Tecnologias
+
+| Categoria | Tecnologia | Versão | Descrição |
+|-----------|-----------|--------|-----------|
+| **Framework** | Angular | 19.1.0 | Framework principal para SPA |
+| **Linguagem** | TypeScript | 5.7 | Linguagem com tipagem estática |
+| **SSR** | Angular SSR | 19.1.5 | Server-Side Rendering |
+| **HTTP** | Angular HttpClient | 19.1.0 | Cliente HTTP para requisições |
+| **Roteamento** | Angular Router | 19.1.0 | Roteamento de páginas |
+| **Reatividade** | RxJS | 7.8.0 | Programação reativa com Observables |
+| **Formulários** | Angular Forms | 19.1.0 | Validação e gerenciamento de forms |
+| **Runtime** | Node.js | 18+ | Ambiente de execução |
+| **Build** | Webpack | via @angular-devkit | Bundler |
+| **Markup** | HTML5 | — | Marcação semântica |
+| **Estilos** | CSS3 / SCSS | — | Estilização responsiva |
+| **Gerenciador Pacotes** | npm | 10+ | Dependências |
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```
-pedro-ou-eduarda/
-├── 📁 backend/                 # Aplicação Spring Boot
-│   ├── 📁 src/
-│   │   ├── 📁 main/
-│   │   │   ├── 📁 java/cha_revelacao/
-│   │   │   │   ├── 📁 config/          # Configurações
-│   │   │   │   ├── 📁 controller/      # Controllers REST
-│   │   │   │   ├── 📁 dto/             # Data Transfer Objects
-│   │   │   │   ├── 📁 exception/       # Tratamento de exceções
-│   │   │   │   ├── 📁 model/           # Entidades JPA
-│   │   │   │   ├── 📁 repository/      # Repositórios de dados
-│   │   │   │   ├── 📁 security/        # Configurações de segurança
-│   │   │   │   └── 📁 service/         # Lógica de negócio
-│   │   │   └── 📁 resources/
-│   │   │       ├── 📁 db/migration/    # Scripts de migração
-│   │   │       ├── 📁 static/          # Recursos estáticos
-│   │   │       └── 📁 templates/       # Templates de email
-│   │   ├── 📁 docs/                    # Documentação
-│   │   ├── 📁 scripts/                 # Scripts utilitários
-│   │   ├── 🐳 Dockerfile              # Container Docker
-│   │   ├── 🐳 docker-compose.yml      # Orquestração
-│   │   └── 📄 pom.xml                 # Configuração Maven
-│   └
-├── 📁 frontend/                # Aplicação Angular
-│   ├── 📁 src/
-│   │   ├── 📁 app/
-│   │   │   ├── 📁 pages/               # Páginas da aplicação
-│   │   │   ├── 📁 shared/              # Componentes compartilhados
-│   │   │   ├── 📁 services/            # Serviços Angular
-│   │   │   ├── 📁 interceptors/        # Interceptadores HTTP
-│   │   │   └── 📁 utils/               # Utilitários
-│   │   ├── 📁 assets/                  # Recursos estáticos
-│   │   └── 📁 environments/            # Configurações de ambiente
-│   ├── 📄 angular.json                # Configuração Angular
-│   ├── 📄 package.json                # Dependências npm
-│   └── 📄 tsconfig.json               # Configuração TypeScript
-├── 📄 render.yaml                     # Configuração de deploy
+frontend/
+├── 📄 angular.json                    # Configuração do Angular CLI
+├── 📄 package.json                    # Dependências npm e scripts
+├── 📄 tsconfig.json                   # Configuração TypeScript global
+├── 📄 tsconfig.app.json               # Configuração TypeScript para aplicação
+├── 📄 tsconfig.spec.json              # Configuração TypeScript para testes
+├── 📄 vercel.json                     # Configuração de deploy na Vercel
+├── 📄 proxy.conf.json                 # Proxy reverso para dev (localhost:5000)
+├── 📄 proxy.conf.dev.json             # Proxy alternativo para desenvolvimento
 ├── 📄 README.md                       # Este arquivo
-└── 📄 .gitignore                      # Arquivos ignorados pelo Git
+│
+└── 📂 src/
+    ├── 📄 index.html                  # Página HTML principal
+    ├── 📄 main.ts                     # Bootstrap do Angular (Browser)
+    ├── 📄 main.server.ts              # Bootstrap para SSR
+    ├── 📄 server.ts                   # Servidor Express para SSR
+    ├── 📄 styles.css                  # Estilos globais da aplicação
+    │
+    ├── 📂 environments/
+    │   ├── 📄 environment.ts          # Configurações de desenvolvimento
+    │   └── 📄 environment.prod.ts     # Configurações de produção
+    │
+    ├── 📂 app/                        # Módulo raiz da aplicação
+    │   ├── 📄 app.component.ts        # Componente raiz
+    │   ├── 📄 app.component.html      # Template raiz (navbar, router-outlet)
+    │   ├── 📄 app.component.css       # Estilos raiz
+    │   ├── 📄 app.routes.ts           # Definição de rotas da aplicação
+    │   │
+    │   ├── 📂 pages/                  # Páginas/views da aplicação
+    │   │   ├── 📂 login/              # Componente de login
+    │   │   ├── 📂 esqueci-senha/      # Componente de esqueci senha
+    │   │   ├── 📂 redefinir-senha/    # Componente de redefinir senha
+    │   │   ├── 📂 home/               # Página inicial com lista de eventos
+    │   │   ├── 📂 identification/     # Página de identificação do usuário
+    │   │   ├── 📂 interaction/        # Página de votação e interação
+    │   │   └── 📂 gallery/            # Página da galeria de fotos
+    │   │
+    │   ├── 📂 shared/                 # Componentes e módulos compartilhados
+    │   │   ├── 📂 components/         # Componentes reutilizáveis
+    │   │   ├── 📂 models/             # Interfaces e tipos TypeScript
+    │   │   └── 📂 pipes/              # Pipes customizados (filtros)
+    │   │
+    │   ├── 📂 services/               # Serviços Angular
+    │   │   ├── auth.service.ts        # Serviço de autenticação
+    │   │   ├── evento.service.ts      # Serviço de eventos
+    │   │   ├── galeria.service.ts     # Serviço de galeria
+    │   │   ├── voto.service.ts        # Serviço de votos
+    │   │   ├── usuario.service.ts     # Serviço de usuários
+    │   │   ├── storage.service.ts     # Serviço de localStorage
+    │   │   ├── loading.service.ts     # Serviço de estado de loading
+    │   │   └── toast.service.ts       # Serviço de notificações
+    │   │
+    │   ├── 📂 interceptors/           # Interceptadores HTTP
+    │   │   ├── auth.interceptor.ts    # Adiciona JWT ao header
+    │   │   ├── error.interceptor.ts   # Trata erros HTTP
+    │   │   └── loading.interceptor.ts # Controla estado de loading
+    │   │
+    │   └── 📂 utils/                  # Funções utilitárias
+    │       ├── constants.ts           # Constantes da aplicação
+    │       ├── validators.ts          # Validadores customizados
+    │       └── helpers.ts             # Funções auxiliares
+    │
+    ├── 📂 assets/                     # Arquivos estáticos
+    │   ├── 📂 images/                 # Imagens da aplicação
+    │   ├── 📂 icons/                  # Ícones
+    │   └── 📂 fonts/                  # Fontes customizadas
+    │
+    └── 📂 public/                     # Pasta raiz do servidor estático
+
+```
+
+---
+
+## 📌 Pré-requisitos
+
+- **Node.js 18+** — [Download aqui](https://nodejs.org/)
+- **npm 10+** — Incluído com Node.js
+- **Angular CLI 19+** (opcional, mas recomendado)
+- **Git** — Para clonar o repositório
+- **Backend em execução** — `http://localhost:5000`
+
+---
+
+## 🔧 Instalação
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/memuvie.git
+cd memuvie/frontend
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+
+# Ou se preferir usar Yarn
+yarn install
+```
+
+### 3. Configure o proxy (opcional)
+
+O arquivo `proxy.conf.json` já está configurado para apontar para `http://localhost:5000`.
+Se seu backend estiver em outra porta, atualize o arquivo:
+
+```json
+{
+  "/api": {
+    "target": "http://localhost:5000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/auth": {
+    "target": "http://localhost:5000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
+```
+
+---
+
+## 🚀 Desenvolvimento
+
+### Iniciar servidor de desenvolvimento
+
+```bash
+npm start
+```
+
+A aplicação estará disponível em: **`http://localhost:4200`**
+
+### O que acontece ao rodar `npm start`?
+
+1. Angular CLI inicia o servidor de desenvolvimento
+2. Webpack compila o código TypeScript
+3. Proxy reverso redireciona `/api/**` para `http://localhost:5000`
+4. Hot reload está ativado — mudanças no código recarregam automaticamente
+5. Terminal mostra build status e erros em tempo real
+
+### Acessar o servidor
+
+- **Frontend:** `http://localhost:4200`
+- **Backend API:** `http://localhost:5000`
+- **Swagger UI:** `http://localhost:5000/swagger`
+
+---
+
+## 🏗️ Build e Deploy
+
+### Build para Desenvolvimento
+
+```bash
+npm run watch
+```
+
+Recompila a cada mudança no código. Saída em `dist/memuvie/browser/`.
+
+### Build para Produção
+
+```bash
+npm run build:prod
+```
+
+Otimizações incluídas:
+- Minificação de código
+- Tree-shaking (remoção de código não usado)
+- Lazy loading de rotas
+- Análise de bundle
+
+Saída em: `dist/memuvie/browser/`
+
+### Build para Homolog
+
+```bash
+npm run build:homolog
+```
+
+Configurações intermediárias entre dev e prod.
+
+### Build com SSR
+
+```bash
+npm run build:vercel
+```
+
+Inclui SSR para Vercel. Saída em: `dist/memuvie/browser/` e `dist/memuvie/server/`
+
+### Deploy na Vercel
+
+A aplicação é deployada automaticamente na Vercel a cada push na branch principal.
+
+```bash
+# Deploy manual (requer Vercel CLI)
+vercel deploy
+```
+
+---
+
+## 🏛️ Arquitetura
+
+### Fluxo de Requisição
+
+```
+Usuario Browser
+     ↓
+Angular Router (Client-side)
+     ↓
+Componente / Página
+     ↓
+Serviço Angular
+     ↓
+HTTP Interceptor (adiciona JWT)
+     ↓
+HttpClient → Backend API (http://localhost:5000)
+     ↓
+Response → HTTP Interceptor (trata erros)
+     ↓
+Serviço → Componente (Observable / RxJS)
+     ↓
+Template → UI atualizada
+```
+
+### Estrutura de Pastas por Funcionalidade
+
+```
+pages/
+├── login/                 # Módulo de autenticação
+├── home/                  # Lista de eventos
+├── identification/        # Identificação do usuário
+├── interaction/           # Votação (interact with event)
+└── gallery/              # Galeria de fotos
+
+services/
+├── auth.service.ts       # Gerencia tokens, login/logout
+├── evento.service.ts     # CRUD de eventos
+├── voto.service.ts       # Votos
+├── galeria.service.ts    # Posts da galeria
+└── usuario.service.ts    # Dados do usuário
+
+interceptors/
+├── auth.interceptor.ts   # Adiciona Authorization header
+└── error.interceptor.ts  # Tratamento centralizado de erros
+```
+
+---
+
+## 🧩 Componentes Principais
+
+### `LoginComponent`
+- Formulário de login com validação
+- Recuperação de senha
+- Armazenamento de JWT em localStorage
+- Redirecionamento para home após login
+
+**Arquivo:** `pages/login/`
+
+### `HomeComponent`
+- Lista de eventos disponíveis
+- Filtros (ativos, com votação aberta, meus eventos)
+- Buttons para entrar no evento
+- Paginação (se aplicável)
+
+**Arquivo:** `pages/home/`
+
+### `IdentificationComponent`
+- Identificação do usuário dentro do evento
+- Seleção de nome de usuário ou email
+- Carregamento de dados do usuário
+- Navegação para página de interação
+
+**Arquivo:** `pages/identification/`
+
+### `InteractionComponent`
+- Votação em enquetes
+- Visualização de resultados
+- Alteração de voto (antes da revelação)
+- Transição para revelação do resultado
+
+**Arquivo:** `pages/interaction/`
+
+### `GalleryComponent`
+- Galeria de posts do evento
+- Upload de foto + mensagem
+- Visualização de posts em tempo real
+- Edição e exclusão de próprios posts
+
+**Arquivo:** `pages/gallery/`
+
+---
+
+## 🔌 Serviços
+
+### `AuthService`
+```typescript
+login(email: string, senha: string): Observable<LoginResponse>
+register(usuario: RegistroDTO): Observable<LoginResponse>
+logout(): void
+isAuthenticated(): boolean
+getToken(): string | null
+```
+
+### `EventoService`
+```typescript
+listarEventos(): Observable<Evento[]>
+buscarEvento(id: number): Observable<Evento>
+criarEvento(evento: CreateEventoDTO): Observable<Evento>
+atualizarEvento(id: number, evento: UpdateEventoDTO): Observable<Evento>
+encerrarVotacao(id: number): Observable<void>
+revelarResultado(id: number): Observable<Evento>
+```
+
+### `VotoService`
+```typescript
+votar(voto: VotoDTO): Observable<Voto>
+meuVoto(eventoId: number): Observable<Voto | null>
+votosDoEvento(eventoId: number): Observable<Voto[]>
+```
+
+### `GaleriaService`
+```typescript
+criarPost(post: CreateGaleriaDTO): Observable<GaleriaPost>
+listarPosts(eventoId: number): Observable<GaleriaPost[]>
+atualizarPost(id: number, post: UpdateGaleriaDTO): Observable<GaleriaPost>
+deletarPost(id: number): Observable<void>
+```
+
+---
+
+## 🔄 Interceptadores
+
+### `AuthInterceptor`
+Adiciona o token JWT ao header `Authorization` de todas as requisições:
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+### `ErrorInterceptor`
+Trata erros HTTP centralizadamente:
+- 401 Unauthorized → Logout automático
+- 403 Forbidden → Redirecionar para home
+- 404 Not Found → Mostrar mensagem de erro
+- 500 Server Error → Mostrar mensagem de erro
+- Network Error → Mostrar mensagem de offline
+
+---
+
+## 📍 Rotas
+
+| Rota | Componente | Auth | Descrição |
+|------|-----------|------|-----------|
+| `/` | `HomeComponent` | ❌ | Página inicial com lista de eventos |
+| `/login` | `LoginComponent` | ❌ | Formulário de login |
+| `/esqueci-senha` | `EsqueceuSenhaComponent` | ❌ | Recuperação de senha |
+| `/redefinir-senha` | `RedefinirSenhaComponent` | ❌ | Redefinir senha com token |
+| `/evento/:id/identificacao` | `IdentificationComponent` | ✅ | Identificação para votação |
+| `/evento/:id/votacao` | `InteractionComponent` | ✅ | Votação e interação |
+| `/evento/:id/galeria` | `GalleryComponent` | ✅ | Galeria de fotos |
+| `/perfil` | `PerfilComponent` | ✅ | Dados do perfil |
+| `**` | — | — | 404 Not Found |
+
+> ✅ = Requer autenticação (token JWT)
+
+---
+
+## 🔐 Variáveis de Ambiente
+
+### `src/environments/environment.ts` (Desenvolvimento)
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:5000'
+};
+```
+
+### `src/environments/environment.prod.ts` (Produção)
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://memuvie.onrender.com'
+};
+```
+
+### Usar nos Componentes
+
+```typescript
+import { environment } from '../../../environments/environment';
+
+export class MeuComponente {
+  apiUrl = environment.apiUrl;
+}
+```
+
+---
+
+## 📦 Scripts npm
+
+```bash
+# Iniciar servidor de desenvolvimento
+npm start
+
+# Compilar com watch (recarga automática)
+npm run watch
+
+# Build para produção
+npm run build:prod
+
+# Build para homolog
+npm run build:homolog
+
+# Build para Vercel (com SSR)
+npm run build:vercel
+
+# SSR - Servir a aplicação renderizada no servidor
+npm run serve:ssr:cha-revelacao
+
+# Testes (Jasmine)
+npm test
+
+# Analisar bundle de produção
+npm run analyze
+
+# Verificar estilos (lint)
+# (não configurado atualmente)
+```
+
+---
+
+## 🔧 Troubleshooting
+
+### Erro: "Cannot find module '@angular/...'"
+
+**Solução:**
+```bash
+npm install
+# Ou limpar cache
+npm cache clean --force
+npm install
+```
+
+### Erro: "Port 4200 already in use"
+
+**Solução:**
+```bash
+# Usar porta diferente
+ng serve --port 4300
+
+# Ou matar processo na porta 4200 (Windows)
+netstat -ano | findstr :4200
+taskkill /PID <PID> /F
+
+# Linux/Mac
+lsof -ti :4200 | xargs kill -9
+```
+
+### Erro: "proxy not working" (requisições para API falham)
+
+**Solução:**
+1. Verificar se `proxy.conf.json` está correto
+2. API deve estar rodando em `http://localhost:5000`
+3. Reiniciar o servidor (`npm start`)
+4. Verificar console do navegador (DevTools → Network) para ver URL real das requisições
+
+### Erro: "401 Unauthorized" em requisições
+
+**Solução:**
+1. Token JWT expirou — fazer login novamente
+2. Verificar se `localStorage` tem a chave `token`
+3. Verificar se `AuthInterceptor` está adicionando header corretamente
+
+### Build lento ou travando
+
+**Solução:**
+```bash
+# Limpar cache do Angular
+rm -rf dist node_modules .angular
+npm install
+
+# Usar build incremental (apenas desenvolvimento)
+npm run watch
 ```
 
 ---
@@ -431,6 +887,48 @@ heroku create pedro-ou-eduarda
 git push heroku main
 ```
 
+## 🔗 Links Úteis
+
+### **Documentação Oficial**
+- [Angular Documentation](https://angular.io/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [RxJS Documentation](https://rxjs.dev/)
+- [Angular Material](https://material.angular.io/)
+
+### **Ferramentas**
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
+- [Vercel Docs](https://vercel.com/docs)
+- [VS Code](https://code.visualstudio.com/)
+
+### **Recursos**
+- [MDN Web Docs](https://developer.mozilla.org/)
+- [CSS-Tricks](https://css-tricks.com/)
+
+### **Aplicação**
+- 📖 **Documentação da API:** [API Docs](https://pedro-ou-eduarda-api.onrender.com/swagger-ui.html)
+- 📊 **Status do Sistema:** [Status Page](https://status.render.com)
+
+### **Repositórios**
+- 📂 **Repositório Principal:** [GitHub](https://github.com/rhayssakramer/pedro-ou-eduarda)
+- 🔄 **Releases:** [Releases](https://github.com/rhayssakramer/pedro-ou-eduarda/releases)
+- 🐛 **Issues:** [Bug Reports](https://github.com/rhayssakramer/pedro-ou-eduarda/issues)
+
+### **Tecnologias**
+- ☕ **Spring Boot:** [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- 🅰️ **Angular:** [angular.io](https://angular.io)
+- 🐳 **Docker:** [docker.com](https://docker.com)
+- 🚀 **Render:** [render.com](https://render.com)
+- ☁️ **Cloudinary:** [cloudinary.com](https://cloudinary.com)
+
+### **Memuvie**
+- 🏢 **Site Institucional:** [memuvie.com](https://memuvie.com) (em breve)
+- 📧 **Contato:** contato@memuvie.com (em breve)
+- 💼 **LinkedIn:** [Memuvie Company](https://linkedin.com/company/memuvie) (em breve)
+- 📱 **Instagram:** [@memuvie](https://instagram.com/memuvie_oficial)
+
+---
+
 ## 👥 Créditos
 
 ### **Equipe Memuvie**
@@ -457,48 +955,16 @@ git push heroku main
   </tr>
 </table>
 
-### **Agradecimentos Especiais**
-- 👧 **Família da Eduarda** - Por confiar em nós com este momento especial
-- 🎉 **Convidados do Chá** - Por tornarem este evento inesquecível
-- ☕ **Café** - Por manter a equipe acordada durante o desenvolvimento
-
-### **Inspiração**
-Este projeto foi desenvolvido com muito 💜 e dedicação, pensando em cada detalhe para tornar o chá revelação da Eduarda um momento único e especial.
-
-## 🔗 Links Úteis
-
-### **Aplicação**
-- 📖 **Documentação da API:** [API Docs](https://pedro-ou-eduarda-api.onrender.com/swagger-ui.html)
-- 📊 **Status do Sistema:** [Status Page](https://status.render.com)
-
-### **Repositórios**
-- 📂 **Repositório Principal:** [GitHub](https://github.com/rhayssakramer/pedro-ou-eduarda)
-- 🔄 **Releases:** [Releases](https://github.com/rhayssakramer/pedro-ou-eduarda/releases)
-- 🐛 **Issues:** [Bug Reports](https://github.com/rhayssakramer/pedro-ou-eduarda/issues)
-
-### **Tecnologias**
-- ☕ **Spring Boot:** [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
-- 🅰️ **Angular:** [angular.io](https://angular.io)
-- 🐳 **Docker:** [docker.com](https://docker.com)
-- 🚀 **Render:** [render.com](https://render.com)
-- ☁️ **Cloudinary:** [cloudinary.com](https://cloudinary.com)
-
-### **Memuvie**
-- 🏢 **Site Institucional:** [memuvie.com](https://memuvie.com) (em breve)
-- 📧 **Contato:** contato@memuvie.com (em breve)
-- 💼 **LinkedIn:** [Memuvie Company](https://linkedin.com/company/memuvie) (em breve)
-- 📱 **Instagram:** [@memuvie](https://instagram.com/memuvie_oficial)
-
----
-
 <div align="center">
-  <h3>Feito com 💜 pela equipe Memuvie para celebrar a chegada da Eduarda!</h3>
+  <h3>Feito com 💜 pela equipe Memuvie para celebrar momentos especiais!</h3>
   
   <p>
     <img src="https://img.shields.io/badge/Memuvie-Viva%20agora%2C%20reviva%20sempre!-pink?style=for-the-badge" alt="Memuvie Slogan">
   </p>
   
   <p>
-    <sub>© 2024 Memuvie. Todos os direitos reservados.</sub>
+    <sub>© 2025 Memuvie. Todos os direitos reservados.</sub>
   </p>
 </div>
+- **Navegador moderno** (Chrome, Firefox, Safari, Edge)
+- **Conexão com internet** - Para recursos externos
