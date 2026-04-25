@@ -169,7 +169,63 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var passwordHashService = scope.ServiceProvider.GetRequiredService<IPasswordHashService>();
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-    
+
+    // Para bancos PostgreSQL já existentes (sem histórico de migrations),
+    // registrar o InitialCreate como aplicado para evitar erro "relation already exists".
+    var currentEnv = app.Environment.EnvironmentName;
+    if (currentEnv == "Production" || currentEnv == "Homolog")
+    {
+        try
+        {
+            var conn = dbContext.Database.GetDbConnection();
+            await conn.OpenAsync();
+
+            // Garantir que a tabela de histórico existe
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS ""__EFMigrationsHistory"" (
+                        ""MigrationId"" character varying(150) NOT NULL,
+                        ""ProductVersion"" character varying(32) NOT NULL,
+                        CONSTRAINT ""PK___EFMigrationsHistory"" PRIMARY KEY (""MigrationId"")
+                    )";
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // Se a tabela Usuarios já existe mas InitialCreate não está registrada,
+            // registrar sem executar (banco foi criado antes das migrations).
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    SELECT EXISTS (
+                        SELECT FROM pg_tables
+                        WHERE schemaname = 'public' AND tablename = 'Usuarios'
+                    ) AND NOT EXISTS (
+                        SELECT FROM ""__EFMigrationsHistory""
+                        WHERE ""MigrationId"" = '20260410200444_ConverterParaSqlite'
+                    )";
+                var shouldRegister = (bool)(await cmd.ExecuteScalarAsync() ?? false);
+
+                if (shouldRegister)
+                {
+                    Log.Information("Banco pré-existente detectado. Registrando InitialCreate sem re-executar...");
+                    using var insertCmd = conn.CreateCommand();
+                    insertCmd.CommandText = @"
+                        INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
+                        VALUES ('20260410200444_ConverterParaSqlite', '9.0.0')
+                        ON CONFLICT DO NOTHING";
+                    await insertCmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            await conn.CloseAsync();
+        }
+        catch (Exception ex)
+        {
+            Log.Warning("Aviso ao verificar estado das migrations: {Message}", ex.Message);
+        }
+    }
+
     dbContext.Database.Migrate();
 
     // Força conversão de colunas boolean caso ainda estejam como integer (fix PostgreSQL)
