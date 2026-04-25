@@ -1,5 +1,7 @@
 services:
-  # Backend Service (.NET)
+  # ─────────────────────────────────────────────────────────────
+  # PRD – Backend Service (.NET)
+  # ─────────────────────────────────────────────────────────────
   - type: web
     name: memuvie-backend
     env: docker
@@ -49,12 +51,59 @@ services:
       # - CLOUDINARY_API_SECRET (optional)
     
     healthCheckPath: /health
-    healthCheckInterval: 30
-    
-    # Build command
-    buildCommand: dotnet publish -c Release -o out --no-restore
-    startCommand: dotnet EventoAPI.dll
 
+  # ─────────────────────────────────────────────────────────────
+  # HOMOLOG – Backend Service (.NET)  →  branch: homolog
+  # ─────────────────────────────────────────────────────────────
+  - type: web
+    name: memuvie-homolog
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    branch: homolog
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Homolog
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+
+      - key: FRONTEND_URL
+        value: https://memuvie-homolog.vercel.app
+
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_FROM
+        value: noreply@memuvie.com
+
+      - key: UPLOAD_PATH
+        value: /uploads/memuvie/
+
+      # 🔒 Banco de dados HOMOLOG → Neon
+      - key: DB_HOST
+        value: ep-silent-feather-ankpy2rt-pooler.c-6.us-east-1.aws.neon.tech
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: neondb
+      - key: DB_USER
+        value: neondb_owner
+      # 🔒 DB_PASSWORD → adicionar como Secret no Render Dashboard (não versionar)
+
+      # 🔒 Demais segredos (adicionar via Render Dashboard):
+      # - JWT_SECRET
+      # - MAIL_USERNAME
+      # - MAIL_PASSWORD
+      # - CLOUDINARY_CLOUD_NAME (opcional)
+      # - CLOUDINARY_API_KEY (opcional)
+      # - CLOUDINARY_API_SECRET (opcional)
+
+    healthCheckPath: /health
+
+  # ─────────────────────────────────────────────────────────────
+  # PRD – Frontend Service (Angular)
+  # ─────────────────────────────────────────────────────────────
   # Frontend Service (Angular)
   - type: web
     name: memuvie-frontend
@@ -65,3 +114,4 @@ services:
       - key: NODE_ENV
         value: production
     healthCheckPath: /
+

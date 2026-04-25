@@ -43,3 +43,6 @@ build/
 # Logs
 logs/
 *.log
+frontend/clear-gallery-cache.js
+.env.example
+frontend/.env.homolog
